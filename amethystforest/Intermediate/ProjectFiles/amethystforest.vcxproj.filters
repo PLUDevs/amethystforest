@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<None Include="..\..\amethystforest.uproject" />
+		<Filter Include="Source">
+			<UniqueIdentifier>{E50589B2-D318-4AE0-A5B8-C10D47A66C77}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Source\amethystforest.Target.cs">
+			<Filter>Source</Filter>
+		</None >
+		<None Include="..\..\Source\amethystforestEditor.Target.cs">
+			<Filter>Source</Filter>
+		</None >
+		<Filter Include="Config">
+			<UniqueIdentifier>{E9BDB55B-2352-4E21-9C27-1EE7F0C58F03}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Config\DefaultEditor.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultEngine.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultGame.ini">
+			<Filter>Config</Filter>
+		</None >
+		<Filter Include="Source\amethystforest">
+			<UniqueIdentifier>{3B4956EA-4D1B-4831-BCB3-537D8D92B7DB}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Source\amethystforest\amethystforest.Build.cs">
+			<Filter>Source\amethystforest</Filter>
+		</None >
+		<ClCompile Include="..\..\Source\amethystforest\amethystforest.cpp">
+			<Filter>Source\amethystforest</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\amethystforest\amethystforest.h">
+			<Filter>Source\amethystforest</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\amethystforest\amethystforestGameMode.cpp">
+			<Filter>Source\amethystforest</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\amethystforest\amethystforestGameMode.h">
+			<Filter>Source\amethystforest</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\amethystforest\amethystforestPlayerController.cpp">
+			<Filter>Source\amethystforest</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\amethystforest\amethystforestPlayerController.h">
+			<Filter>Source\amethystforest</Filter>
+		</ClInclude >
+		<Filter Include="Source\amethystforest\Resources">
+			<UniqueIdentifier>{705CE637-9496-4371-A2A6-74ADCEAC7AD2}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="Source\amethystforest\Resources\Windows">
+			<UniqueIdentifier>{997C8610-E3FD-4F5E-93BD-FF377B241B9B}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Source\amethystforest\Resources\Windows\amethystforest.ico">
+			<Filter>Source\amethystforest\Resources\Windows</Filter>
+		</None >
+		<ResourceCompile Include="..\..\Source\amethystforest\Resources\Windows\amethystforest.rc">
+			<Filter>Source\amethystforest\Resources\Windows</Filter>
+		</ResourceCompile >
+	</ItemGroup>
+</Project>
