@@ -2,13 +2,11 @@
 
 #include "amethystforest.h"
 #include "AmethystCharacter.h"
+#include "AmethystCharMovementComponent.h"
+#include "AmethystDamageType.h"
 
-/* TO DO: CharacterMovement Class 
-AShooterCharacter::AShooterCharacter(const class FPostConstructInitializeProperties& PCIP) 
-	: Super(PCIP.SetDefaultSubobjectClass<UShooterCharacterMovement>(ACharacter::CharacterMovementComponentName))
-	*/
 AAmethystCharacter::AAmethystCharacter(const class FPostConstructInitializeProperties& PCIP)
-	: Super(PCIP)
+	: Super(PCIP.SetDefaultSubobjectClass<UAmethystCharMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	Mesh1P = PCIP.CreateDefaultSubobject<USkeletalMeshComponent>(this, TEXT("PawnMesh1P"));
 	Mesh1P->AttachParent = CapsuleComponent;
@@ -342,14 +340,12 @@ void AAmethystCharacter::OnDeath(float KillingDamage, struct FDamageEvent const&
 		APlayerController* PC = Cast<APlayerController>(Controller);
 		if (PC && DamageEvent.DamageTypeClass)
 		{
-			/* TO DO: Custom DamageType Class needed
-			UShooterDamageType *DamageType = Cast<UShooterDamageType>(DamageEvent.DamageTypeClass->GetDefaultObject());
+			UAmethystDamageType *DamageType = Cast<UAmethystDamageType>(DamageEvent.DamageTypeClass->GetDefaultObject());
 
 			if (DamageType && DamageType->KilledForceFeedback)
 			{
 				PC->ClientPlayForceFeedback(DamageType->KilledForceFeedback, false, "Damage");
 			}
-			*/
 		}
 	}
 
@@ -413,14 +409,12 @@ void AAmethystCharacter::PlayHit(float DamageTaken, struct FDamageEvent const& D
 		APlayerController* PC = Cast<APlayerController>(Controller);
 		if (PC && DamageEvent.DamageTypeClass)
 		{
-			/* TO DO: Custom DamageType Class needed
-			UShooterDamageType *DamageType = Cast<UShooterDamageType>(DamageEvent.DamageTypeClass->GetDefaultObject());
+			UAmethystDamageType *DamageType = Cast<UAmethystDamageType>(DamageEvent.DamageTypeClass->GetDefaultObject());
 			
 			if (DamageType && DamageType->HitForceFeedback)
 			{
 				PC->ClientPlayForceFeedback(DamageType->HitForceFeedback, false, "Damage");
 			}
-			*/
 		}
 	}
 
