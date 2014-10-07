@@ -4,6 +4,8 @@
 #include "AmethystCharacter.h"
 #include "AmethystCharMovementComponent.h"
 #include "AmethystDamageType.h"
+#include "AmethystWeapon.h"
+#include "amethystforestPlayerController.h"
 
 AAmethystCharacter::AAmethystCharacter(const class FPostConstructInitializeProperties& PCIP)
 	: Super(PCIP.SetDefaultSubobjectClass<UAmethystCharMovementComponent>(ACharacter::CharacterMovementComponentName))
@@ -93,9 +95,7 @@ void AAmethystCharacter::PawnClientRestart()
 	UpdatePawnMeshes();
 
 	// reattach weapon if needed
-	/* TO DO: Weapon Class needed
 	SetCurrentWeapon(CurrentWeapon);
-	*/
 
 	// set team colors for 1st person view
 	UMaterialInstanceDynamic* Mesh1PMID = Mesh1P->CreateAndSetMaterialInstanceDynamic(0);
@@ -130,9 +130,10 @@ FRotator AAmethystCharacter::GetAimOffsets() const
 	return AimRotLS;
 }
 
-/* TO DO: PlayerState class and GameMode Class needed
+
 bool AAmethystCharacter::IsEnemyFor(AController* TestPC) const
 {
+	/* TO DO: PlayerState class and GameMode Class needed
 	if (TestPC == Controller || TestPC == NULL)
 	{
 		return false;
@@ -152,8 +153,8 @@ bool AAmethystCharacter::IsEnemyFor(AController* TestPC) const
 	}
 
 	return bIsEnemy;
+	*/
 }
-*/
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -239,7 +240,7 @@ void AAmethystCharacter::KilledBy(APawn* EventInstigator)
 float AAmethystCharacter::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser)
 {
 	/* TO DO: PlayerState, GameMode, and custom playercontroller class needed
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->HasGodMode())
 	{
 		return 0.f;
@@ -424,7 +425,7 @@ void AAmethystCharacter::PlayHit(float DamageTaken, struct FDamageEvent const& D
 	}
 
 	/* TO DO: Player Controller and Custom HUD class needed
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	AShooterHUD* MyHUD = MyPC ? Cast<AShooterHUD>(MyPC->GetHUD()) : NULL;
 	if (MyHUD)
 	{
@@ -433,7 +434,7 @@ void AAmethystCharacter::PlayHit(float DamageTaken, struct FDamageEvent const& D
 
 	if (PawnInstigator && PawnInstigator != this && PawnInstigator->IsLocallyControlled())
 	{
-		AShooterPlayerController* InstigatorPC = Cast<AShooterPlayerController>(PawnInstigator->Controller);
+		AamethystforestPlayerController* InstigatorPC = Cast<AamethystforestPlayerController>(PawnInstigator->Controller);
 		AShooterHUD* InstigatorHUD = InstigatorPC ? Cast<AShooterHUD>(InstigatorPC->GetHUD()) : NULL;
 		if (InstigatorHUD)
 		{
@@ -551,26 +552,21 @@ void AAmethystCharacter::SpawnDefaultInventory()
 	int32 NumWeaponClasses = 1;	//DefaultInventoryClasses.Num();	
 	for (int32 i = 0; i < NumWeaponClasses; i++)
 	{
-		/* TO DO: Weapon Class needed 
 		if (DefaultInventoryClasses[i])
 		{
 			FActorSpawnParameters SpawnInfo;
 			SpawnInfo.bNoCollisionFail = true;
-			/** TO DO: Weapon Class needed
-			AShooterWeapon* NewWeapon = GetWorld()->SpawnActor<AShooterWeapon>(DefaultInventoryClasses[i], SpawnInfo);
+			AAmethystWeapon* NewWeapon = GetWorld()->SpawnActor<AAmethystWeapon>(DefaultInventoryClasses[i], SpawnInfo);
 			AddWeapon(NewWeapon);
 
 		}
-		*/
 	}
 
 	// equip first weapon in inventory
-	/* TO DO: Weapon Class needed
 	if (Inventory.Num() > 0)
 	{
 		EquipWeapon(Inventory[0]);
 	}
-	*/
 }
 
 void AAmethystCharacter::DestroyInventory()
@@ -581,21 +577,18 @@ void AAmethystCharacter::DestroyInventory()
 	}
 
 	// remove all weapons from inventory and destroy them
-	/* TO DO: Weapon Class needed
 	for (int32 i = Inventory.Num() - 1; i >= 0; i--)
 	{
-		AShooterWeapon* Weapon = Inventory[i];
+		AAmethystWeapon* Weapon = Inventory[i];
 		if (Weapon)
 		{
 			RemoveWeapon(Weapon);
 			Weapon->Destroy();
 		}
 	}
-	*/
 }
 
-/* TO DO: Weapon Class needed
-void AAmethystCharacter::AddWeapon(AShooterWeapon* Weapon)
+void AAmethystCharacter::AddWeapon(AAmethystWeapon* Weapon)
 {
 	if (Weapon && Role == ROLE_Authority)
 	{
@@ -604,7 +597,7 @@ void AAmethystCharacter::AddWeapon(AShooterWeapon* Weapon)
 	}
 }
 
-void AAmethystCharacter::RemoveWeapon(AShooterWeapon* Weapon)
+void AAmethystCharacter::RemoveWeapon(AAmethystWeapon* Weapon)
 {
 	if (Weapon && Role == ROLE_Authority)
 	{
@@ -613,7 +606,7 @@ void AAmethystCharacter::RemoveWeapon(AShooterWeapon* Weapon)
 	}
 }
 
-AShooterWeapon* AAmethystCharacter::FindWeapon(TSubclassOf<AShooterWeapon> WeaponClass)
+AAmethystWeapon* AAmethystCharacter::FindWeapon(TSubclassOf<AAmethystWeapon> WeaponClass)
 {
 	for (int32 i = 0; i < Inventory.Num(); i++)
 	{
@@ -626,7 +619,7 @@ AShooterWeapon* AAmethystCharacter::FindWeapon(TSubclassOf<AShooterWeapon> Weapo
 	return NULL;
 }
 
-void AAmethystCharacter::EquipWeapon(AShooterWeapon* Weapon)
+void AAmethystCharacter::EquipWeapon(AAmethystWeapon* Weapon)
 {
 	if (Weapon)
 	{
@@ -641,24 +634,24 @@ void AAmethystCharacter::EquipWeapon(AShooterWeapon* Weapon)
 	}
 }
 
-bool AAmethystCharacter::ServerEquipWeapon_Validate(AShooterWeapon* Weapon)
+bool AAmethystCharacter::ServerEquipWeapon_Validate(AAmethystWeapon* Weapon)
 {
 	return true;
 }
 
-void AAmethystCharacter::ServerEquipWeapon_Implementation(AShooterWeapon* Weapon)
+void AAmethystCharacter::ServerEquipWeapon_Implementation(AAmethystWeapon* Weapon)
 {
 	EquipWeapon(Weapon);
 }
 
-void AAmethystCharacter::OnRep_CurrentWeapon(AShooterWeapon* LastWeapon)
+void AAmethystCharacter::OnRep_CurrentWeapon(AAmethystWeapon* LastWeapon)
 {
 	SetCurrentWeapon(CurrentWeapon, LastWeapon);
 }
 
-void AAmethystCharacter::SetCurrentWeapon(class AShooterWeapon* NewWeapon, class AShooterWeapon* LastWeapon)
+void AAmethystCharacter::SetCurrentWeapon(class AAmethystWeapon* NewWeapon, class AAmethystWeapon* LastWeapon)
 {
-	AShooterWeapon* LocalLastWeapon = NULL;
+	AAmethystWeapon* LocalLastWeapon = NULL;
 
 	if (LastWeapon != NULL)
 	{
@@ -680,16 +673,14 @@ void AAmethystCharacter::SetCurrentWeapon(class AShooterWeapon* NewWeapon, class
 	// equip new one
 	if (NewWeapon)
 	{
-		NewWeapon->SetOwningPawn(this);	// Make sure weapon's MyPawn is pointing back to us. During replication, we can't guarantee APawn::CurrentWeapon will rep after AWeapon::MyPawn!
+		NewWeapon->SetOwningPawn(this);	// Make sure weapon's MyPawn is pointing back to us. During replication, we can't guarantee APawn::CurrentWeapon will rep after AAmethystWeapon::MyPawn!
 		NewWeapon->OnEquip();
 	}
 }
-*/
 
 //////////////////////////////////////////////////////////////////////////
 // Weapon usage
 
-/* TO DO: Weapon Class needed
 void AAmethystCharacter::StartWeaponFire()
 {
 	if (!bWantsToFire)
@@ -713,7 +704,6 @@ void AAmethystCharacter::StopWeaponFire()
 		}
 	}
 }
-*/
 
 bool AAmethystCharacter::CanFire() const
 {
@@ -862,10 +852,8 @@ void AAmethystCharacter::SetupPlayerInputComponent(class UInputComponent* InputC
 	InputComponent->BindAction("Targeting", IE_Pressed, this, &AAmethystCharacter::OnStartTargeting);
 	InputComponent->BindAction("Targeting", IE_Released, this, &AAmethystCharacter::OnStopTargeting);
 
-	/* TO DO: Weapon Class needed
 	InputComponent->BindAction("NextWeapon", IE_Pressed, this, &AAmethystCharacter::OnNextWeapon);
 	InputComponent->BindAction("PrevWeapon", IE_Pressed, this, &AAmethystCharacter::OnPrevWeapon);
-	*/
 
 	InputComponent->BindAction("Reload", IE_Pressed, this, &AAmethystCharacter::OnReload);
 
@@ -929,8 +917,7 @@ void AAmethystCharacter::LookUpAtRate(float Val)
 
 void AAmethystCharacter::OnStartFire()
 {
-	/* TO DO: Custom Player Controller class needed
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->IsGameInputAllowed())
 	{
 		if (IsRunning())
@@ -939,23 +926,19 @@ void AAmethystCharacter::OnStartFire()
 		}
 		StartWeaponFire();
 	}
-	*/
 }
 
 
 void AAmethystCharacter::OnStopFire()
 {
-	/* TO DO: Weapon Class Needed
 	StopWeaponFire();
-	*/
 }
 
 
 
 void AAmethystCharacter::OnStartTargeting()
 {
-	/* TO DO: Custom Player Controller class needed
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->IsGameInputAllowed())
 	{
 		if (IsRunning())
@@ -964,7 +947,6 @@ void AAmethystCharacter::OnStartTargeting()
 		}
 		SetTargeting(true);
 	}
-	*/
 }
 
 void AAmethystCharacter::OnStopTargeting()
@@ -972,16 +954,15 @@ void AAmethystCharacter::OnStopTargeting()
 	SetTargeting(false);
 }
 
-/* TO DO: Weapon and Player Controller Class needed
 void AAmethystCharacter::OnNextWeapon()
 {
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->IsGameInputAllowed())
 	{
 		if (Inventory.Num() >= 2 && (CurrentWeapon == NULL || CurrentWeapon->GetCurrentState() != EWeaponState::Equipping))
 		{
 			const int32 CurrentWeaponIdx = Inventory.IndexOfByKey(CurrentWeapon);
-			AShooterWeapon* NextWeapon = Inventory[(CurrentWeaponIdx + 1) % Inventory.Num()];
+			AAmethystWeapon* NextWeapon = Inventory[(CurrentWeaponIdx + 1) % Inventory.Num()];
 			EquipWeapon(NextWeapon);
 		}
 	}
@@ -989,23 +970,21 @@ void AAmethystCharacter::OnNextWeapon()
 
 void AAmethystCharacter::OnPrevWeapon()
 {
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->IsGameInputAllowed())
 	{
 		if (Inventory.Num() >= 2 && (CurrentWeapon == NULL || CurrentWeapon->GetCurrentState() != EWeaponState::Equipping))
 		{
 			const int32 CurrentWeaponIdx = Inventory.IndexOfByKey(CurrentWeapon);
-			AShooterWeapon* PrevWeapon = Inventory[(CurrentWeaponIdx - 1 + Inventory.Num()) % Inventory.Num()];
+			AAmethystWeapon* PrevWeapon = Inventory[(CurrentWeaponIdx - 1 + Inventory.Num()) % Inventory.Num()];
 			EquipWeapon(PrevWeapon);
 		}
 	}
 }
-*/
 
 void AAmethystCharacter::OnReload()
 {
-	/* TO DO: Custom Player Controller Class Needed 
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->IsGameInputAllowed())
 	{
 		if (CurrentWeapon)
@@ -1013,13 +992,11 @@ void AAmethystCharacter::OnReload()
 			CurrentWeapon->StartReload();
 		}
 	}
-	*/
 }
 
 void AAmethystCharacter::OnStartRunning()
 {
-	/* TO DO: Custom Player Controller Class Needed
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->IsGameInputAllowed())
 	{
 		if (IsTargeting())
@@ -1029,13 +1006,11 @@ void AAmethystCharacter::OnStartRunning()
 		StopWeaponFire();
 		SetRunning(true, false);
 	}
-	*/
 }
 
 void AAmethystCharacter::OnStartRunningToggle()
 {
-	/* TO DO: Custom Player Controller Class Needed
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->IsGameInputAllowed())
 	{
 		if (IsTargeting())
@@ -1045,7 +1020,6 @@ void AAmethystCharacter::OnStartRunningToggle()
 		StopWeaponFire();
 		SetRunning(true, true);
 	}
-	*/
 }
 
 void AAmethystCharacter::OnStopRunning()
@@ -1072,8 +1046,7 @@ void AAmethystCharacter::Tick(float DeltaSeconds)
 	{
 		SetRunning(false, false);
 	}
-	/* TO DO: Custom PlayerController Class needed
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->HasHealthRegen())
 	{
 		if (this->Health < this->GetMaxHealth())
@@ -1105,18 +1078,15 @@ void AAmethystCharacter::Tick(float DeltaSeconds)
 			LowHealthWarningPlayer->SetVolumeMultiplier(MinVolume + (1.0f - MinVolume) * VolumeMultiplier);
 		}
 	}
-	*/
 }
 
 void AAmethystCharacter::OnStartJump()
 {
-	/* TO DO: CUstom PlayerController Class Needed
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->IsGameInputAllowed())
 	{
 		bPressedJump = true;
 	}
-	*/
 }
 
 void AAmethystCharacter::OnStopJump()
@@ -1142,9 +1112,7 @@ void AAmethystCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > 
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	// only to local owner: weapon change requests are locally instigated, other clients don't need it
-	/* TO DO: Weapon Class Needed
 	DOREPLIFETIME_CONDITION(AAmethystCharacter, Inventory, COND_OwnerOnly);
-	*/
 
 	// everyone except local owner: flag change is locally instigated
 	DOREPLIFETIME_CONDITION(AAmethystCharacter, bIsTargeting, COND_SkipOwner);
@@ -1155,14 +1123,11 @@ void AAmethystCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > 
 	*/
 
 	// everyone
-	/* TO DO: Weapon Class Needed
 	DOREPLIFETIME(AAmethystCharacter, CurrentWeapon);
-	*/
 	DOREPLIFETIME(AAmethystCharacter, Health);
 }
 
-/* TO DO: Weapon Class needed
-AShooterWeapon* AAmethystCharacter::GetWeapon() const
+AAmethystWeapon* AAmethystCharacter::GetWeapon() const
 {
 	return CurrentWeapon;
 }
@@ -1171,14 +1136,11 @@ int32 AAmethystCharacter::GetInventoryCount() const
 {
 	return Inventory.Num();
 }
-*/
 
-/* TO DO: Weapon Class needed
-AShooterWeapon* AAmethystCharacter::GetInventoryWeapon(int32 index) const
+AAmethystWeapon* AAmethystCharacter::GetInventoryWeapon(int32 index) const
 {
 	return Inventory[index];
 }
-*/
 
 USkeletalMeshComponent* AAmethystCharacter::GetPawnMesh() const
 {
@@ -1190,12 +1152,10 @@ USkeletalMeshComponent* AAmethystCharacter::GetSpecifcPawnMesh(bool WantFirstPer
 	return WantFirstPerson == true ? Mesh1P : Mesh;
 }
 
-/* TO DO: Weapon Class needed
 FName AAmethystCharacter::GetWeaponAttachPoint() const
 {
 	return WeaponAttachPoint;
 }
-*/
 
 float AAmethystCharacter::GetTargetingSpeedModifier() const
 {
