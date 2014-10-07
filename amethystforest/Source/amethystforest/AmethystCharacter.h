@@ -10,7 +10,7 @@ UCLASS(Abstract)
 class AAmethystCharacter : public ACharacter
 {
 	GENERATED_UCLASS_BODY()
-
+	
 	/** spawn inventory, setup initial variables */
 	virtual void PostInitializeComponents() OVERRIDE;
 
