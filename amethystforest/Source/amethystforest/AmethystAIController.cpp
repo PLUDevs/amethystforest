@@ -10,7 +10,7 @@
 
 
 AAmethystAIController::AAmethystAIController(const class FPostConstructInitializeProperties& PCIP)
-	: Super(PCIP)
+	: Super(PCIP) 
 {
 	// create blackboard and behaviour components in the constructor
 	BlackboardComp = PCIP.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackBoardComp"));

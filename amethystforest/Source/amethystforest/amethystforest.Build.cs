@@ -6,7 +6,9 @@ public class amethystforest : ModuleRules
 {
 	public amethystforest(TargetInfo Target)
 	{
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AIModule" });
+
+
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

@@ -3,9 +3,10 @@
 #pragma once
 
 #include "GameFramework/Character.h"
+#include "AmethystWeapon.h"
 #include "AmethystCharacter.generated.h"
 
-UCLASS(Abstract)
+UCLASS(Abstract) 
 class AAmethystCharacter : public ACharacter
 {
 	GENERATED_UCLASS_BODY()
@@ -56,9 +57,7 @@ class AAmethystCharacter : public ACharacter
 	* @param Weapon	Weapon to add.
 	*/
 
-	/** TO DO: Weapon Class needed 
-	* void AddWeapon(class AWeapon* Weapon);
-	*/
+	void AddWeapon(class AAmethystWeapon* Weapon);
 
 	/**
 	* [server] remove weapon from inventory
@@ -66,9 +65,7 @@ class AAmethystCharacter : public ACharacter
 	* @param Weapon	Weapon to remove.
 	*/
 
-	/** TO DO: Weapon Class needed
-	* void RemoveWeapon(class AWeapon* Weapon);
-	*/
+	void RemoveWeapon(class AAmethystWeapon* Weapon);
 
 	/**
 	* Find in inventory
@@ -76,9 +73,7 @@ class AAmethystCharacter : public ACharacter
 	* @param WeaponClass	Class of weapon to find.
 	*/
 
-	/** TO DO: Weapon Class needed
-	* class AWeapon* FindWeapon(TSubclassOf<class AWeapon> WeaponClass);
-	*/
+	class AAmethystWeapon* FindWeapon(TSubclassOf<class AAmethystWeapon> WeaponClass);
 
 	/**
 	* [server + local] equips weapon from inventory
@@ -86,21 +81,16 @@ class AAmethystCharacter : public ACharacter
 	* @param Weapon	Weapon to equip
 	*/
 
-	/** TO DO: Weapon Class needed
-	* void EquipWeapon(class AWeapon* Weapon);
-	*/
+	void EquipWeapon(class AAmethystWeapon* Weapon);
 
 	//////////////////////////////////////////////////////////////////////////
 	// Weapon usage
 
-	/** TO DO: Weapon Class needed */
+	/** [local] starts weapon fire */
+	void StartWeaponFire();
 
-	/** [local] starts weapon fire
-	* void StartWeaponFire();
-	*/
-	/** [local] stops weapon fire
-	* void StopWeaponFire();
-	*/
+	/** [local] stops weapon fire */
+	void StopWeaponFire();
 
 	/** check if pawn can fire weapon */
 	bool CanFire() const;
@@ -174,13 +164,11 @@ class AAmethystCharacter : public ACharacter
 	/** player released targeting action */
 	void OnStopTargeting();
 
-	/** TO DO: Weapon Class needed */
-	/** player pressed next weapon action
-	* void OnNextWeapon();
-	*/
-	/** player pressed prev weapon action
-	* void OnPrevWeapon();
-	*/
+	/** player pressed next weapon action */
+	void OnNextWeapon();
+	
+	/** player pressed prev weapon action */
+	void OnPrevWeapon();
 
 	/** player pressed reload action */
 	void OnReload();
@@ -207,13 +195,11 @@ class AAmethystCharacter : public ACharacter
 	USkeletalMeshComponent* GetPawnMesh() const;
 
 	/** get currently equipped weapon */
-	/** TO DO: Weapon Class needed
-	* UFUNCTION(BlueprintCallable, Category = "Game|Weapon")
-	* class AWeapon* GetWeapon() const;
-	*/
-	/** get weapon attach point
-	* FName GetWeaponAttachPoint() const;
-	*/
+	UFUNCTION(BlueprintCallable, Category = "Game|Weapon")
+	class AAmethystWeapon* GetWeapon() const;
+	
+	/** get weapon attach point */
+	FName GetWeaponAttachPoint() const;
 
 	/** get total number of inventory items */
 	int32 GetInventoryCount() const;
@@ -223,9 +209,8 @@ class AAmethystCharacter : public ACharacter
 	*
 	* @param Index Inventory index
 	*/
-	/** TO DO: Weapon Class needed
-	* class AWeapon* GetInventoryWeapon(int32 index) const;
-	*/
+	class AAmethystWeapon* GetInventoryWeapon(int32 index) const;
+
 	/** get weapon taget modifier speed */
 	 UFUNCTION(BlueprintCallable, Category = "Game|Weapon")
 		float GetTargetingSpeedModifier() const;
@@ -279,20 +264,16 @@ protected:
 		FName WeaponAttachPoint;
 
 	/** default inventory list */
-	/** TO DO: Weapon Class Needed
-	* UPROPERTY(EditDefaultsOnly, Category = Inventory)
-	*	TArray<TSubclassOf<class AWeapon> > DefaultInventoryClasses;
-	*/
+	UPROPERTY(EditDefaultsOnly, Category = Inventory)
+		TArray<TSubclassOf<class AAmethystWeapon> > DefaultInventoryClasses;
 
 	/** weapons in inventory */
-	/** TO DO: Weapon Class needed
-	* UPROPERTY(Transient, Replicated)
-	*	TArray<class AWeapon*> Inventory;
-	*/
-	/** currently equipped weapon
-	* UPROPERTY(Transient, ReplicatedUsing = OnRep_CurrentWeapon)
-	* class AWeapon* CurrentWeapon;
-	*/
+	UPROPERTY(Transient, Replicated)
+		TArray<class AAmethystWeapon*> Inventory;
+
+	/** currently equipped weapon */
+	UPROPERTY(Transient, ReplicatedUsing = OnRep_CurrentWeapon)
+		class AAmethystWeapon* CurrentWeapon;
 
 	/** Replicate where this pawn was last hit and damaged */
 	/** TO DO: Figure out LastTakeHitInfo
@@ -454,14 +435,11 @@ protected:
 
 	/** updates current weapon */
 
-	/** TO DO: Weapon Class needed
-	* void SetCurrentWeapon(class AWeapon* NewWeapon, class AWeapon* LastWeapon = NULL);
-	*/
+	void SetCurrentWeapon(class AAmethystWeapon* NewWeapon, class AAmethystWeapon* LastWeapon = NULL);
+
 	/** current weapon rep handler */
-	/**
-	* UFUNCTION()
-	*	void OnRep_CurrentWeapon(class AWeapon* LastWeapon);
-	*/
+	UFUNCTION()
+		void OnRep_CurrentWeapon(class AAmethystWeapon* LastWeapon);
 
 	/** [server] spawns default inventory */
 	void SpawnDefaultInventory();
@@ -469,10 +447,9 @@ protected:
 	/** [server] remove all weapons from inventory and destroy them */
 	void DestroyInventory();
 
-	/** equip weapon
-	* UFUNCTION(reliable, server, WithValidation)
-	*	void ServerEquipWeapon(class AWeapon* NewWeapon);
-	*/
+	/** equip weapon */
+	UFUNCTION(reliable, server, WithValidation)
+		void ServerEquipWeapon(class AAmethystWeapon* NewWeapon);
 
 	/** update targeting state */
 	UFUNCTION(reliable, server, WithValidation)
