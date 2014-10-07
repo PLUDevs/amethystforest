@@ -11,12 +11,12 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(config=Game)
 class AMETHYSTFOREST_API AAmethystAIController : public AAIController
 {
 	GENERATED_UCLASS_BODY()
 
-		UPROPERTY(transient)
+	UPROPERTY(transient)
 		TSubobjectPtr<class UBlackboardComponent> BlackboardComp;
 
 	UPROPERTY(transient)
