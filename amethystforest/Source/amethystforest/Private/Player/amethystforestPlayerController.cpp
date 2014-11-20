@@ -235,7 +235,7 @@ void AamethystforestPlayerController::SetPlayer(UPlayer* Player)
 /* TO DO: Create PlayerState Class
 void AamethystforestPlayerController::OnDeathMessage(class AShooterPlayerState* KillerPlayerState, class AShooterPlayerState* KilledPlayerState, const UDamageType* KillerDamageType)
 {
-	/* TO DO: HUD Class
+	TO DO: HUD Class
 	AShooterHUD* ShooterHUD = GetShooterHUD();
 	if (ShooterHUD)
 	{
