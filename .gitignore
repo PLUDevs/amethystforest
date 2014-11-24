@@ -32,3 +32,6 @@
 
 #Intermediates
 Intermediate/*
+
+*.sdf
+*.suo
