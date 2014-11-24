@@ -26,7 +26,7 @@ class AMETHYSTFOREST_API AAmethystBot : public AAmethystCharacter
 		void PerformMeleeAttack();
 
 	float AccumulatedFiretime;
-	virtual void TakeDamage();
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) OVERRIDE;
 	virtual bool IsFirstPerson() const OVERRIDE;
 
 

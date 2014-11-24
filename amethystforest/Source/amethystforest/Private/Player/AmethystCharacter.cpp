@@ -196,9 +196,9 @@ void AAmethystCharacter::OnCameraUpdate(const FVector& CameraLocation, const FRo
 	const FRotator RotCameraPitch(CameraRotation.Pitch, 0.0f, 0.0f);
 	const FRotator RotCameraYaw(0.0f, CameraRotation.Yaw, 0.0f);
 
-	const FMatrix LeveledCameraLS = FRotationTranslationMatrix(RotCameraYaw, CameraLocation) * LocalToWorld.InverseSafe();
+	const FMatrix LeveledCameraLS = FRotationTranslationMatrix(RotCameraYaw, CameraLocation) * LocalToWorld.Inverse();
 	const FMatrix PitchedCameraLS = FRotationMatrix(RotCameraPitch) * LeveledCameraLS;
-	const FMatrix MeshRelativeToCamera = DefMeshLS * LeveledCameraLS.InverseSafe();
+	const FMatrix MeshRelativeToCamera = DefMeshLS * LeveledCameraLS.Inverse();
 	const FMatrix PitchedMesh = MeshRelativeToCamera * PitchedCameraLS;
 
 	Mesh1P->SetRelativeLocationAndRotation(PitchedMesh.GetOrigin(), PitchedMesh.Rotator());
