@@ -39,14 +39,14 @@ FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult 
 
 
 }
-void AAmethystBot::TakeDamage()
+float AAmethystBot::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser)
 {
 	FRotator Rotation;
 	Rotation.Yaw = -90;
 	Rotation.Pitch = 0;
 	Rotation.Roll = 0;
 	Super::AddActorLocalRotation(Rotation, false);
-
+    return 0;
 }
 void AAmethystBot::PerformMeleeAttack()
 {
