@@ -1,5 +1,4 @@
 
-
 #include "../../Public/amethystforest.h"
 #include "../../Classes/Weapon/AmethystWeapon.h"
 #include "../../Classes/Bots/AmethystAIController.h"
