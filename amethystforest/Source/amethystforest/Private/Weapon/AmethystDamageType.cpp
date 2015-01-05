@@ -1,5 +1,4 @@
 
-
 #include "amethystforest.h"
 #include "../../Classes/Weapon/AmethystDamageType.h"
 
