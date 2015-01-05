@@ -13,7 +13,7 @@ UAmethystCharMovementComponent::UAmethystCharMovementComponent(const class FPost
 
 float UAmethystCharMovementComponent::GetMaxSpeedModifier() const
 {
-	float SpeedMod = Super::GetMaxSpeedModifier();
+	float SpeedMod = Super::GetMaxSpeed();
 
 	const AAmethystCharacter* CharacterOwner = Cast<AAmethystCharacter>(PawnOwner);
 	if (CharacterOwner)
