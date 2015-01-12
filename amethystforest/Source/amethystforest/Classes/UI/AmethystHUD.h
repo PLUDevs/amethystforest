@@ -84,75 +84,6 @@ public:
     /** Notifies we have hit the enemy. */
     void NotifyEnemyHit();
     
-    /**
-     * Set state of current match.
-     *
-     * @param	NewState	The new match state.
-     */
-    /** Dont need
-     *void SetMatchState(EAmethystMatchState::Type NewState);*/
-    
-    /** Get state of current match. */
-    /** Dont need
-    *EAmethystMatchState::Type GetMatchState() const;*/
-    
-    /** Turns off scoreboard if it is being displayed */
-    /** Dont need
-    *void ConditionalCloseScoreboard();*/
-    
-    /** Toggles scoreboard */
-    /** Dont need
-    void ToggleScoreboard();*/
-    
-    /**
-     * Toggles in game scoreboard.
-     * Note:Will not display if the game menu is visible.
-     
-     * @param	bEnable	Required scoreboard display state.
-     */
-    /** Dont need
-    *void ShowScoreboard(bool bEnable);
-     */
-    
-    /**
-     * Add death message.
-     *
-     * @param	KillerPlayerState	Player that did the killings state.
-     * @param	VictimPlayerState	Played that was killed state.
-     * @param	KillerDamageType	The type of damaged that caused the death.
-     */
-    /** Dont Need
-    *void ShowDeathMessage(class AAmethystPlayerState* KillerPlayerState, class AAmethystPlayerState* VictimPlayerState, const UDamageType* KillerDamageType);*/
-    
-    /*
-     * Toggle chat window visibility.
-     *
-     */
-    /** Dont Need
-    *void ToggleChat();
-     */
-    
-    /**
-     * Set chat window visibility.
-     *
-     * @param	RequiredVisibility	The required visibility.
-     */
-    /** Dont Need
-    *void SetChatVisibilty( const EVisibility RequiredVisibility );*/
-    
-    /*
-     * Add a string to the chat window.
-     *
-     * @param	ChatString	The string to add.
-     * @param	bWantFocus	Should we set the chat window to focus
-     */
-    /** Dont Need
-    * void AddChatLine(const FString& ChatString, bool bWantFocus);*/
-    
-    /* Is the match over (IE Is the state Won or Lost). */
-    /** Dont Need
-    *bool IsMatchOver() const;*/
-    
 protected:
     /** Floor for automatic hud scaling. */
     static const float MinHudScale;
@@ -233,16 +164,6 @@ protected:
     UPROPERTY()
     FCanvasIcon KilledIcon;
     
-    /** Timer icon. */
-    /** Dont Need
-    *UPROPERTY()
-    *FCanvasIcon TimerIcon;*/
-    
-    /** Podium icon. */
-    /** Dont Need
-    *UPROPERTY()
-    *FCanvasIcon PlaceIcon;*/
-    
     /** UI scaling factor for other resolutions than Full HD. */
     float ScaleUI;
     
@@ -297,30 +218,6 @@ protected:
     /** Active death messages. */
     TArray<FDeathMessage> DeathMessages;
     
-    /** State of match. */
-    /* Dont Need or Dont Have MatchState
-    *EAmethystMatchState::Type MatchState;*/
-    
-    /** Is the scoreboard widget on screen? */
-    /** Dont Need
-    *uint32 bIsScoreBoardVisible:1;*/
-    
-    /** Scoreboard widget. */
-    /** Dont Need
-    *TSharedPtr<class SAmethystScoreboardWidget>	ScoreboardWidget;*/
-    
-    /** Scoreboard widget overlay. */
-    /** Dont Need
-    *TSharedPtr<class SOverlay>	ScoreboardWidgetOverlay;*/
-    
-    /** Scoreboard widget container - used for removing */
-    /** Dont Need
-    *TSharedPtr<class SWidget> ScoreboardWidgetContainer;*/
-    
-    /** Chatbox widget. */
-    /** Dont Need
-    *TSharedPtr<class SChatWidget> ChatWidget;*/
-    
     /** Array of information strings to render (Waiting to respawn etc) */
     TArray<FCanvasTextItem> InfoItems;
     
@@ -334,16 +231,8 @@ protected:
     /** Draws weapon HUD. */
     void DrawWeaponHUD();
     
-    /** Draws kills information. */
-    /* Dont Need
-    *void DrawKills();*/
-    
     /** Draw player's health bar. */
     void DrawHealth();
-    
-    /** Draws match timer and player position. */
-    /** Dont Need
-    *void DrawMatchTimerAndPosition();*/
     
     /** Draws weapon crosshair. */
     void DrawCrosshair();
@@ -353,14 +242,6 @@ protected:
     
     /** Draw death messages. */
     void DrawDeathMessages();
-    
-    /*
-     * Draw the most recently killed player if needed
-     *
-     * @return Returns the bottom of the message or 0 if not drawn.
-     */
-    /* Dont Need
-    * float DrawRecentlyKilledPlayer();*/
     
     /** Temporary helper for drawing text-in-a-box. */
     void DrawDebugInfoString(const FString& Text, float PosX, float PosY, bool bAlignLeft, bool bAlignTop, const FColor& TextColor);
