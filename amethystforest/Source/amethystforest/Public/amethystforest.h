@@ -4,7 +4,8 @@
 
 #include "Engine.h"
 #include "../Classes/Player/AmethystCharacter.h"
-#include "../Classes//Weapon/AmethystWeapon.h"
+#include "../Classes/Weapon/AmethystWeapon.h"
+#include "../Classes/UI/AmethystHUD.h"
 #include "ParticleDefinitions.h"
 #include "ParticleHelper.h"
 #include "Particles/ParticleSystem.h"
