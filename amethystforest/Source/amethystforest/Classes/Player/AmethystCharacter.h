@@ -383,6 +383,9 @@ public:
 	// Current health of the Pawn
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = Health)
 		float Health;
+	// Current team of the Pawn
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = TeamID)
+		uint8 TeamID;
 
 	/** Take damage, handle death */
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) OVERRIDE;
