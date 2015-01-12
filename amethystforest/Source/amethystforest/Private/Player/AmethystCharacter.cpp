@@ -3,9 +3,11 @@
 #include "amethystforest.h"
 #include "../../Classes/Player/AmethystCharacter.h"
 #include "../../Classes/Player/AmethystCharMovementComponent.h"
+#include "../../Classes/Player/amethystforestPlayerController.h"
 #include "../../Classes/Weapon/AmethystDamageType.h"
 #include "../../Classes/Weapon/AmethystWeapon.h"
-#include "../../Classes/Player/amethystforestPlayerController.h"
+#include "../../Classes/UI/AmethystHUD.h"
+#include "../../Classes/Game/amethystforestGameMode.h"
 
 AAmethystCharacter::AAmethystCharacter(const class FPostConstructInitializeProperties& PCIP)
 	: Super(PCIP.SetDefaultSubobjectClass<UAmethystCharMovementComponent>(ACharacter::CharacterMovementComponentName))
@@ -45,6 +47,17 @@ AAmethystCharacter::AAmethystCharacter(const class FPostConstructInitializePrope
 
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
+    
+}
+
+void AAmethystCharacter::BeginPlay()
+{
+    Super::BeginPlay();
+    
+    if (GEngine)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("We are using AmethystCharacter!"));
+    }
 }
 
 void AAmethystCharacter::PostInitializeComponents()
@@ -138,13 +151,13 @@ bool AAmethystCharacter::IsEnemyFor(AController* TestPC) const
 		return false;
 	}
 
-	AShooterPlayerState* TestPlayerState = Cast<AShooterPlayerState>(TestPC->PlayerState);
-	AShooterPlayerState* MyPlayerState = Cast<AShooterPlayerState>(PlayerState);
+	AAmethystPlayerState* TestPlayerState = Cast<AAmethystPlayerState>(TestPC->PlayerState);
+	AAmethystPlayerState* MyPlayerState = Cast<AAmethystPlayerState>(PlayerState);
 
 	bool bIsEnemy = true;
 	if (GetWorld()->GameState && GetWorld()->GameState->GameModeClass)
 	{
-		const AShooterGameMode* DefGame = GetWorld()->GameState->GameModeClass->GetDefaultObject<AShooterGameMode>();
+		const AAmethystGameMode* DefGame = GetWorld()->GameState->GameModeClass->GetDefaultObject<AAmethystGameMode>();
 		if (DefGame && MyPlayerState && TestPlayerState)
 		{
 			bIsEnemy = DefGame->CanDealDamage(TestPlayerState, MyPlayerState);
@@ -154,7 +167,6 @@ bool AAmethystCharacter::IsEnemyFor(AController* TestPC) const
 	return bIsEnemy;
 }
 */
-
 
 //////////////////////////////////////////////////////////////////////////
 // Meshes
@@ -170,13 +182,12 @@ void AAmethystCharacter::UpdatePawnMeshes()
 	Mesh->SetOwnerNoSee(bFirstPerson);
 }
 
-
 void AAmethystCharacter::UpdateTeamColors(UMaterialInstanceDynamic* UseMID)
 {
 	if (UseMID)
 	{
 		/* TO DO: PlayerState class needed
-		AShooterPlayerState* MyPlayerState = Cast<AShooterPlayerState>(PlayerState);
+		AAmethystPlayerState* MyPlayerState = Cast<AAmethystPlayerState>(PlayerState);
 		if (MyPlayerState != NULL)
 		{
 			float MaterialParam = (float)MyPlayerState->GetTeamNum();
@@ -235,10 +246,8 @@ void AAmethystCharacter::KilledBy(APawn* EventInstigator)
 	}
 }
 
-
 float AAmethystCharacter::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser)
 {
-	// TO DO: PlayerState, GameMode, and custom playercontroller class needed
 	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->HasGodMode())
 	{
@@ -251,8 +260,8 @@ float AAmethystCharacter::TakeDamage(float Damage, struct FDamageEvent const& Da
 	}
 
 	// Modify based on game rules.
-	//AShooterGameMode* const Game = GetWorld()->GetAuthGameMode<AShooterGameMode>();
-	//Damage = Game ? Game->ModifyDamage(Damage, this, DamageEvent, EventInstigator, DamageCauser) : 0.f;
+	AamethystforestGameMode* const Game = GetWorld()->GetAuthGameMode<AamethystforestGameMode>();
+	Damage = Game ? Game->ModifyDamage(Damage, this, DamageEvent, EventInstigator, DamageCauser) : 0.f;
 
 	const float ActualDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 	if (ActualDamage > 0.f)
@@ -272,8 +281,6 @@ float AAmethystCharacter::TakeDamage(float Damage, struct FDamageEvent const& Da
 
 	return ActualDamage;
 	
-
-	return 0; //remove this later
 }
 
 
@@ -294,7 +301,6 @@ bool AAmethystCharacter::CanDie(float KillingDamage, FDamageEvent const& DamageE
 	return true;
 }
 
-
 bool AAmethystCharacter::Die(float KillingDamage, FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser)
 {
 	if (!CanDie(KillingDamage, DamageEvent, Killer, DamageCauser))
@@ -309,9 +315,9 @@ bool AAmethystCharacter::Die(float KillingDamage, FDamageEvent const& DamageEven
 	Killer = GetDamageInstigator(Killer, *DamageType);
 
 	AController* const KilledPlayer = (Controller != NULL) ? Controller : Cast<AController>(GetOwner());
-	/* TO DO: GameMode class needed
-	GetWorld()->GetAuthGameMode<AShooterGameMode>()->Killed(Killer, KilledPlayer, this, DamageType);
-	*/
+    /* TO DO: GameMode Class needs these identifiers.
+	GetWorld()->GetAuthGameMode<AAmethystGameMode>()->Killed(Killer, KilledPlayer, this, DamageType);
+    */
 
 	NetUpdateFrequency = GetDefault<AAmethystCharacter>()->NetUpdateFrequency;
 	CharacterMovement->ForceReplicationUpdate();
@@ -319,7 +325,6 @@ bool AAmethystCharacter::Die(float KillingDamage, FDamageEvent const& DamageEven
 	OnDeath(KillingDamage, DamageEvent, Killer ? Killer->GetPawn() : NULL, DamageCauser);
 	return true;
 }
-
 
 void AAmethystCharacter::OnDeath(float KillingDamage, struct FDamageEvent const& DamageEvent, class APawn* PawnInstigator, class AActor* DamageCauser)
 {
@@ -423,9 +428,8 @@ void AAmethystCharacter::PlayHit(float DamageTaken, struct FDamageEvent const& D
 		ApplyDamageMomentum(DamageTaken, DamageEvent, PawnInstigator, DamageCauser);
 	}
 
-	/* TO DO: Player Controller and Custom HUD class needed
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
-	AShooterHUD* MyHUD = MyPC ? Cast<AShooterHUD>(MyPC->GetHUD()) : NULL;
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
+	AAmethystHUD* MyHUD = MyPC ? Cast<AAmethystHUD>(MyPC->GetHUD()) : NULL;
 	if (MyHUD)
 	{
 		MyHUD->NotifyHit(DamageTaken, DamageEvent, PawnInstigator);
@@ -433,16 +437,14 @@ void AAmethystCharacter::PlayHit(float DamageTaken, struct FDamageEvent const& D
 
 	if (PawnInstigator && PawnInstigator != this && PawnInstigator->IsLocallyControlled())
 	{
-		AShooterPlayerController* InstigatorPC = Cast<AShooterPlayerController>(PawnInstigator->Controller);
-		AShooterHUD* InstigatorHUD = InstigatorPC ? Cast<AShooterHUD>(InstigatorPC->GetHUD()) : NULL;
+		AamethystforestPlayerController* InstigatorPC = Cast<AamethystforestPlayerController>(PawnInstigator->Controller);
+		AAmethystHUD* InstigatorHUD = InstigatorPC ? Cast<AAmethystHUD>(InstigatorPC->GetHUD()) : NULL;
 		if (InstigatorHUD)
 		{
 			InstigatorHUD->NotifyEnemyHit();
 		}
 	}
-	*/
 }
-
 
 void AAmethystCharacter::SetRagdollPhysics()
 {
@@ -483,8 +485,6 @@ void AAmethystCharacter::SetRagdollPhysics()
 		SetLifeSpan(10.0f);
 	}
 }
-
-
 
 void AAmethystCharacter::ReplicateHit(float Damage, struct FDamageEvent const& DamageEvent, class APawn* PawnInstigator, class AActor* DamageCauser, bool bKilled)
 {
@@ -916,8 +916,7 @@ void AAmethystCharacter::LookUpAtRate(float Val)
 
 void AAmethystCharacter::OnStartFire()
 {
-	/* TO DO: Custom Player Controller class needed
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->IsGameInputAllowed())
 	{
 		if (IsRunning())
@@ -926,7 +925,6 @@ void AAmethystCharacter::OnStartFire()
 		}
 		StartWeaponFire();
 	}
-	*/
 }
 
 
@@ -939,8 +937,7 @@ void AAmethystCharacter::OnStopFire()
 
 void AAmethystCharacter::OnStartTargeting()
 {
-	/* TO DO: Custom Player Controller class needed
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->IsGameInputAllowed())
 	{
 		if (IsRunning())
@@ -949,7 +946,6 @@ void AAmethystCharacter::OnStartTargeting()
 		}
 		SetTargeting(true);
 	}
-	*/
 }
 
 void AAmethystCharacter::OnStopTargeting()
@@ -959,8 +955,7 @@ void AAmethystCharacter::OnStopTargeting()
 
 void AAmethystCharacter::OnNextWeapon()
 {
-	/* TO DO: PlayerController Class 
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->IsGameInputAllowed())
 	{
 		if (Inventory.Num() >= 2 && (CurrentWeapon == NULL || CurrentWeapon->GetCurrentState() != EWeaponState::Equipping))
@@ -970,13 +965,11 @@ void AAmethystCharacter::OnNextWeapon()
 			EquipWeapon(NextWeapon);
 		}
 	}
-	*/
 }
 
 void AAmethystCharacter::OnPrevWeapon()
 {
-	/* TO DO: PlayerController Class
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->IsGameInputAllowed())
 	{
 		if (Inventory.Num() >= 2 && (CurrentWeapon == NULL || CurrentWeapon->GetCurrentState() != EWeaponState::Equipping))
@@ -986,13 +979,11 @@ void AAmethystCharacter::OnPrevWeapon()
 			EquipWeapon(PrevWeapon);
 		}
 	}
-	*/
 }
 
 void AAmethystCharacter::OnReload()
 {
-	/* TO DO: Custom Player Controller Class Needed 
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->IsGameInputAllowed())
 	{
 		if (CurrentWeapon)
@@ -1000,13 +991,11 @@ void AAmethystCharacter::OnReload()
 			CurrentWeapon->StartReload();
 		}
 	}
-	*/
 }
 
 void AAmethystCharacter::OnStartRunning()
 {
-	/* TO DO: Custom Player Controller Class Needed
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->IsGameInputAllowed())
 	{
 		if (IsTargeting())
@@ -1016,13 +1005,11 @@ void AAmethystCharacter::OnStartRunning()
 		StopWeaponFire();
 		SetRunning(true, false);
 	}
-	*/
 }
 
 void AAmethystCharacter::OnStartRunningToggle()
 {
-	/* TO DO: Custom Player Controller Class Needed
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->IsGameInputAllowed())
 	{
 		if (IsTargeting())
@@ -1032,7 +1019,6 @@ void AAmethystCharacter::OnStartRunningToggle()
 		StopWeaponFire();
 		SetRunning(true, true);
 	}
-	*/
 }
 
 void AAmethystCharacter::OnStopRunning()
@@ -1059,8 +1045,7 @@ void AAmethystCharacter::Tick(float DeltaSeconds)
 	{
 		SetRunning(false, false);
 	}
-	/* TO DO: Custom PlayerController Class needed
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->HasHealthRegen())
 	{
 		if (this->Health < this->GetMaxHealth())
@@ -1092,18 +1077,15 @@ void AAmethystCharacter::Tick(float DeltaSeconds)
 			LowHealthWarningPlayer->SetVolumeMultiplier(MinVolume + (1.0f - MinVolume) * VolumeMultiplier);
 		}
 	}
-	*/
 }
 
 void AAmethystCharacter::OnStartJump()
 {
-	/* TO DO: CUstom PlayerController Class Needed
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->IsGameInputAllowed())
 	{
 		bPressedJump = true;
 	}
-	*/
 }
 
 void AAmethystCharacter::OnStopJump()

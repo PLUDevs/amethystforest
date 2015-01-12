@@ -10,6 +10,9 @@ UCLASS(Abstract)
 class AAmethystCharacter : public ACharacter
 {
 	GENERATED_UCLASS_BODY()
+    
+    /** TESTING PURPOSES */
+    virtual void BeginPlay() override;
 	
 	/** spawn inventory, setup initial variables */
 	virtual void PostInitializeComponents() OVERRIDE;

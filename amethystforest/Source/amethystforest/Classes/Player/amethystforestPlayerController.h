@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "amethystforest.h"
 #include "GameFramework/PlayerController.h"
 #include "amethystforestPlayerController.generated.h"
 
@@ -16,10 +17,6 @@ public:
 	UFUNCTION(reliable, client)
 		void ClientSetSpectatorCamera(FVector CameraLocation, FRotator CameraRotation);
 
-	/** notify player about started match */
-	UFUNCTION(reliable, client)
-		void ClientGameStarted();
-
 	/** Starts the online game using the session name in the PlayerState */
 	UFUNCTION(reliable, client)
 		void ClientStartOnlineGame();
@@ -28,9 +25,6 @@ public:
 	UFUNCTION(reliable, client)
 		void ClientEndOnlineGame();
 
-	/** notify player about finished match */
-	virtual void ClientGameEnded_Implementation(class AActor* EndGameFocus, bool bIsWinner);
-
 	/** used for input simulation from blueprint (for automatic perf tests) */
 	UFUNCTION(BlueprintCallable, Category = "Input")
 		void SimulateInputKey(FKey Key, bool bPressed = true);
@@ -38,12 +32,6 @@ public:
 	/** sends cheat message */
 	UFUNCTION(reliable, server, WithValidation)
 		void ServerCheat(const FString& Msg);
-
-	/* Overriden Message implementation. */
-	virtual void ClientTeamMessage_Implementation(APlayerState* SenderPlayerState, const FString& S, FName Type, float MsgLifeTime) OVERRIDE;
-
-	/* Tell the HUD to toggle the chat window. */
-	void ToggleChatWindow();
 
 	/** Local function say a string */
 	UFUNCTION(exec)
@@ -59,19 +47,13 @@ public:
 
 	/** notify local client about deaths */
 	/** TO DO: Get a PlayerState Class */
-	// void OnDeathMessage(class AShooterPlayerState* KillerPlayerState, class AShooterPlayerState* KilledPlayerState, const UDamageType* KillerDamageType);
+	// void OnDeathMessage(class AAmethystPlayerState* KillerPlayerState, class AAmethystPlayerState* KilledPlayerState, const UDamageType* KillerDamageType);
 
 	/** toggle InGameMenu handler */
 	void OnToggleInGameMenu();
 
 	/** Show the in-game menu if it's not already showing */
 	void ShowInGameMenu();
-
-	/** shows scoreboard */
-	void OnShowScoreboard();
-
-	/** hides scoreboard */
-	void OnHideScoreboard();
 
 	/** set infinite ammo cheat */
 	void SetInfiniteAmmo(bool bEnable);
@@ -145,12 +127,11 @@ public:
 
 	// begin AamethystforestPlayerController-specific
 
-	/** Returns a pointer to the shooter game hud. May return NULL. */
-	/* TO DO: HUD Class Needed */
-	// AShooterHUD* GetShooterHUD() const;
+	/** Returns a pointer to the Amethyst game hud. May return NULL. */
+	AAmethystHUD* GetAmethystHUD() const;
 
 	/** Returns the persistent user record associated with this player, or null if there is't one. */
-	class UShooterPersistentUser* GetPersistentUser() const;
+	class UAmethystPersistentUser* GetPersistentUser() const;
 
 	/** Informs that player fragged someone */
 	void OnKill();
@@ -181,8 +162,8 @@ protected:
 	/** if set, gameplay related actions (movement, weapn usage, etc) are allowed */
 	uint8 bAllowGameActions : 1;
 
-	/** shooter in-game menu */
-	TSharedPtr<class FShooterIngameMenu> ShooterIngameMenu;
+	/** Amethyst in-game menu */
+	TSharedPtr<class FAmethystIngameMenu> AmethystIngameMenu;
 
 	/** try to find spot for death cam */
 	bool FindDeathCameraSpot(FVector& CameraLocation, FRotator& CameraRotation);
@@ -211,14 +192,6 @@ protected:
 
 	/** sets up input */
 	virtual void SetupInputComponent() OVERRIDE;
-
-	/**
-	* Called from game info upon end of the game, used to transition to proper state.
-	*
-	* @param EndGameFocus Actor to set as the view target on end game
-	* @param bIsWinner true if this controller is on winning team
-	*/
-	virtual void GameHasEnded(class AActor* EndGameFocus = NULL, bool bIsWinner = false) OVERRIDE;
 
 	/** Return the client to the main menu gracefully */
 	void ClientReturnToMainMenu_Implementation(const FString& ReturnReason) OVERRIDE;
