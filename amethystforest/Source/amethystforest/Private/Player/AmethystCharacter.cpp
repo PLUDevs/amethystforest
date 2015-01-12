@@ -5,6 +5,7 @@
 #include "../../Classes/Player/AmethystCharMovementComponent.h"
 #include "../../Classes/Weapon/AmethystDamageType.h"
 #include "../../Classes/Weapon/AmethystWeapon.h"
+#include "../../Classes/Player/amethystforestPlayerController.h"
 
 AAmethystCharacter::AAmethystCharacter(const class FPostConstructInitializeProperties& PCIP)
 	: Super(PCIP.SetDefaultSubobjectClass<UAmethystCharMovementComponent>(ACharacter::CharacterMovementComponentName))
@@ -237,8 +238,8 @@ void AAmethystCharacter::KilledBy(APawn* EventInstigator)
 
 float AAmethystCharacter::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser)
 {
-	/* TO DO: PlayerState, GameMode, and custom playercontroller class needed
-	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+	// TO DO: PlayerState, GameMode, and custom playercontroller class needed
+	AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(Controller);
 	if (MyPC && MyPC->HasGodMode())
 	{
 		return 0.f;
@@ -250,8 +251,8 @@ float AAmethystCharacter::TakeDamage(float Damage, struct FDamageEvent const& Da
 	}
 
 	// Modify based on game rules.
-	AShooterGameMode* const Game = GetWorld()->GetAuthGameMode<AShooterGameMode>();
-	Damage = Game ? Game->ModifyDamage(Damage, this, DamageEvent, EventInstigator, DamageCauser) : 0.f;
+	//AShooterGameMode* const Game = GetWorld()->GetAuthGameMode<AShooterGameMode>();
+	//Damage = Game ? Game->ModifyDamage(Damage, this, DamageEvent, EventInstigator, DamageCauser) : 0.f;
 
 	const float ActualDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 	if (ActualDamage > 0.f)
@@ -270,7 +271,7 @@ float AAmethystCharacter::TakeDamage(float Damage, struct FDamageEvent const& Da
 	}
 
 	return ActualDamage;
-	*/
+	
 
 	return 0; //remove this later
 }
@@ -545,21 +546,21 @@ void AAmethystCharacter::SpawnDefaultInventory()
 	{
 		return;
 	}
-
-	// @hack to remove rocket launcher
-	int32 NumWeaponClasses = 1;	//DefaultInventoryClasses.Num();	
-	for (int32 i = 0; i < NumWeaponClasses; i++)
-	{
-		if (DefaultInventoryClasses[i])
+	
+		// @hack to remove rocket launcher
+		int32 NumWeaponClasses = DefaultInventoryClasses.Num();	
+		for (int32 i = 0; i < NumWeaponClasses; i++)
 		{
-			FActorSpawnParameters SpawnInfo;
-			SpawnInfo.bNoCollisionFail = true;
-			AAmethystWeapon* NewWeapon = GetWorld()->SpawnActor<AAmethystWeapon>(DefaultInventoryClasses[i], SpawnInfo);
-			AddWeapon(NewWeapon);
+			if (DefaultInventoryClasses[i])
+			{
+				FActorSpawnParameters SpawnInfo;
+				SpawnInfo.bNoCollisionFail = true;
+				AAmethystWeapon* NewWeapon = GetWorld()->SpawnActor<AAmethystWeapon>(DefaultInventoryClasses[i], SpawnInfo);
+				AddWeapon(NewWeapon);
 
+			}
 		}
-	}
-
+	
 	// equip first weapon in inventory
 	if (Inventory.Num() > 0)
 	{
