@@ -384,7 +384,7 @@ void AAmethystWeapon::UseAmmo()
 	else if (PlayerController)
 	{
 		/* TO DO: Add Player State class
-		AShooterPlayerState* PlayerState = Cast<AShooterPlayerState>(PlayerController->PlayerState);
+		AAmethystPlayerState* PlayerState = Cast<AAmethystPlayerState>(PlayerController->PlayerState);
 		switch (GetAmmoType())
 		{
 		case EAmmoType::ERocket:
@@ -428,13 +428,11 @@ void AAmethystWeapon::HandleFiring()
 		{
 			PlayWeaponSound(OutOfAmmoSound);
 			AamethystforestPlayerController* MyPC = Cast<AamethystforestPlayerController>(MyPawn->Controller);
-			/* TO DO: Add a HUD class 
-			AShooterHUD* MyHUD = MyPC ? Cast<AShooterHUD>(MyPC->GetHUD()) : NULL;
+			AAmethystHUD* MyHUD = MyPC ? Cast<AAmethystHUD>(MyPC->GetHUD()) : NULL;
 			if (MyHUD)
 			{
 				MyHUD->NotifyOutOfAmmo();
 			}
-			*/
 		}
 
 		// stop weapon fire FX, but stay in Firing state
