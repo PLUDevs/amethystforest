@@ -35,8 +35,8 @@ static const int32 GreatScoreCount = 15;
 AamethystforestPlayerController::AamethystforestPlayerController(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
 {
 	/* TO DO: PlayerCameraManager and CheatManager classes
-	PlayerCameraManagerClass = AShooterPlayerCameraManager::StaticClass();
-	CheatClass = UShooterCheatManager::StaticClass();
+	PlayerCameraManagerClass = AAmethystPlayerCameraManager::StaticClass();
+	CheatClass = UAmethystCheatManager::StaticClass();
 	bAllowGameActions = true;
 
 	if (!HasAnyFlags(RF_ClassDefaultObject))
@@ -55,14 +55,7 @@ void AamethystforestPlayerController::SetupInputComponent()
 
 	// UI input
 	InputComponent->BindAction("InGameMenu", IE_Pressed, this, &AamethystforestPlayerController::OnToggleInGameMenu);
-	InputComponent->BindAction("Scoreboard", IE_Pressed, this, &AamethystforestPlayerController::OnShowScoreboard);
-	InputComponent->BindAction("Scoreboard", IE_Released, this, &AamethystforestPlayerController::OnHideScoreboard);
 
-	// voice chat
-	InputComponent->BindAction("PushToTalk", IE_Pressed, this, &APlayerController::StartTalking);
-	InputComponent->BindAction("PushToTalk", IE_Released, this, &APlayerController::StopTalking);
-
-	InputComponent->BindAction("ToggleChat", IE_Pressed, this, &AamethystforestPlayerController::ToggleChatWindow);
 }
 
 
@@ -70,10 +63,10 @@ void AamethystforestPlayerController::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	//Build menu only after game is initialized
-	/* TO DO: ShooterStyle?? InGameMenu class needed 
-	FShooterStyle::Initialize();
-	ShooterIngameMenu = MakeShareable(new FShooterIngameMenu());
-	ShooterIngameMenu->Construct(this);
+	/* TO DO: AmethystStyle?? InGameMenu class needed 
+	FAmethystStyle::Initialize();
+	AmethystIngameMenu = MakeShareable(new FAmethystIngameMenu());
+	AmethystIngameMenu->Construct(this);
 	*/
 }
 
@@ -100,30 +93,6 @@ void AamethystforestPlayerController::PawnPendingDestroy(APawn* P)
 	Super::PawnPendingDestroy(P);
 
 	ClientSetSpectatorCamera(CameraLocation, CameraRotation);
-}
-
-void AamethystforestPlayerController::GameHasEnded(class AActor* EndGameFocus, bool bIsWinner)
-{
-	// write stats
-	ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(Player);
-	if (LocalPlayer)
-	{
-		/* TO DO: PlayerState and PersistentUser Class
-		AShooterPlayerState* ShooterPlayerState = Cast<AShooterPlayerState>(PlayerState);
-		if (ShooterPlayerState)
-		{
-			// update local saved profile
-			UShooterPersistentUser* const PersistentUser = GetPersistentUser();
-			if (PersistentUser)
-			{
-				PersistentUser->AddMatchResult(ShooterPlayerState->GetKills(), ShooterPlayerState->GetDeaths(), ShooterPlayerState->GetNumBulletsFired(), ShooterPlayerState->GetNumRocketsFired(), bIsWinner);
-				PersistentUser->SaveIfDirty();
-			}
-		}
-		*/
-	}
-
-	Super::GameHasEnded(EndGameFocus, bIsWinner);
 }
 
 void AamethystforestPlayerController::ClientSetSpectatorCamera_Implementation(FVector CameraLocation, FRotator CameraRotation)
@@ -228,18 +197,18 @@ void AamethystforestPlayerController::SetPlayer(UPlayer* Player)
 {
 	APlayerController::SetPlayer(Player);
 	/* TO DO: IngameMenu Class 
-	ShooterIngameMenu->UpdateMenuOwner();
+	AmethystIngameMenu->UpdateMenuOwner();
 	*/
 }
 
 /* TO DO: Create PlayerState Class
-void AamethystforestPlayerController::OnDeathMessage(class AShooterPlayerState* KillerPlayerState, class AShooterPlayerState* KilledPlayerState, const UDamageType* KillerDamageType)
+void AamethystforestPlayerController::OnDeathMessage(class AAmethystPlayerState* KillerPlayerState, class AAmethystPlayerState* KilledPlayerState, const UDamageType* KillerDamageType)
 {
 	TO DO: HUD Class
-	AShooterHUD* ShooterHUD = GetShooterHUD();
-	if (ShooterHUD)
+	AAmethystHUD* AmethystHUD = GetAmethystHUD();
+	if (AmethystHUD)
 	{
-		ShooterHUD->ShowDeathMessage(KillerPlayerState, KilledPlayerState, KillerDamageType);
+		AmethystHUD->ShowDeathMessage(KillerPlayerState, KilledPlayerState, KillerDamageType);
 	}
 
 	ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(Player);
@@ -286,32 +255,9 @@ void AamethystforestPlayerController::OnDeathMessage(class AShooterPlayerState* 
 void AamethystforestPlayerController::OnToggleInGameMenu()
 {
 	/* TO DO: IngameMenu class 
-	if (ShooterIngameMenu.IsValid())
+	if (AmethystIngameMenu.IsValid())
 	{
-		ShooterIngameMenu->ToggleGameMenu();
-	}
-	*/
-}
-
-void AamethystforestPlayerController::OnShowScoreboard()
-{
-	/* TO DO: HUD class needed
-	AShooterHUD* ShooterHUD = GetShooterHUD();
-	if (ShooterHUD)
-	{
-		ShooterHUD->ShowScoreboard(true);
-	}
-	*/
-}
-
-void AamethystforestPlayerController::OnHideScoreboard()
-{
-	/* TO DO: HUD class needed
-	AShooterHUD* ShooterHUD = GetShooterHUD();
-	// If have a valid match and the match is over - hide the scoreboard
-	if ((ShooterHUD != NULL) && (ShooterHUD->IsMatchOver() == false))
-	{
-		ShooterHUD->ShowScoreboard(false);
+		AmethystIngameMenu->ToggleGameMenu();
 	}
 	*/
 }
@@ -320,9 +266,9 @@ bool AamethystforestPlayerController::IsGameMenuVisible() const
 {
 	bool Result = false;
 	/* TO DO: IngameMenu
-	if (ShooterIngameMenu.IsValid())
+	if (AmethystIngameMenu.IsValid())
 	{
-		Result = ShooterIngameMenu->GetIsGameMenuUp();
+		Result = AmethystIngameMenu->GetIsGameMenuUp();
 	}
 	*/
 
@@ -349,17 +295,6 @@ void AamethystforestPlayerController::SetGodMode(bool bEnable)
 	bGodMode = bEnable;
 }
 
-void AamethystforestPlayerController::ClientGameStarted_Implementation()
-{
-	/* TO DO: HUD class needed
-	AShooterHUD* ShooterHUD = GetShooterHUD();
-	if (ShooterHUD)
-	{
-		ShooterHUD->SetMatchState(EShooterMatchState::Playing);
-	}
-	*/
-}
-
 /** Starts the online game using the session name in the PlayerState */
 void AamethystforestPlayerController::ClientStartOnlineGame_Implementation()
 {
@@ -367,8 +302,8 @@ void AamethystforestPlayerController::ClientStartOnlineGame_Implementation()
 		return;
 
 	/* TO DO: PlayerState and persistentuser class and fix logic
-	AShooterPlayerState* ShooterPlayerState = Cast<AShooterPlayerState>(PlayerState);
-	if (ShooterPlayerState)
+	AAmethystPlayerState* AmethystPlayerState = Cast<AAmethystPlayerState>(PlayerState);
+	if (AmethystPlayerState)
 	{
 		IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
 		if (OnlineSub)
@@ -376,8 +311,8 @@ void AamethystforestPlayerController::ClientStartOnlineGame_Implementation()
 			IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
 			if (Sessions.IsValid())
 			{
-				UE_LOG(LogOnline, Log, TEXT("Starting session %s on client"), *ShooterPlayerState->SessionName.ToString());
-				Sessions->StartSession(ShooterPlayerState->SessionName);
+				UE_LOG(LogOnline, Log, TEXT("Starting session %s on client"), *AmethystPlayerState->SessionName.ToString());
+				Sessions->StartSession(AmethystPlayerState->SessionName);
 			}
 		}
 	}
@@ -395,8 +330,8 @@ void AamethystforestPlayerController::ClientEndOnlineGame_Implementation()
 	if (!IsPrimaryPlayer())
 		return;
 	/* TO DO: PlayerState and persistentuser class and fix logic
-	AShooterPlayerState* ShooterPlayerState = Cast<AShooterPlayerState>(PlayerState);
-	if (ShooterPlayerState)
+	AAmethystPlayerState* AmethystPlayerState = Cast<AAmethystPlayerState>(PlayerState);
+	if (AmethystPlayerState)
 	{
 		IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
 		if (OnlineSub)
@@ -404,8 +339,8 @@ void AamethystforestPlayerController::ClientEndOnlineGame_Implementation()
 			IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
 			if (Sessions.IsValid())
 			{
-				UE_LOG(LogOnline, Log, TEXT("Ending session %s on client"), *ShooterPlayerState->SessionName.ToString());
-				Sessions->EndSession(ShooterPlayerState->SessionName);
+				UE_LOG(LogOnline, Log, TEXT("Ending session %s on client"), *AmethystPlayerState->SessionName.ToString());
+				Sessions->EndSession(AmethystPlayerState->SessionName);
 			}
 		}
 	}
@@ -414,7 +349,6 @@ void AamethystforestPlayerController::ClientEndOnlineGame_Implementation()
 
 void AamethystforestPlayerController::ClientReturnToMainMenu_Implementation(const FString& ReturnReason)
 {
-	OnHideScoreboard();
 	CleanupSessionOnReturnToMenu();
 }
 
@@ -425,8 +359,8 @@ void AamethystforestPlayerController::CleanupSessionOnReturnToMenu()
 
 	// end online game and then destroy it
 	/* TO DO: PlayerState and persistentuser class and fix logic
-	AShooterPlayerState* ShooterPlayerState = Cast<AShooterPlayerState>(PlayerState);
-	if (ShooterPlayerState)
+	AAmethystPlayerState* AmethystPlayerState = Cast<AAmethystPlayerState>(PlayerState);
+	if (AmethystPlayerState)
 	{
 		IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
 		if (OnlineSub)
@@ -434,14 +368,14 @@ void AamethystforestPlayerController::CleanupSessionOnReturnToMenu()
 			IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
 			if (Sessions.IsValid())
 			{
-				EOnlineSessionState::Type SessionState = Sessions->GetSessionState(ShooterPlayerState->SessionName);
-				UE_LOG(LogOnline, Log, TEXT("Session %s is '%s'"), *ShooterPlayerState->SessionName.ToString(), EOnlineSessionState::ToString(SessionState));
+				EOnlineSessionState::Type SessionState = Sessions->GetSessionState(AmethystPlayerState->SessionName);
+				UE_LOG(LogOnline, Log, TEXT("Session %s is '%s'"), *AmethystPlayerState->SessionName.ToString(), EOnlineSessionState::ToString(SessionState));
 
 				if (EOnlineSessionState::InProgress == SessionState)
 				{
-					UE_LOG(LogOnline, Log, TEXT("Ending session %s on return to main menu"), *ShooterPlayerState->SessionName.ToString());
+					UE_LOG(LogOnline, Log, TEXT("Ending session %s on return to main menu"), *AmethystPlayerState->SessionName.ToString());
 					Sessions->AddOnEndSessionCompleteDelegate(OnEndSessionCompleteDelegate);
-					bPendingOnlineOp = Sessions->EndSession(ShooterPlayerState->SessionName);
+					bPendingOnlineOp = Sessions->EndSession(AmethystPlayerState->SessionName);
 					if (!bPendingOnlineOp)
 					{
 						Sessions->ClearOnEndSessionCompleteDelegate(OnEndSessionCompleteDelegate);
@@ -449,16 +383,16 @@ void AamethystforestPlayerController::CleanupSessionOnReturnToMenu()
 				}
 				else if (EOnlineSessionState::Ending == SessionState)
 				{
-					UE_LOG(LogOnline, Log, TEXT("Waiting for session %s to end on return to main menu"), *ShooterPlayerState->SessionName.ToString());
+					UE_LOG(LogOnline, Log, TEXT("Waiting for session %s to end on return to main menu"), *AmethystPlayerState->SessionName.ToString());
 					Sessions->AddOnEndSessionCompleteDelegate(OnEndSessionCompleteDelegate);
 					bPendingOnlineOp = true;
 				}
 				else if (EOnlineSessionState::Ended == SessionState ||
 					EOnlineSessionState::Pending == SessionState)
 				{
-					UE_LOG(LogOnline, Log, TEXT("Destroying session %s on return to main menu"), *ShooterPlayerState->SessionName.ToString());
+					UE_LOG(LogOnline, Log, TEXT("Destroying session %s on return to main menu"), *AmethystPlayerState->SessionName.ToString());
 					Sessions->AddOnDestroySessionCompleteDelegate(OnDestroySessionCompleteDelegate);
-					bPendingOnlineOp = Sessions->DestroySession(ShooterPlayerState->SessionName);
+					bPendingOnlineOp = Sessions->DestroySession(AmethystPlayerState->SessionName);
 					if (!bPendingOnlineOp)
 					{
 						Sessions->ClearOnDestroySessionCompleteDelegate(OnDestroySessionCompleteDelegate);
@@ -466,7 +400,7 @@ void AamethystforestPlayerController::CleanupSessionOnReturnToMenu()
 				}
 				else if (EOnlineSessionState::Starting == SessionState)
 				{
-					UE_LOG(LogOnline, Log, TEXT("Waiting for session %s to start, and then we will end it to return to main menu"), *ShooterPlayerState->SessionName.ToString());
+					UE_LOG(LogOnline, Log, TEXT("Waiting for session %s to start, and then we will end it to return to main menu"), *AmethystPlayerState->SessionName.ToString());
 					Sessions->AddOnStartSessionCompleteDelegate(OnStartSessionCompleteEndItDelegate);
 					bPendingOnlineOp = true;
 				}
@@ -481,8 +415,8 @@ void AamethystforestPlayerController::CleanupSessionOnReturnToMenu()
 
 		// Temp fix until next week's meeting on how to design King / Networking interaction properly.
 		/* TO DO: Figure this out 
-		UShooterGameKing& ShooterKing = UShooterGameKing::Get();
-		ShooterKing.SetCurrentState(ShooterKing.GetInitialFrontendState());
+		UAmethystGameKing& AmethystKing = UAmethystGameKing::Get();
+		AmethystKing.SetCurrentState(AmethystKing.GetInitialFrontendState());
 		*/
 	}
 }
@@ -559,31 +493,6 @@ void AamethystforestPlayerController::OnDestroySessionComplete(FName SessionName
 	CleanupSessionOnReturnToMenu();
 }
 
-void AamethystforestPlayerController::ClientGameEnded_Implementation(class AActor* EndGameFocus, bool bIsWinner)
-{
-	Super::ClientGameEnded_Implementation(EndGameFocus, bIsWinner);
-
-	// Allow only looking around
-	SetIgnoreMoveInput(true);
-	bAllowGameActions = false;
-
-	// Make sure that we still have valid view target
-	SetViewTarget(GetPawn());
-
-	// Show scoreboard
-	/* TO DO: HUD class needed
-	AShooterHUD* ShooterHUD = GetShooterHUD();
-	if (ShooterHUD)
-	{
-		ShooterHUD->SetMatchState(bIsWinner ? EShooterMatchState::Won : EShooterMatchState::Lost);
-		if (IsPrimaryPlayer())
-		{
-			ShooterHUD->ShowScoreboard(true);
-		}
-	}
-	*/
-}
-
 void AamethystforestPlayerController::SetCinematicMode(bool bInCinematicMode, bool bHidePlayer, bool bAffectsHUD, bool bAffectsMovement, bool bAffectsTurning)
 {
 	Super::SetCinematicMode(bInCinematicMode, bHidePlayer, bAffectsHUD, bAffectsMovement, bAffectsTurning);
@@ -609,7 +518,7 @@ void AamethystforestPlayerController::InitInputSystem()
 	Super::InitInputSystem();
 
 	/* TO DO: PersistentUser Class needed
-	UShooterPersistentUser* PersistentUser = GetPersistentUser();
+	UAmethystPersistentUser* PersistentUser = GetPersistentUser();
 	if (PersistentUser)
 	{
 		PersistentUser->TellInputAboutKeybindings();
@@ -675,34 +584,6 @@ bool AamethystforestPlayerController::IsGameInputAllowed() const
 	return bAllowGameActions && !bCinematicMode;
 }
 
-void AamethystforestPlayerController::ToggleChatWindow()
-{
-	/* TO DO: HUD class needed
-	AShooterHUD* ShooterHUD = Cast<AShooterHUD>(GetHUD());
-	if (ShooterHUD)
-	{
-		ShooterHUD->ToggleChat();
-	}
-	*/
-}
-
-void AamethystforestPlayerController::ClientTeamMessage_Implementation(APlayerState* SenderPlayerState, const FString& S, FName Type, float MsgLifeTime)
-{
-	/* TO DO: HUD class needed
-	AShooterHUD* ShooterHUD = Cast<AShooterHUD>(GetHUD());
-	if (ShooterHUD)
-	{
-		if (Type == ServerSayString)
-		{
-			if (SenderPlayerState != PlayerState)
-			{
-				ShooterHUD->AddChatLine(S);
-			}
-		}
-	}
-	*/
-}
-
 void AamethystforestPlayerController::Say(const FString& Msg)
 {
 	ServerSay(Msg.Left(128));
@@ -718,21 +599,18 @@ void AamethystforestPlayerController::ServerSay_Implementation(const FString& Ms
 	GetWorld()->GetAuthGameMode()->Broadcast(this, Msg, ServerSayString);
 }
 
-/* TO DO: HUD class needed
-AShooterHUD* AamethystforestPlayerController::GetShooterHUD() const
+AAmethystHUD* AamethystforestPlayerController::GetAmethystHUD() const
 {
-	return Cast<AShooterHUD>(GetHUD());
+	return Cast<AAmethystHUD>(GetHUD());
 }
-*/
 
-
-UShooterPersistentUser* AamethystforestPlayerController::GetPersistentUser() const
+UAmethystPersistentUser* AamethystforestPlayerController::GetPersistentUser() const
 {
 	/* TO DO: LocalPlayer
-	UShooterLocalPlayer* const ShooterLP = Cast<UShooterLocalPlayer>(Player);
-	if (ShooterLP)
+	UAmethystLocalPlayer* const AmethystLP = Cast<UAmethystLocalPlayer>(Player);
+	if (AmethystLP)
 	{
-		return ShooterLP->PersistentUser;
+		return AmethystLP->PersistentUser;
 	}
 	*/
 
@@ -767,9 +645,9 @@ bool AamethystforestPlayerController::SetPause(bool bPause, FCanUnpause CanUnpau
 void AamethystforestPlayerController::ShowInGameMenu()
 {
 	/* TO DO: InGameMenu Class 
-	if (ShooterIngameMenu.IsValid() && !ShooterIngameMenu->GetIsGameMenuUp())
+	if (AmethystIngameMenu.IsValid() && !AmethystIngameMenu->GetIsGameMenuUp())
 	{
-		ShooterIngameMenu->ToggleGameMenu();
+		AmethystIngameMenu->ToggleGameMenu();
 	}
 	*/
 }
