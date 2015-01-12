@@ -47,6 +47,17 @@ AAmethystCharacter::AAmethystCharacter(const class FPostConstructInitializePrope
 
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
+    
+}
+
+void AAmethystCharacter::BeginPlay()
+{
+    Super::BeginPlay();
+    
+    if (GEngine)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("We are using AmethystCharacter!"));
+    }
 }
 
 void AAmethystCharacter::PostInitializeComponents()
