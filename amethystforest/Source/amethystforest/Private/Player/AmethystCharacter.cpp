@@ -261,7 +261,7 @@ float AAmethystCharacter::TakeDamage(float Damage, struct FDamageEvent const& Da
 
 	// Modify based on game rules.
 	AamethystforestGameMode* const Game = GetWorld()->GetAuthGameMode<AamethystforestGameMode>();
-	Damage = Game ? Game->ModifyDamage(Damage, this, DamageEvent, EventInstigator, DamageCauser) : 0.f;
+	//Damage = Game ? Game->ModifyDamage(Damage, this, DamageEvent, EventInstigator, DamageCauser) : 0.f;
 
 	const float ActualDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 	if (ActualDamage > 0.f)
