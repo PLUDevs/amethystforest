@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Engine.h"
+#include "Slate.h"
 #include "../Classes/Player/AmethystCharacter.h"
 #include "../Classes/Weapon/AmethystWeapon.h"
 #include "../Classes/UI/AmethystHUD.h"
