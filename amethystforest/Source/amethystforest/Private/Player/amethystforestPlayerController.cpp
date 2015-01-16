@@ -34,10 +34,11 @@ static const int32 GreatScoreCount = 15;
 
 AamethystforestPlayerController::AamethystforestPlayerController(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
 {
+	bAllowGameActions = true;
 	/* TO DO: PlayerCameraManager and CheatManager classes
 	PlayerCameraManagerClass = AAmethystPlayerCameraManager::StaticClass();
 	CheatClass = UAmethystCheatManager::StaticClass();
-	bAllowGameActions = true;
+	
 
 	if (!HasAnyFlags(RF_ClassDefaultObject))
 	{
