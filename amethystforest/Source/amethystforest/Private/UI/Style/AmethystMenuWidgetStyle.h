@@ -17,7 +17,6 @@ struct FAmethystMenuStyle : public FSlateWidgetStyle
     GENERATED_USTRUCT_BODY()
     
     FAmethystMenuStyle();
-    //TO DO: figure out why deconstructor wont build
     virtual ~FAmethystMenuStyle();
     
     // FSlateWidgetStyle

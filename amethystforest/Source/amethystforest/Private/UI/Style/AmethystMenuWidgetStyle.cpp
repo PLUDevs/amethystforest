@@ -6,10 +6,9 @@ FAmethystMenuStyle::FAmethystMenuStyle()
 {
 }
 
-/*TO DO: figure out why deconstructor wont build
 FAmethystMenuStyle::~FAmethystMenuStyle()
 {
-}*/
+}
 
 const FName FAmethystMenuStyle::TypeName(TEXT("FAmethystMenuStyle"));
 

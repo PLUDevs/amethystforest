@@ -6,7 +6,6 @@ FAmethystMenuItemStyle::FAmethystMenuItemStyle()
 {
 }
 
-/* TO DO: Figure out why deconstructor won't work.*/
 FAmethystMenuItemStyle::~FAmethystMenuItemStyle()
 {
 }
