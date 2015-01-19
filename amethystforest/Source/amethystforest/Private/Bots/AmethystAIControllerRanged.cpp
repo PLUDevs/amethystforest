@@ -71,7 +71,10 @@ void AAmethystAIControllerRanged::ShootEnemy()
 	{
 		return;
 	}
-
+	
+		
+		
+	
 	bool bCanShoot = false;
 	AAmethystCharacter* Enemy = GetEnemy();
 	if (Enemy && (Enemy->IsAlive()) && (MyWeapon->GetCurrentAmmo() > 0) && (MyWeapon->CanFire() == true))
@@ -84,6 +87,7 @@ void AAmethystAIControllerRanged::ShootEnemy()
 
 	if (bCanShoot)
 	{
+		
 		MyBot->StartWeaponFire();
 	}
 	else
@@ -91,7 +95,7 @@ void AAmethystAIControllerRanged::ShootEnemy()
 		MyBot->StopWeaponFire();
 	}
 }
-void AAmethystAIControllerRanged::CheckAmmo(const class AShooterWeapon* CurrentWeapon)
+void AAmethystAIControllerRanged::CheckAmmo(const class AAmethystWeapon* CurrentWeapon)
 {
 	/*if (CurrentWeapon && BlackboardComp)
 	{

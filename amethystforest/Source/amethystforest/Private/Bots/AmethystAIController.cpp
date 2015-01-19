@@ -38,6 +38,7 @@ void AAmethystAIController::Possess(APawn* InPawn)
 		// Get the enemy blackboard ID, and store it to access that blackboard key later.
 		EnemyKeyID = BlackboardComp->GetKeyID("Enemy");
 		NeedAmmoKeyID = BlackboardComp->GetKeyID("NeedAmmo");
+		EnemyLastKnownLocation = BlackboardComp->GetKeyID("EnemyLocation");
 
 
 		BehaviorComp->StartTree(Bot->BotBehavior);
@@ -61,7 +62,14 @@ void AAmethystAIController::Respawn()
 }
 
 
-
+void AAmethystAIController::SetEnemyLastKnownLocation(class APawn* InPawn)
+{
+	if (BlackboardComp)
+	{
+		
+		BlackboardComp->SetValueAsVector(EnemyLastKnownLocation, InPawn->GetActorLocation());
+	}
+}
 
 void AAmethystAIController::SetEnemy(class APawn* InPawn)
 {
@@ -161,6 +169,7 @@ bool AAmethystAIController::PawnCanBeSeen(APawn * target)
 
 	if (LineOfSightTo(target, GetPawn()->GetActorLocation()) && angle >0)
 	{
+		SetEnemyLastKnownLocation(target);
 		return true;
 	}
 	else
