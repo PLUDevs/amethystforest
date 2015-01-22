@@ -5,6 +5,7 @@
 #include "GameFramework/GameMode.h"
 #include "../Bots/AmethystAIController.h"
 #include "../Bots/AmethystBot.h"
+#include "Pickups/AmethystPickup.h"
 #include "amethystforestGameMode.generated.h"
 
 /**
@@ -78,5 +79,8 @@ public:
     
     /** get the name of the bots count option, can be used in server travel URL if we use online*/
     static FString GetBotsCountOptionName();
+    
+    UPROPERTY()
+    TArray<class AAmethystPickup*> LevelPickups;
 	
 };
