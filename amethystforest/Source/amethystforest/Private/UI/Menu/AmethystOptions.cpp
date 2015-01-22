@@ -1,11 +1,12 @@
 
-#include "../../../Public/amethystforest.h"
+#include "amethystforest.h"
 #include "AmethystOptions.h"
 #include "Classes/Player/AmethystPersistentUser.h"
-#include "../../../Classes/AmethystTypes.h"
-#include "../../../Classes/Player/amethystforestPlayerController.h"
-#include "../Style/AmethystStyle.h"
-#include "../Style/AmethystOptionsWidgetStyle.h"
+#include "Classes/Game/AmethystGameState.h"
+#include "Classes/AmethystTypes.h"
+#include "Classes/Player/amethystforestPlayerController.h"
+#include "Private/UI/Style/AmethystStyle.h"
+#include "Private/UI/Style/AmethystOptionsWidgetStyle.h"
 
 #define LOCTEXT_NAMESPACE "AmethystGame.HUD.Menu"
 
@@ -72,7 +73,6 @@ void FAmethystOptions::Construct(ULocalPlayer* _PlayerOwner)
     CheatsItem = MenuHelper::AddMenuItem(CheatsRoot,LOCTEXT("Cheats", "CHEATS"));
     MenuHelper::AddMenuOptionSP(CheatsItem, LOCTEXT("InfiniteAmmo", "INFINITE AMMO"), OnOffList, this, &FAmethystOptions::InfiniteAmmoOptionChanged);
     MenuHelper::AddMenuOptionSP(CheatsItem, LOCTEXT("InfiniteClip", "INFINITE CLIP"), OnOffList, this, &FAmethystOptions::InfiniteClipOptionChanged);
-    MenuHelper::AddMenuOptionSP(CheatsItem, LOCTEXT("FreezeMatchTimer", "FREEZE MATCH TIMER"), OnOffList, this, &FAmethystOptions::FreezeTimerOptionChanged);
     MenuHelper::AddMenuOptionSP(CheatsItem, LOCTEXT("HealthRegen", "HP REGENERATION"), OnOffList, this, &FAmethystOptions::HealthRegenOptionChanged);
     
     OptionsItem = MenuHelper::AddMenuItem(OptionsRoot,LOCTEXT("Options", "OPTIONS"));
@@ -292,19 +292,6 @@ void FAmethystOptions::InfiniteClipOptionChanged(TSharedPtr<FAmethystMenuItem> M
         }
     }
 }
-
-void FAmethystOptions::FreezeTimerOptionChanged(TSharedPtr<FAmethystMenuItem> MenuItem, int32 MultiOptionIndex)
-{
-    UWorld* const World = PlayerOwner->GetWorld();
-    /* TO DO: GameState
-    AAmethystGameState* const GameState = World ? Cast<AAmethystGameState>(World->GameState) : nullptr;
-    if (GameState)
-    {
-        GameState->bTimerPaused = MultiOptionIndex > 0  ? true : false;
-    }
-     */
-}
-
 
 void FAmethystOptions::HealthRegenOptionChanged(TSharedPtr<FAmethystMenuItem> MenuItem, int32 MultiOptionIndex)
 {

@@ -165,12 +165,11 @@ void FAmethystIngameMenu::OnCancelExitToMain()
 void FAmethystIngameMenu::OnConfirmExitToMain()
 {
     // tell game instance to go back to main menu state
-//    TO DO: GameInstance
-//    UAmethystGameInstance* const GI = Cast<UAmethystGameInstance>(PlayerOwner->GetGameInstance());
-//    if (GI)
-//    {
-//        GI->GotoState(AmethystGameInstanceState::MainMenu);
-//    }
+    UAmethystGameInstance* const GI = Cast<UAmethystGameInstance>(PlayerOwner->GetGameInstance());
+    if (GI)
+    {
+        GI->GotoState(AmethystGameInstanceState::MainMenu);
+    }
 }
 
 void FAmethystIngameMenu::OnUIQuit()

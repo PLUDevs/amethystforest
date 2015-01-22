@@ -77,6 +77,9 @@ protected:
     
 public:
     
+    /** Send Player to Main Menu */
+    void RequestFinishAndExitToMainMenu();
+    
     /** get the name of the bots count option, can be used in server travel URL if we use online*/
     static FString GetBotsCountOptionName();
     

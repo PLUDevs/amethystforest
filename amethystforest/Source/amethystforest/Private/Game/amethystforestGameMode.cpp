@@ -1,9 +1,9 @@
 
 
 #include "amethystforest.h"
-#include "../../Classes/Game/amethystforestGameMode.h"
-#include "../../Classes/Player/amethystforestPlayerController.h"
-#include "../../Classes/UI/AmethystHUD.h"
+#include "Classes/Game/amethystforestGameMode.h"
+#include "Classes/Player/amethystforestPlayerController.h"
+#include "Classes/UI/AmethystHUD.h"
 
 AamethystforestGameMode::AamethystforestGameMode(const class FPostConstructInitializeProperties& PCIP)
 	: Super(PCIP)
@@ -54,6 +54,29 @@ void AamethystforestGameMode::InitGame(const FString& MapName, const FString& Op
     SetAllowBots(BotsCountOptionValue > 0 ? true : false, BotsCountOptionValue);
     
     Super::InitGame(MapName, Options, ErrorMessage);
+}
+
+void AamethystforestGameMode::RequestFinishAndExitToMainMenu()
+{
+    
+    APlayerController* LocalPrimaryController = nullptr;
+    for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
+    {
+        APlayerController* Controller = *Iterator;
+        if (Controller && !Controller->IsLocalController())
+        {
+            Controller->ClientReturnToMainMenu("Return To Main Menu");
+        }
+        else
+        {
+            LocalPrimaryController = Controller;
+        }
+    }
+    
+    if (LocalPrimaryController != NULL)
+    {
+        LocalPrimaryController->ClientReturnToMainMenu("Return To Main Menu");
+    }
 }
 
 float AamethystforestGameMode::ModifyDamage(float Damage, AActor* DamagedActor, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) const

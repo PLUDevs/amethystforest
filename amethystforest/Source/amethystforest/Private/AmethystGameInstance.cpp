@@ -299,13 +299,11 @@ void UAmethystGameInstance::EndPlayingState()
     UWorld* const World = GetWorld();
     if (World)
     {
-        /* TO DO: GameState
         AAmethystGameState* const GameState = World->GetGameState<AAmethystGameState>();
         if (GameState)
         {
             GameState->RequestFinishAndExitToMainMenu();
         }
-         */
     }
 }
 
