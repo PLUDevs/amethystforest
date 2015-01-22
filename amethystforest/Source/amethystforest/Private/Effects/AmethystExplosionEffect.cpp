@@ -58,7 +58,9 @@ void AAmethystExplosionEffect::Tick(float DeltaSeconds)
         const float FadeAlpha = 1.0f - FMath::Square(TimeRemaining / ExplosionLightFadeOut);
         
         UPointLightComponent* DefLight = Cast<UPointLightComponent>(GetClass()->GetDefaultSubobjectByName(ExplosionLightComponentName));
+        /* TO DO: UPointLightComponent no longer has SetBrightness function
         ExplosionLight->SetBrightness(DefLight->Intensity * FadeAlpha);
+         */
     }
     else
     {

@@ -251,9 +251,7 @@ void AamethystforestGameMode::InitBot(AAmethystBot* Bot, int BotNumber)
             AIPC->PlayerState->PlayerName = BotName;
         }
         AActor* BestStart = ChoosePlayerStart(AIPC);
-        /* TO DO: LogAmethyst needs to be created
         UE_LOG(LogAmethyst, Log, TEXT("InitBot: %s spawned on %s"), *Bot->GetName(), *BestStart->GetName());
-         */
         Bot->TeleportTo(BestStart->GetActorLocation(), BestStart->GetActorRotation(), false, true);
     }
 }

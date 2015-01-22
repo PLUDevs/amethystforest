@@ -158,9 +158,8 @@ void SAmethystMenuWidget::UpdateMenuOwner()
 void SAmethystMenuWidget::BuildAndShowMenu()
 {
     //grab the user settings
-//    TO DO: GameUserSettings
-//    UAmethystGameUserSettings* UserSettings = CastChecked<UAmethystGameUserSettings>(GEngine->GetGameUserSettings());
-//    ScreenRes = UserSettings->GetScreenResolution();
+    UAmethystGameUserSettings* UserSettings = CastChecked<UAmethystGameUserSettings>(GEngine->GetGameUserSettings());
+    ScreenRes = UserSettings->GetScreenResolution();
     
     //Build left menu panel
     bLeftMenuChanging = false;
