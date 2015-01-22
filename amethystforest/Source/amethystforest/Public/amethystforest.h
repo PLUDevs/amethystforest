@@ -1,13 +1,15 @@
 
 
-#pragma once
+//#pragma once
+
+#ifndef __AMETHYSTGAME_H__
+#define __AMETHYSTGAME_H__
+
 
 #include "Engine.h"
 #include "Slate.h"
-#include "../Classes/AmethystEngine.h"
 #include "../Classes/AmethystGameInstance.h"
 #include "../Classes/AmethystGameUserSettings.h"
-#include "../Classes/AmethystGameViewportClient.h"
 #include "../Classes/Player/AmethystCharacter.h"
 #include "../Classes/Weapon/AmethystWeapon.h"
 #include "../Classes/UI/AmethystHUD.h"
@@ -24,3 +26,5 @@ DECLARE_LOG_CATEGORY_EXTERN(LogAmethystWeapon, Log, All);
 #define COLLISION_WEAPON		ECC_GameTraceChannel1
 #define COLLISION_PROJECTILE	ECC_GameTraceChannel2
 #define COLLISION_PIKCUP		ECC_GameTraceChannel
+
+#endif	// __AMETHYSTGAME_H__
