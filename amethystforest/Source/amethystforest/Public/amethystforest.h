@@ -25,6 +25,6 @@ DECLARE_LOG_CATEGORY_EXTERN(LogAmethystWeapon, Log, All);
 
 #define COLLISION_WEAPON		ECC_GameTraceChannel1
 #define COLLISION_PROJECTILE	ECC_GameTraceChannel2
-#define COLLISION_PIKCUP		ECC_GameTraceChannel
+#define COLLISION_PICKUP		ECC_GameTraceChannel3
 
 #endif	// __AMETHYSTGAME_H__
