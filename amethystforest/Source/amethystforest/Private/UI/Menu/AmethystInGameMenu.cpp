@@ -1,5 +1,5 @@
 
-#include "../../../Public/amethystforest.h"
+#include "amethystforest.h"
 #include "../../../Classes/Player/amethystforestPlayerController.h"
 #include "AmethystIngameMenu.h"
 #include "../Style/AmethystStyle.h"
