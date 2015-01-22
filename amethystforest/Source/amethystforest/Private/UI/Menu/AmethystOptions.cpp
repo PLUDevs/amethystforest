@@ -129,12 +129,10 @@ void FAmethystOptions::ApplySettings()
         PersistentUser->SaveIfDirty();
     }
      */
-    /* TO DO: UserSettings
     UserSettings->SetScreenResolution(ResolutionOpt);
     UserSettings->SetFullscreenMode(bFullScreenOpt);
     UserSettings->SetGraphicsQuality(GraphicsQualityOpt);
     UserSettings->ApplySettings(false);
-    */
      
     OnApplyChanges.ExecuteIfBound();
 }

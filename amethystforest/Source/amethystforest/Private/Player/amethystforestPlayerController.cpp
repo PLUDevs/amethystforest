@@ -4,7 +4,8 @@
 #include "../../Classes/Player/amethystforestPlayerController.h"
 #include "../../Classes/Player/AmethystCharacter.h"
 #include "../../Classes/Weapon/AmethystWeapon.h"
-
+#include "../UI/Style/AmethystStyle.h"
+#include "../UI/Menu/AmethystInGameMenu.h"
 
 #define  ACH_FRAG_SOMEONE	TEXT("ACH_FRAG_SOMEONE")
 #define  ACH_SOME_KILLS		TEXT("ACH_SOME_KILLS")
@@ -64,11 +65,11 @@ void AamethystforestPlayerController::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	//Build menu only after game is initialized
-	/* TO DO: AmethystStyle?? InGameMenu class needed 
 	FAmethystStyle::Initialize();
 	AmethystIngameMenu = MakeShareable(new FAmethystIngameMenu());
+    /* TO DO: InGameMenu not constructing
 	AmethystIngameMenu->Construct(this);
-	*/
+     */
 }
 
 void AamethystforestPlayerController::UnFreeze()
@@ -197,9 +198,9 @@ void AamethystforestPlayerController::OnKill()
 void AamethystforestPlayerController::SetPlayer(UPlayer* Player)
 {
 	APlayerController::SetPlayer(Player);
-	/* TO DO: IngameMenu Class 
+    /* UpdateMenuOwner Function in IngameMenu needed
 	AmethystIngameMenu->UpdateMenuOwner();
-	*/
+     */
 }
 
 /* TO DO: Create PlayerState Class
@@ -255,23 +256,19 @@ void AamethystforestPlayerController::OnDeathMessage(class AAmethystPlayerState*
 
 void AamethystforestPlayerController::OnToggleInGameMenu()
 {
-	/* TO DO: IngameMenu class 
 	if (AmethystIngameMenu.IsValid())
 	{
 		AmethystIngameMenu->ToggleGameMenu();
 	}
-	*/
 }
 
 bool AamethystforestPlayerController::IsGameMenuVisible() const
 {
 	bool Result = false;
-	/* TO DO: IngameMenu
 	if (AmethystIngameMenu.IsValid())
 	{
 		Result = AmethystIngameMenu->GetIsGameMenuUp();
 	}
-	*/
 
 	return Result;
 }
@@ -645,12 +642,10 @@ bool AamethystforestPlayerController::SetPause(bool bPause, FCanUnpause CanUnpau
 
 void AamethystforestPlayerController::ShowInGameMenu()
 {
-	/* TO DO: InGameMenu Class 
 	if (AmethystIngameMenu.IsValid() && !AmethystIngameMenu->GetIsGameMenuUp())
 	{
 		AmethystIngameMenu->ToggleGameMenu();
 	}
-	*/
 }
 
 

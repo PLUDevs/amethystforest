@@ -14,6 +14,7 @@ void FAmethystMessageMenu::Construct(ULocalPlayer* InPlayerOwner, const FString&
     
     if (PlayerOwner)
     {
+        /* TO DO: GameViewportClient
         UAmethystGameViewportClient * AmethystViewport = Cast<UAmethystGameViewportClient>(PlayerOwner->ViewportClient);
         
         if (AmethystViewport)
@@ -31,6 +32,7 @@ void FAmethystMessageMenu::Construct(ULocalPlayer* InPlayerOwner, const FString&
                                         FOnClicked::CreateRaw(this, &FAmethystMessageMenu::OnClickedCancel)
                                         );
         }
+         */
     }
 }
 
@@ -38,6 +40,7 @@ void FAmethystMessageMenu::RemoveFromGameViewport()
 {
     if (GEngine && GEngine->GameViewport)
     {
+        /* TO DO: GameViewportClient
         UAmethystGameViewportClient * AmethystViewport = Cast<UAmethystGameViewportClient>(GEngine->GameViewport);
         
         if (AmethystViewport)
@@ -45,6 +48,7 @@ void FAmethystMessageMenu::RemoveFromGameViewport()
             // Hide the previous dialog
             AmethystViewport->HideDialog();
         }
+         */
     }
 }
 

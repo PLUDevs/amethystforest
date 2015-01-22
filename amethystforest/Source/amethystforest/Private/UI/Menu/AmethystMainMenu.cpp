@@ -247,6 +247,11 @@ void FAmethystMainMenu::OnMenuHidden()
 #endif
 }
 
+FAmethystMainMenu::EMap FAmethystMainMenu::GetSelectedMap() const
+{
+    return (EMap)MapOption->SelectedMultiChoice;
+}
+
 void FAmethystMainMenu::CloseSubMenu()
 {
     MenuWidget->MenuGoBack(true);

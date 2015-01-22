@@ -320,6 +320,18 @@ bool UAmethystGameInstance::HandleOpenCommand(const TCHAR* Cmd, FOutputDevice& A
     return bOpenSuccessful;
 }
 
+bool UAmethystGameInstance::Tick(float DeltaSeconds)
+{
+    // Dedicated server doesn't need to worry about game state
+    if (IsRunningDedicatedServer() == true)
+    {
+        return true;
+    }
+    
+    MaybeChangeState();
+    return true;
+}
+
 void UAmethystGameInstance::HandleSafeFrameChanged()
 {
     UCanvas::UpdateAllCanvasSafeZoneData();

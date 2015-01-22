@@ -45,8 +45,7 @@ public:
     
 protected:
     /** User settings pointer */
-    /** TO DO: GameUserSettings*/
-//    UAmethystGameUserSettings* UserSettings;
+    UAmethystGameUserSettings* UserSettings;
     
     /** video resolution option changed handler */
     void VideoResolutionOptionChanged(TSharedPtr<FAmethystMenuItem> MenuItem, int32 MultiOptionIndex);

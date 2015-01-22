@@ -90,24 +90,18 @@ void AAmethystWeapon_Instance::ServerNotifyHit_Implementation(const FHitResult I
                     }
                     else
                     {
-                        /* TO DO: FLogCategoryLowAmethystWeapon LogAmethystWeapon needs to be created
                         UE_LOG(LogAmethystWeapon, Log, TEXT("%s Rejected client side hit of %s (outside bounding box tolerance)"), *GetNameSafe(this), *GetNameSafe(Impact.GetActor()));
-                         */
                     }
                 }
             }
         }
         else if (ViewDotHitDir <= InstantConfig.AllowedViewDotHitDir)
         {
-            /* TO DO: FLogCategoryLowAmethystWeapon LogAmethystWeapon needs to be created
             UE_LOG(LogAmethystWeapon, Log, TEXT("%s Rejected client side hit of %s (facing too far from the hit direction)"), *GetNameSafe(this), *GetNameSafe(Impact.GetActor()));
-             */
         }
         else
         {
-            /* TO DO: FLogCategoryLowAmethystWeapon LogAmethystWeapon needs to be created
             UE_LOG(LogAmethystWeapon, Log, TEXT("%s Rejected client side hit of %s"), *GetNameSafe(this), *GetNameSafe(Impact.GetActor()));
-             */
         }
     }
 }
