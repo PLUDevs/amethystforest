@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "../../Public/amethystforest.h"
+#include "amethystforest.h"
 #include "GameFramework/Character.h"
 #include "AmethystCharacter.generated.h"
 

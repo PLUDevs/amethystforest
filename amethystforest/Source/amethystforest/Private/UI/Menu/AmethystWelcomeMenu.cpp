@@ -1,7 +1,7 @@
 
-#include "../../../Public/amethystforest.h"
+#include "amethystforest.h"
 #include "AmethystWelcomeMenu.h"
-#include "../Style/AmethystStyle.h"
+#include "Private/UI/Style/AmethystStyle.h"
 
 #define LOCTEXT_NAMESPACE "AmethystGame.HUD.Menu"
 

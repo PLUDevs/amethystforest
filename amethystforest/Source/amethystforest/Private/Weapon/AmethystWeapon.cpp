@@ -1,10 +1,10 @@
 
-#include "../../Public/amethystforest.h"
-#include "../../Classes/Weapon/AmethystWeapon.h"
-#include "../../Classes/Bots/AmethystAIController.h"
-#include "../../Classes/Player/AmethystCharacter.h"
-#include "../../Classes/Player/amethystforestPlayerController.h"
-#include "../../Classes/Bots/AmethystAIController.h"
+#include "amethystforest.h"
+#include "Classes/Weapon/AmethystWeapon.h"
+#include "Classes/Bots/AmethystAIController.h"
+#include "Classes/Player/AmethystCharacter.h"
+#include "Classes/Player/amethystforestPlayerController.h"
+#include "Classes/Bots/AmethystAIController.h"
 
 AAmethystWeapon::AAmethystWeapon(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
 {

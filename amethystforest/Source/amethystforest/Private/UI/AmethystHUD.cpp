@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "../../Public/amethystforest.h"
-#include "../../Classes/UI/AmethystHUD.h"
-#include "../../Classes/Weapon/AmethystWeapon_Instance.h"
-#include "../../Classes/Weapon/AmethystDamageType.h"
-#include "../../Classes/Player/amethystforestPlayerController.h"
+#include "amethystforest.h"
+#include "Classes/UI/AmethystHUD.h"
+#include "Classes/Weapon/AmethystWeapon_Instance.h"
+#include "Classes/Weapon/AmethystDamageType.h"
+#include "Classes/Player/amethystforestPlayerController.h"
 
 #define LOCTEXT_NAMESPACE "AmethystGame.HUD.Menu"
 

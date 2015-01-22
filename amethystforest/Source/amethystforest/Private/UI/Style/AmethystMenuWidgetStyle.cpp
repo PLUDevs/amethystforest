@@ -1,5 +1,5 @@
 
-#include "../../../Public/amethystforest.h"
+#include "amethystforest.h"
 #include "AmethystMenuWidgetStyle.h"
 
 FAmethystMenuStyle::FAmethystMenuStyle()

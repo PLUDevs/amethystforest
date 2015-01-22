@@ -1,8 +1,8 @@
 
 
 #include "amethystforest.h"
-#include "../../Classes/Bots/AmethystAIController.h"
-#include "../../Classes/Bots/AmethystBot.h"
+#include "Classes/Bots/AmethystAIController.h"
+#include "Classes/Bots/AmethystBot.h"
 
 
 AAmethystBot::AAmethystBot(const class FPostConstructInitializeProperties& PCIP)

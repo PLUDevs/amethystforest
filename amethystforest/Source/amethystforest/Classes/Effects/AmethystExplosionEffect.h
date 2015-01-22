@@ -2,7 +2,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "../AmethystTypes.h"
+#include "AmethystTypes.h"
 #include "AmethystExplosionEffect.generated.h"
 
 //

@@ -1,13 +1,13 @@
 
 
 #include "amethystforest.h"
-#include "../../Classes/Player/AmethystCharacter.h"
-#include "../../Classes/Player/AmethystCharMovementComponent.h"
-#include "../../Classes/Player/amethystforestPlayerController.h"
-#include "../../Classes/Weapon/AmethystDamageType.h"
-#include "../../Classes/Weapon/AmethystWeapon.h"
-#include "../../Classes/UI/AmethystHUD.h"
-#include "../../Classes/Game/amethystforestGameMode.h"
+#include "Classes/Player/AmethystCharacter.h"
+#include "Classes/Player/AmethystCharMovementComponent.h"
+#include "Classes/Player/amethystforestPlayerController.h"
+#include "Classes/Weapon/AmethystDamageType.h"
+#include "Classes/Weapon/AmethystWeapon.h"
+#include "Classes/UI/AmethystHUD.h"
+#include "Classes/Game/amethystforestGameMode.h"
 
 AAmethystCharacter::AAmethystCharacter(const class FPostConstructInitializeProperties& PCIP)
 	: Super(PCIP.SetDefaultSubobjectClass<UAmethystCharMovementComponent>(ACharacter::CharacterMovementComponentName))

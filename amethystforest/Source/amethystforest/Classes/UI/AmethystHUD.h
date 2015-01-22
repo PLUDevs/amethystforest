@@ -3,7 +3,7 @@
 #pragma once
 
 #include "GameFramework/HUD.h"
-#include "../AmethystTypes.h"
+#include "AmethystTypes.h"
 #include "AmethystHUD.generated.h"
 
 struct FHitData

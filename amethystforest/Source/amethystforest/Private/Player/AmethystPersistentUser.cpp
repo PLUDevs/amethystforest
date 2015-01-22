@@ -1,6 +1,6 @@
 
 #include "amethystforest.h"
-#include "../../Classes/Player/AmethystPersistentUser.h"
+#include "Classes/Player/AmethystPersistentUser.h"
 
 UAmethystPersistentUser::UAmethystPersistentUser(const class FPostConstructInitializeProperties& PCIP)
 : Super(PCIP)

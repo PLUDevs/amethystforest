@@ -3,7 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "../../Public/amethystforest.h"
+#include "amethystforest.h"
 #include "AmethystWeapon.generated.h"
 
 

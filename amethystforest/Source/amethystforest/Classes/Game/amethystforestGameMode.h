@@ -3,8 +3,8 @@
 #pragma once
 
 #include "GameFramework/GameMode.h"
-#include "../Bots/AmethystAIController.h"
-#include "../Bots/AmethystBot.h"
+#include "Bots/AmethystAIController.h"
+#include "Bots/AmethystBot.h"
 #include "Pickups/AmethystPickup.h"
 #include "amethystforestGameMode.generated.h"
 

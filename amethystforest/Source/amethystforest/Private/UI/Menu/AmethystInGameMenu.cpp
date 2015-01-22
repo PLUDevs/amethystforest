@@ -1,11 +1,9 @@
 
 #include "amethystforest.h"
-#include "../../../Classes/Player/amethystforestPlayerController.h"
+#include "Classes/Player/amethystforestPlayerController.h"
 #include "AmethystIngameMenu.h"
-#include "../Style/AmethystStyle.h"
-#include "../Style/AmethystMenuSoundsWidgetStyle.h"
-//#include "Online.h"
-//#include "OnlineExternalUIInterface.h"
+#include "Private/UI/Style/AmethystStyle.h"
+#include "Private/UI/Style/AmethystMenuSoundsWidgetStyle.h"
 
 #define LOCTEXT_NAMESPACE "AmethystGame.HUD.Menu"
 

@@ -1,6 +1,6 @@
 
-#include "../../Public/amethystforest.h"
-#include "../../Classes/Effects/AmethystExplosionEffect.h"
+#include "amethystforest.h"
+#include "Classes/Effects/AmethystExplosionEffect.h"
 
 AAmethystExplosionEffect::AAmethystExplosionEffect(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
 {

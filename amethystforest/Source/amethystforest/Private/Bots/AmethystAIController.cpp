@@ -1,10 +1,10 @@
 
 
 #include "amethystforest.h"
-#include "../../Classes/Bots/AmethystAIController.h"
-#include "../../Classes/Player/AmethystCharacter.h"
-#include "../../Classes/Weapon/AmethystWeapon.h"
-#include "../../Classes/Bots/AmethystBot.h"
+#include "Classes/Bots/AmethystAIController.h"
+#include "Classes/Player/AmethystCharacter.h"
+#include "Classes/Weapon/AmethystWeapon.h"
+#include "Classes/Bots/AmethystBot.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"

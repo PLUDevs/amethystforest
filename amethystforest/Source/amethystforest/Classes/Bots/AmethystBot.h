@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "../../Classes/Player/AmethystCharacter.h"
+#include "Classes/Player/AmethystCharacter.h"
 #include "AmethystBot.generated.h"
 
 /**
