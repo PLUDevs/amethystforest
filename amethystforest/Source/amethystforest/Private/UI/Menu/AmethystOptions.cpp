@@ -1,6 +1,7 @@
 
 #include "../../../Public/amethystforest.h"
 #include "AmethystOptions.h"
+#include "Classes/Player/AmethystPersistentUser.h"
 #include "../../../Classes/AmethystTypes.h"
 #include "../../../Classes/Player/amethystforestPlayerController.h"
 #include "../Style/AmethystStyle.h"
@@ -88,7 +89,6 @@ void FAmethystOptions::Construct(ULocalPlayer* _PlayerOwner)
     //Do not allow to set aim sensitivity to 0
     AimSensitivityOption->MinMultiChoiceIndex = MinSensitivity;
     
-    /*TO DO: GameUserSettings and PersistantUser
     UserSettings = CastChecked<UAmethystGameUserSettings>(GEngine->GetGameUserSettings());
     ResolutionOpt = UserSettings->GetScreenResolution();
     bFullScreenOpt = UserSettings->GetFullscreenMode();
@@ -106,7 +106,7 @@ void FAmethystOptions::Construct(ULocalPlayer* _PlayerOwner)
         bInvertYAxisOpt = false;
         SensitivityOpt = 1.0f;
         GammaOpt = 2.2f;
-    }*/
+    }
 }
 
 void FAmethystOptions::OnApplySettings()
@@ -117,7 +117,6 @@ void FAmethystOptions::OnApplySettings()
 
 void FAmethystOptions::ApplySettings()
 {
-    /*TO DO: PersistantUser
     UAmethystPersistentUser* PersistentUser = GetPersistentUser();
     if(PersistentUser)
     {
@@ -128,7 +127,6 @@ void FAmethystOptions::ApplySettings()
         
         PersistentUser->SaveIfDirty();
     }
-     */
     UserSettings->SetScreenResolution(ResolutionOpt);
     UserSettings->SetFullscreenMode(bFullScreenOpt);
     UserSettings->SetGraphicsQuality(GraphicsQualityOpt);
@@ -139,13 +137,11 @@ void FAmethystOptions::ApplySettings()
 
 void FAmethystOptions::TellInputAboutKeybindings()
 {
-    /* TO DO: PersistentUser
     UAmethystPersistentUser* PersistentUser = GetPersistentUser();
     if(PersistentUser)
     {
         PersistentUser->TellInputAboutKeybindings();
     }
-     */
 }
 
 void FAmethystOptions::RevertChanges()
@@ -169,10 +165,8 @@ int32 FAmethystOptions::GetCurrentResolutionIndex(FIntPoint CurrentRes)
     return Result;
 }
 
-// WARNING BROKEN METHOD!!!
 int32 FAmethystOptions::GetCurrentMouseYAxisInvertedIndex()
 {
-    /* TO DO: PersistentUser
     UAmethystPersistentUser* PersistentUser = GetPersistentUser();
     if(PersistentUser)
     {
@@ -182,14 +176,10 @@ int32 FAmethystOptions::GetCurrentMouseYAxisInvertedIndex()
     {
         return 0;
     }
-     */
-    return 0; //Remove this when fixed
 }
 
-// WARNING BROKEN METHOD!!!
 int32 FAmethystOptions::GetCurrentMouseSensitivityIndex()
 {
-    /* TO DO: PersistentUser
     UAmethystPersistentUser* PersistentUser = GetPersistentUser();
     if(PersistentUser)
     {
@@ -200,14 +190,10 @@ int32 FAmethystOptions::GetCurrentMouseSensitivityIndex()
     }
     
     return FMath::RoundToInt((1.0f - 0.5f) * 10.0f);
-     */
-    return 0; //Remove this when fixed
 }
 
-// WARNING BROKEN METHOD
 int32 FAmethystOptions::GetCurrentGammaIndex()
 {
-    /* TO DO: PersistentUser
     UAmethystPersistentUser* PersistentUser = GetPersistentUser();
     if(PersistentUser)
     {
@@ -218,8 +204,6 @@ int32 FAmethystOptions::GetCurrentGammaIndex()
     }
     
     return FMath::TruncToInt(((2.2f - 2.2f) / 2.0f + 0.5f) * 100);
-    */
-    return 0; //Remove this when fixed
 }
 
 int32 FAmethystOptions::GetOwnerUserIndex() const
@@ -227,7 +211,6 @@ int32 FAmethystOptions::GetOwnerUserIndex() const
     return PlayerOwner ? PlayerOwner->ControllerId : 0;
 }
 
-/* TO DO: PersistentUser
 UAmethystPersistentUser* FAmethystOptions::GetPersistentUser() const
 {
     UAmethystLocalPlayer* const SLP = Cast<UAmethystLocalPlayer>(PlayerOwner);
@@ -238,12 +221,9 @@ UAmethystPersistentUser* FAmethystOptions::GetPersistentUser() const
     
     return nullptr;
 }
- */
 
-// WARNING BROKEN METHOD
 void FAmethystOptions::UpdateOptions()
 {
-    /* TO DO: Persistant User
 #if UE_BUILD_SHIPPING
     CheatsItem->bVisible = false;
 #else
@@ -278,7 +258,7 @@ void FAmethystOptions::UpdateOptions()
     GraphicsQualityOption->SelectedMultiChoice = UserSettings->GetGraphicsQuality();
     FullScreenOption->SelectedMultiChoice = UserSettings->GetCurrentFullscreenMode() != EWindowMode::Windowed ? 1 : 0;
 #endif
-     */
+    
 }
 
 void FAmethystOptions::InfiniteAmmoOptionChanged(TSharedPtr<FAmethystMenuItem> MenuItem, int32 MultiOptionIndex)

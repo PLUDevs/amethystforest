@@ -2,6 +2,7 @@
 
 #include "amethystforest.h"
 #include "AmethystMainMenu.h"
+#include "Classes/Player/AmethystPersistentUser.h"
 #include "../Style/AmethystStyle.h"
 #include "../Style/AmethystMenuSoundsWidgetStyle.h"
 //#include "AmethystLoadingScreen.h"
@@ -44,9 +45,7 @@ void FAmethystMainMenu::Construct(ULocalPlayer* _PlayerOwner)
     PlayerOwner = _PlayerOwner;
     
     // read user settings
-    /* TO DO: GameUserSettings and PersistantUser
     UAmethystGameUserSettings* const UserSettings = CastChecked<UAmethystGameUserSettings>(GEngine->GetGameUserSettings());
-    bIsLanMatch = UserSettings->IsLanMatch();
     
     UAmethystPersistentUser* PersistentUser = GetPersistentUser();
     BotsCountOpt = 1;
@@ -54,7 +53,6 @@ void FAmethystMainMenu::Construct(ULocalPlayer* _PlayerOwner)
     {
         BotsCountOpt = PersistentUser->GetBotsCount();
     }
-     */
     
     // number entries 0 up to MAX_BOX_COUNT
     TArray<FText> BotsCountList;
@@ -270,14 +268,11 @@ void FAmethystMainMenu::BotCountOptionChanged(TSharedPtr<FAmethystMenuItem> Menu
 {
     BotsCountOpt = MultiOptionIndex;
     
-    /* TO DO: PersistentUser
-    
     UAmethystPersistentUser* PersistentUser = GetPersistentUser();
     if(PersistentUser)
     {
         PersistentUser->SetBotsCount(BotsCountOpt);
     }
-     */
 }
 
 void FAmethystMainMenu::OnUIQuit()
@@ -341,13 +336,11 @@ bool FAmethystMainMenu::IsMapReady() const
     return bReady;
 }
 
-/* TO DO: PersistentUser
 UAmethystPersistentUser* FAmethystMainMenu::GetPersistentUser() const
 {
     UAmethystLocalPlayer* const SLP = Cast<UAmethystLocalPlayer>(PlayerOwner);
     return SLP ? SLP->GetPersistentUser() : nullptr;
 }
- */
 
 ULocalPlayer* FAmethystMainMenu::GetOwningPlayer() const
 {

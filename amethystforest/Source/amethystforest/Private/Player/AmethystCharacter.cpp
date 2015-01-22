@@ -315,9 +315,7 @@ bool AAmethystCharacter::Die(float KillingDamage, FDamageEvent const& DamageEven
 	Killer = GetDamageInstigator(Killer, *DamageType);
 
 	AController* const KilledPlayer = (Controller != NULL) ? Controller : Cast<AController>(GetOwner());
-    /* TO DO: GameMode Class needs these identifiers.
-	GetWorld()->GetAuthGameMode<AAmethystGameMode>()->Killed(Killer, KilledPlayer, this, DamageType);
-    */
+	GetWorld()->GetAuthGameMode<AamethystforestGameMode>()->Killed(Killer, KilledPlayer, this, DamageType);
 
 	NetUpdateFrequency = GetDefault<AAmethystCharacter>()->NetUpdateFrequency;
 	CharacterMovement->ForceReplicationUpdate();

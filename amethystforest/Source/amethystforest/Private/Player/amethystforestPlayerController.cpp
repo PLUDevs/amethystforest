@@ -3,6 +3,8 @@
 #include "amethystforest.h"
 #include "../../Classes/Player/amethystforestPlayerController.h"
 #include "../../Classes/Player/AmethystCharacter.h"
+#include "../../Classes/Player/AmethystPersistentUser.h"
+#include "../../Classes/Player/AmethystLocalPlayer.h"
 #include "../../Classes/Weapon/AmethystWeapon.h"
 #include "../UI/Style/AmethystStyle.h"
 #include "../UI/Menu/AmethystInGameMenu.h"
@@ -36,19 +38,11 @@ static const int32 GreatScoreCount = 15;
 AamethystforestPlayerController::AamethystforestPlayerController(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
 {
 	bAllowGameActions = true;
-	/* TO DO: PlayerCameraManager and CheatManager classes
+
 	PlayerCameraManagerClass = AAmethystPlayerCameraManager::StaticClass();
 	CheatClass = UAmethystCheatManager::StaticClass();
 	
-
-	if (!HasAnyFlags(RF_ClassDefaultObject))
-	{
-		OnStartSessionCompleteEndItDelegate = FOnEndSessionCompleteDelegate::CreateUObject(this, &AamethystforestPlayerController::OnStartSessionCompleteEndIt);
-		OnEndSessionCompleteDelegate = FOnEndSessionCompleteDelegate::CreateUObject(this, &AamethystforestPlayerController::OnEndSessionComplete);
-		OnDestroySessionCompleteDelegate = FOnDestroySessionCompleteDelegate::CreateUObject(this, &AamethystforestPlayerController::OnDestroySessionComplete);
-	}
 	ServerSayString = TEXT("Say");
-	*/
 }
 
 void AamethystforestPlayerController::SetupInputComponent()
@@ -515,13 +509,11 @@ void AamethystforestPlayerController::InitInputSystem()
 {
 	Super::InitInputSystem();
 
-	/* TO DO: PersistentUser Class needed
 	UAmethystPersistentUser* PersistentUser = GetPersistentUser();
 	if (PersistentUser)
 	{
 		PersistentUser->TellInputAboutKeybindings();
 	}
-	*/
 }
 
 void AamethystforestPlayerController::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
@@ -604,13 +596,12 @@ AAmethystHUD* AamethystforestPlayerController::GetAmethystHUD() const
 
 UAmethystPersistentUser* AamethystforestPlayerController::GetPersistentUser() const
 {
-	/* TO DO: LocalPlayer
 	UAmethystLocalPlayer* const AmethystLP = Cast<UAmethystLocalPlayer>(Player);
 	if (AmethystLP)
 	{
-		return AmethystLP->PersistentUser;
+        // TO DO: PersistentUser is a private member of UAmethystLocalPlayer, need to fix
+		//return AmethystLP->PersistentUser;
 	}
-	*/
 
 	return NULL;
 }
