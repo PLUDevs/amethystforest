@@ -35,3 +35,6 @@ Intermediate/*
 
 *.sdf
 *.suo
+
+#OS X
+*.DS_Store
