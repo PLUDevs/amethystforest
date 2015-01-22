@@ -27,8 +27,11 @@
 *.out
 *.app
 
-# Map
+# Unreal
 *.umap
+*.uproject
+*./Intermediate
+*./Saved
 
 #Intermediates
 Intermediate/*
@@ -38,3 +41,7 @@ Intermediate/*
 
 #OS X
 *.DS_Store
+*.xcodeproj
+
+#Misc
+*.Target.cs
