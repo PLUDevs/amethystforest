@@ -1,3 +1,5 @@
+//TO DO: pragma once prevents from casting persistent user to a localplayer
+#pragma once //remove once fix
 
 #include "AmethystPersistentUser.h"
 #include "AmethystLocalPlayer.generated.h"

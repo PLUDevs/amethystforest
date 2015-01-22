@@ -84,6 +84,26 @@ float AamethystforestGameMode::ModifyDamage(float Damage, AActor* DamagedActor, 
     return ActualDamage;
 }
 
+void AamethystforestGameMode::Killed(AController* Killer, AController* KilledPlayer, APawn* KilledPawn, const UDamageType* DamageType)
+{
+    /* TO DO: PlayerState
+    AAmethystPlayerState* KillerPlayerState = Killer ? Cast<AAmethystPlayerState>(Killer->PlayerState) : NULL;
+    AAmethystPlayerState* VictimPlayerState = KilledPlayer ? Cast<AAmethystPlayerState>(KilledPlayer->PlayerState) : NULL;
+    
+    if (KillerPlayerState && KillerPlayerState != VictimPlayerState)
+    {
+        KillerPlayerState->ScoreKill(VictimPlayerState, KillScore);
+        KillerPlayerState->InformAboutKill(KillerPlayerState, DamageType, VictimPlayerState);
+    }
+    
+    if (VictimPlayerState)
+    {
+        VictimPlayerState->ScoreDeath(KillerPlayerState, DeathScore);
+        VictimPlayerState->BroadcastDeath(KillerPlayerState, DamageType, VictimPlayerState);
+    }
+     */
+}
+
 bool AamethystforestGameMode::AllowCheats(APlayerController* P)
 {
     return true;

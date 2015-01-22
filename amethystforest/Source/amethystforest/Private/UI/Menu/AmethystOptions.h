@@ -1,6 +1,7 @@
 
 #pragma once
 #include "Slate.h"
+#include "Classes/Player/AmethystPersistentUser.h"
 #include "Widgets/AmethystMenuItem.h"
 #include "Widgets/SAmethystMenuWidget.h"
 
@@ -93,8 +94,7 @@ protected:
     int32 GetOwnerUserIndex() const;
     
     /** Get the persistence user associated with PlayerOwner*/
-//    TO DO: PersistentUser
-//    UAmethystPersistentUser* GetPersistentUser() const;
+    UAmethystPersistentUser* GetPersistentUser() const;
     
     /** Owning player controller */
     ULocalPlayer* PlayerOwner;

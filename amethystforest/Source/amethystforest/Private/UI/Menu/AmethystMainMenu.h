@@ -93,8 +93,7 @@ protected:
     bool IsMapReady() const;
     
     /** Get the persistence user associated with PCOwner*/
-//    TO DO: AmethystPersistentUser
-//    UAmethystPersistentUser* GetPersistentUser() const;
+    UAmethystPersistentUser* GetPersistentUser() const;
     
     /** number of bots in game */
     int32 BotsCountOpt;
