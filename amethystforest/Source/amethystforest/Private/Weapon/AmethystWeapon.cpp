@@ -381,22 +381,6 @@ void AAmethystWeapon::UseAmmo()
 	{
 		BotAI->CheckAmmo(this);
 	}
-	else if (PlayerController)
-	{
-		/* TO DO: Add Player State class
-		AAmethystPlayerState* PlayerState = Cast<AAmethystPlayerState>(PlayerController->PlayerState);
-		switch (GetAmmoType())
-		{
-		case EAmmoType::ERocket:
-			PlayerState->AddRocketsFired(1);
-			break;
-		case EAmmoType::EBullet:
-		default:
-			PlayerState->AddBulletsFired(1);
-			break;
-		}
-		*/
-	}
 }
 
 void AAmethystWeapon::HandleFiring()

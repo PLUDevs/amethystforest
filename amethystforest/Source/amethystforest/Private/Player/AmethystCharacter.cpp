@@ -110,28 +110,17 @@ void AAmethystCharacter::PawnClientRestart()
 	// reattach weapon if needed
 	SetCurrentWeapon(CurrentWeapon);
 
-	// set team colors for 1st person view
-	UMaterialInstanceDynamic* Mesh1PMID = Mesh1P->CreateAndSetMaterialInstanceDynamic(0);
-	UpdateTeamColors(Mesh1PMID);
 }
 
 void AAmethystCharacter::PossessedBy(class AController* InController)
 {
 	Super::PossessedBy(InController);
 
-	// [server] as soon as PlayerState is assigned, set team colors of this pawn for local player
-	UpdateTeamColorsAllMIDs();
 }
 
 void AAmethystCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
-
-	// [client] as soon as PlayerState is assigned, set team colors of this pawn for local player
-	if (PlayerState != NULL)
-	{
-		UpdateTeamColorsAllMIDs();
-	}
 }
 
 FRotator AAmethystCharacter::GetAimOffsets() const
@@ -142,31 +131,6 @@ FRotator AAmethystCharacter::GetAimOffsets() const
 
 	return AimRotLS;
 }
-
-/* TO DO: PlayerState class and GameMode Class needed
-bool AAmethystCharacter::IsEnemyFor(AController* TestPC) const
-{
-	if (TestPC == Controller || TestPC == NULL)
-	{
-		return false;
-	}
-
-	AAmethystPlayerState* TestPlayerState = Cast<AAmethystPlayerState>(TestPC->PlayerState);
-	AAmethystPlayerState* MyPlayerState = Cast<AAmethystPlayerState>(PlayerState);
-
-	bool bIsEnemy = true;
-	if (GetWorld()->GameState && GetWorld()->GameState->GameModeClass)
-	{
-		const AAmethystGameMode* DefGame = GetWorld()->GameState->GameModeClass->GetDefaultObject<AAmethystGameMode>();
-		if (DefGame && MyPlayerState && TestPlayerState)
-		{
-			bIsEnemy = DefGame->CanDealDamage(TestPlayerState, MyPlayerState);
-		}
-	}
-
-	return bIsEnemy;
-}
-*/
 
 //////////////////////////////////////////////////////////////////////////
 // Meshes
@@ -180,21 +144,6 @@ void AAmethystCharacter::UpdatePawnMeshes()
 
 	Mesh->MeshComponentUpdateFlag = bFirstPerson ? EMeshComponentUpdateFlag::OnlyTickPoseWhenRendered : EMeshComponentUpdateFlag::AlwaysTickPoseAndRefreshBones;
 	Mesh->SetOwnerNoSee(bFirstPerson);
-}
-
-void AAmethystCharacter::UpdateTeamColors(UMaterialInstanceDynamic* UseMID)
-{
-	if (UseMID)
-	{
-		/* TO DO: PlayerState class needed
-		AAmethystPlayerState* MyPlayerState = Cast<AAmethystPlayerState>(PlayerState);
-		if (MyPlayerState != NULL)
-		{
-			float MaterialParam = (float)MyPlayerState->GetTeamNum();
-			UseMID->SetScalarParameterValue(TEXT("Team Color Index"), MaterialParam);
-		}
-		*/
-	}
 }
 
 void AAmethystCharacter::OnCameraUpdate(const FVector& CameraLocation, const FRotator& CameraRotation)
@@ -290,9 +239,7 @@ bool AAmethystCharacter::CanDie(float KillingDamage, FDamageEvent const& DamageE
 		|| IsPendingKill()								// already destroyed
 		|| Role != ROLE_Authority						// not authority
 		|| GetWorld()->GetAuthGameMode() == NULL
-		/* TO DO: bLevelChange not a function of AGameMode
-		|| GetWorld()->GetAuthGameMode()->bLevelChange)	// level transition occurring
-		*/
+        || GetWorld()->GetAuthGameMode()
 		)
 	{
 		return false;
@@ -313,9 +260,6 @@ bool AAmethystCharacter::Die(float KillingDamage, FDamageEvent const& DamageEven
 	// if this is an environmental death then refer to the previous killer so that they receive credit (knocked into lava pits, etc)
 	UDamageType const* const DamageType = DamageEvent.DamageTypeClass ? DamageEvent.DamageTypeClass->GetDefaultObject<UDamageType>() : GetDefault<UDamageType>();
 	Killer = GetDamageInstigator(Killer, *DamageType);
-
-	AController* const KilledPlayer = (Controller != NULL) ? Controller : Cast<AController>(GetOwner());
-	GetWorld()->GetAuthGameMode<AamethystforestGameMode>()->Killed(Killer, KilledPlayer, this, DamageType);
 
 	NetUpdateFrequency = GetDefault<AAmethystCharacter>()->NetUpdateFrequency;
 	CharacterMovement->ForceReplicationUpdate();
@@ -1193,13 +1137,3 @@ float AAmethystCharacter::GetLowHealthPercentage() const
 {
 	return LowHealthPercentage;
 }
-
-void AAmethystCharacter::UpdateTeamColorsAllMIDs()
-{
-	for (int32 i = 0; i < MeshMIDs.Num(); ++i)
-	{
-		UpdateTeamColors(MeshMIDs[i]);
-	}
-}
-
-

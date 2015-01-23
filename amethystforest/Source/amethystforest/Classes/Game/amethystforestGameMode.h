@@ -36,12 +36,6 @@ class AMETHYSTFOREST_API AamethystforestGameMode : public AGameMode
     
     /** returns default pawn class for given controller */
     virtual UClass* GetDefaultPawnClassForController(AController* InController) override;
-
-    /** prevents friendly fire */
-    virtual float ModifyDamage(float Damage, AActor* DamagedActor, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) const;
-    
-    /** notify about kills */
-    virtual void Killed(AController* Killer, AController* KilledPlayer, APawn* KilledPawn, const UDamageType* DamageType);
     
     /** always create cheat manager */
     virtual bool AllowCheats(APlayerController* P) override;

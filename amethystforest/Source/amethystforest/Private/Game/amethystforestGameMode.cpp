@@ -79,54 +79,6 @@ void AamethystforestGameMode::RequestFinishAndExitToMainMenu()
     }
 }
 
-float AamethystforestGameMode::ModifyDamage(float Damage, AActor* DamagedActor, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) const
-{
-    float ActualDamage = Damage;
-    
-    AAmethystCharacter* DamagedPawn = Cast<AAmethystCharacter>(DamagedActor);
-    if (DamagedPawn && EventInstigator)
-    {
-        /* TO DO: PlayerState
-        AAmethystPlayerState* DamagedPlayerState = Cast<AAmethystPlayerState>(DamagedPawn->PlayerState);
-        AAmethystPlayerState* InstigatorPlayerState = Cast<AAmethystPlayerState>(EventInstigator->PlayerState);
-        
-        // disable friendly fire
-        if (!CanDealDamage(InstigatorPlayerState, DamagedPlayerState))
-        {
-            ActualDamage = 0.0f;
-        }
-        
-        // scale self instigated damage
-        if (InstigatorPlayerState == DamagedPlayerState)
-        {
-            ActualDamage *= DamageSelfScale;
-        } */
-        return 0; //Remove later
-    }
-    
-    return ActualDamage;
-}
-
-void AamethystforestGameMode::Killed(AController* Killer, AController* KilledPlayer, APawn* KilledPawn, const UDamageType* DamageType)
-{
-    /* TO DO: PlayerState
-    AAmethystPlayerState* KillerPlayerState = Killer ? Cast<AAmethystPlayerState>(Killer->PlayerState) : NULL;
-    AAmethystPlayerState* VictimPlayerState = KilledPlayer ? Cast<AAmethystPlayerState>(KilledPlayer->PlayerState) : NULL;
-    
-    if (KillerPlayerState && KillerPlayerState != VictimPlayerState)
-    {
-        KillerPlayerState->ScoreKill(VictimPlayerState, KillScore);
-        KillerPlayerState->InformAboutKill(KillerPlayerState, DamageType, VictimPlayerState);
-    }
-    
-    if (VictimPlayerState)
-    {
-        VictimPlayerState->ScoreDeath(KillerPlayerState, DeathScore);
-        VictimPlayerState->BroadcastDeath(KillerPlayerState, DamageType, VictimPlayerState);
-    }
-     */
-}
-
 bool AamethystforestGameMode::AllowCheats(APlayerController* P)
 {
     return true;
