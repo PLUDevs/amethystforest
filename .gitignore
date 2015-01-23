@@ -26,3 +26,12 @@
 *.exe
 *.out
 *.app
+
+# Map
+*.umap
+
+#Intermediates
+Intermediate/*
+
+*.sdf
+*.suo
