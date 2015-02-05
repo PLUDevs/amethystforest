@@ -1,8 +1,8 @@
 
 
 #include "amethystforest.h"
-#include "../../Classes/Bots/AmethystAIController.h"
-#include "../../Classes/Bots/AmethystBot.h"
+#include "Classes/Bots/AmethystAIController.h"
+#include "Classes/Bots/AmethystBot.h"
 
 
 AAmethystBot::AAmethystBot(const class FPostConstructInitializeProperties& PCIP)
@@ -39,6 +39,7 @@ FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult 
 
 
 }
+/*
 float AAmethystBot::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser)
 {
 	FRotator Rotation;
@@ -48,6 +49,7 @@ float AAmethystBot::TakeDamage(float Damage, struct FDamageEvent const& DamageEv
 	Super::AddActorLocalRotation(Rotation, false);
     return 0;
 }
+*/
 void AAmethystBot::PerformMeleeAttack()
 {
 	const FVector StartTrace = GetActorLocation();

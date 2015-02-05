@@ -1,10 +1,10 @@
 
 
 #include "amethystforest.h"
-#include "../../Classes/Bots/AmethystAIController.h"
-#include "../../Classes/Player/AmethystCharacter.h"
-#include "../../Classes/Weapon/AmethystWeapon.h"
-#include "../../Classes/Bots/AmethystBot.h"
+#include "Classes/Bots/AmethystAIController.h"
+#include "Classes/Player/AmethystCharacter.h"
+#include "Classes/Weapon/AmethystWeapon.h"
+#include "Classes/Bots/AmethystBot.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -168,7 +168,12 @@ bool AAmethystAIController::PawnCanBeSeen(APawn * target)
 		return false;
 	}
 }
+/*
+tic
 
+
+
+*/
 
 void AAmethystAIController::SearchEnemyInView()
 {
@@ -188,9 +193,9 @@ void AAmethystAIController::SearchEnemyInView()
 		//UE_LOG(LogShooterWeapon, Log, TEXT(" ENEMY SEEN %s "), *GetNameSafe(*It));
 		if (PawnCanBeSeen(*It))
 		{
-			AAmethystCharacter* TestPawn = Cast<AAmethystBot>(*It);
+			AAmethystCharacter* TestPawn = Cast<AAmethystCharacter>(*It);
 
-			if (TestPawn && TestPawn->IsAlive() && Cast<AAmethystCharacter>(TestPawn) == NULL)
+			if (TestPawn && TestPawn->IsAlive() && Cast<AAmethystBot>(TestPawn) == NULL)
 			{
 				const float DistSq = (TestPawn->GetActorLocation() - MyLoc).SizeSquared();
 				if (DistSq < BestDistSq)
@@ -202,7 +207,7 @@ void AAmethystAIController::SearchEnemyInView()
 		}
 	}
 
-	if (BestPawn)
+	if (BestPawn && BestPawn->TeamID != Cast<AAmethystBot>(GetPawn())->TeamID)
 	{
 		// We saw someone, so set him as target.
 		SetEnemy(BestPawn);

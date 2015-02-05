@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "../../Classes/Player/AmethystCharacter.h"
+#include "Classes/Player/AmethystCharacter.h"
 #include "AmethystBot.generated.h"
 
 /**
@@ -26,7 +26,7 @@ class AMETHYSTFOREST_API AAmethystBot : public AAmethystCharacter
 		void PerformMeleeAttack();
 
 	float AccumulatedFiretime;
-	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) OVERRIDE;
+	/*virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) OVERRIDE;*/
 	virtual bool IsFirstPerson() const OVERRIDE;
 
 

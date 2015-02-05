@@ -27,11 +27,21 @@
 *.out
 *.app
 
-# Map
+# Unreal
 *.umap
+*.uproject
+*./Intermediate
+*./Saved
 
 #Intermediates
 Intermediate/*
 
 *.sdf
 *.suo
+
+#OS X
+*.DS_Store
+*.xcodeproj
+
+#Misc
+*.Target.cs

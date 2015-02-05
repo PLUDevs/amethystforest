@@ -1,8 +1,8 @@
 
 
 #include "amethystforest.h"
-#include "../../Classes/Player/AmethystCharMovementComponent.h"
-#include "../../Classes/Player/AmethystCharacter.h"
+#include "Classes/Player/AmethystCharMovementComponent.h"
+#include "Classes/Player/AmethystCharacter.h"
 
 
 UAmethystCharMovementComponent::UAmethystCharMovementComponent(const class FPostConstructInitializeProperties& PCIP)
@@ -13,7 +13,7 @@ UAmethystCharMovementComponent::UAmethystCharMovementComponent(const class FPost
 
 float UAmethystCharMovementComponent::GetMaxSpeedModifier() const
 {
-	float SpeedMod = Super::GetMaxSpeedModifier();
+	float SpeedMod = Super::GetMaxSpeed();
 
 	const AAmethystCharacter* CharacterOwner = Cast<AAmethystCharacter>(PawnOwner);
 	if (CharacterOwner)

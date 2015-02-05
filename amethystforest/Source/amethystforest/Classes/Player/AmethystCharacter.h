@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "../../Public/amethystforest.h"
+#include "amethystforest.h"
 #include "GameFramework/Character.h"
 #include "AmethystCharacter.generated.h"
 
@@ -10,6 +10,9 @@ UCLASS(Abstract)
 class AAmethystCharacter : public ACharacter
 {
 	GENERATED_UCLASS_BODY()
+    
+    /** TESTING PURPOSES */
+    virtual void BeginPlay() override;
 	
 	/** spawn inventory, setup initial variables */
 	virtual void PostInitializeComponents() OVERRIDE;
@@ -251,8 +254,6 @@ class AAmethystCharacter : public ACharacter
 	*/
 	USkeletalMeshComponent* GetSpecifcPawnMesh(bool WantFirstPerson) const;
 
-	/** Update the team color of all player meshes. */
-	void UpdateTeamColorsAllMIDs();
 protected:
 
 	/** pawn mesh: 1st person view */
@@ -365,9 +366,6 @@ protected:
 	/** handle mesh visibility and updates */
 	void UpdatePawnMeshes();
 
-	/** handle mesh colors on specified material instance */
-	void UpdateTeamColors(UMaterialInstanceDynamic* UseMID);
-
 	/** Responsible for cleaning up bodies on clients. */
 	virtual void TornOff();
 
@@ -383,6 +381,9 @@ public:
 	// Current health of the Pawn
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = Health)
 		float Health;
+	// Current team of the Pawn
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = TeamID)
+		uint8 TeamID;
 
 	/** Take damage, handle death */
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) OVERRIDE;

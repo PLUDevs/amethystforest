@@ -6,15 +6,26 @@ public class amethystforest : ModuleRules
 {
 	public amethystforest(TargetInfo Target)
 	{
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AIModule" });
+        PublicDependencyModuleNames.AddRange(
+            new string[] {
+                "Core",
+                "CoreUObject",
+                "Engine",
+                "AssetRegistry",
+                "AIModule",
+                "Slate",
+                "SlateCore"
+            }
+        );
 
+        PrivateDependencyModuleNames.AddRange(
+            new string[] {
+                "Slate",
+                "SlateCore",
+                "InputCore"
+            }
+        );
 
-
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
-
-		// Uncomment if you are using Slate UI
-		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
-		
 		// Uncomment if you are using online features
 		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
 		// if ((Target.Platform == UnrealTargetPlatform.Win32) || (Target.Platform == UnrealTargetPlatform.Win64))
