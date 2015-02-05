@@ -1,8 +1,8 @@
 
 
 #include "amethystforest.h"
-#include "../../Classes/Player/AmethystCharMovementComponent.h"
-#include "../../Classes/Player/AmethystCharacter.h"
+#include "Classes/Player/AmethystCharMovementComponent.h"
+#include "Classes/Player/AmethystCharacter.h"
 
 
 UAmethystCharMovementComponent::UAmethystCharMovementComponent(const class FPostConstructInitializeProperties& PCIP)

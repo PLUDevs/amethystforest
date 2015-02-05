@@ -1,13 +1,13 @@
 
 
 #include "amethystforest.h"
-#include "../../Classes/Player/amethystforestPlayerController.h"
-#include "../../Classes/Player/AmethystCharacter.h"
-#include "../../Classes/Player/AmethystPersistentUser.h"
-#include "../../Classes/Player/AmethystLocalPlayer.h"
-#include "../../Classes/Weapon/AmethystWeapon.h"
-#include "../UI/Style/AmethystStyle.h"
-#include "../UI/Menu/AmethystInGameMenu.h"
+#include "Classes/Player/amethystforestPlayerController.h"
+#include "Classes/Player/AmethystCharacter.h"
+#include "Classes/Player/AmethystPersistentUser.h"
+#include "Classes/Player/AmethystLocalPlayer.h"
+#include "Classes/Weapon/AmethystWeapon.h"
+#include "Private/UI/Style/AmethystStyle.h"
+#include "Private/UI/Menu/AmethystInGameMenu.h"
 
 #define  ACH_FRAG_SOMEONE	TEXT("ACH_FRAG_SOMEONE")
 #define  ACH_SOME_KILLS		TEXT("ACH_SOME_KILLS")
@@ -42,7 +42,6 @@ AamethystforestPlayerController::AamethystforestPlayerController(const class FPo
 	PlayerCameraManagerClass = AAmethystPlayerCameraManager::StaticClass();
 	CheatClass = UAmethystCheatManager::StaticClass();
 	
-	ServerSayString = TEXT("Say");
 }
 
 void AamethystforestPlayerController::SetupInputComponent()
@@ -192,61 +191,10 @@ void AamethystforestPlayerController::OnKill()
 void AamethystforestPlayerController::SetPlayer(UPlayer* Player)
 {
 	APlayerController::SetPlayer(Player);
-    /* UpdateMenuOwner Function in IngameMenu needed
+    /* TO DO: UpdateMenuOwner Function in IngameMenu needed
 	AmethystIngameMenu->UpdateMenuOwner();
      */
 }
-
-/* TO DO: Create PlayerState Class
-void AamethystforestPlayerController::OnDeathMessage(class AAmethystPlayerState* KillerPlayerState, class AAmethystPlayerState* KilledPlayerState, const UDamageType* KillerDamageType)
-{
-	TO DO: HUD Class
-	AAmethystHUD* AmethystHUD = GetAmethystHUD();
-	if (AmethystHUD)
-	{
-		AmethystHUD->ShowDeathMessage(KillerPlayerState, KilledPlayerState, KillerDamageType);
-	}
-
-	ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(Player);
-	if (LocalPlayer && LocalPlayer->GetUniqueNetId().IsValid() && KilledPlayerState->UniqueId.IsValid())
-	{
-		// if this controller is the player who died, update the hero stat.
-		if (*LocalPlayer->GetUniqueNetId() == *KilledPlayerState->UniqueId)
-		{
-			const auto Events = Online::GetEventsInterface();
-			const auto Identity = Online::GetIdentityInterface();
-
-			if (Events.IsValid() && Identity.IsValid())
-			{
-				int32 UserIndex = LocalPlayer->ControllerId;
-				TSharedPtr<FUniqueNetId> UniqueID = Identity->GetUniquePlayerId(UserIndex);
-				if (UniqueID.IsValid())
-				{
-					ACharacter* Pawn = GetCharacter();
-					check(Pawn);
-					FVector Location = Pawn->GetActorLocation();
-
-					FOnlineEventParms Params;
-					Params.Add(TEXT("SectionId"), FVariantData((int32)1));
-					Params.Add(TEXT("GameplayModeId"), FVariantData((int32)1));
-					Params.Add(TEXT("DifficultyLevelId"), FVariantData((int32)0));
-
-					Params.Add(TEXT("PlayerRoleId"), FVariantData((int32)0));
-					Params.Add(TEXT("PlayerWeaponId"), FVariantData((int32)0));
-					Params.Add(TEXT("EnemyRoleId"), FVariantData((int32)0));
-					Params.Add(TEXT("EnemyWeaponId"), FVariantData((int32)0));
-
-					Params.Add(TEXT("LocationX"), FVariantData(Location.X));
-					Params.Add(TEXT("LocationY"), FVariantData(Location.Y));
-					Params.Add(TEXT("LocationZ"), FVariantData(Location.Z));
-
-					Events->TriggerEvent(*UniqueID, TEXT("PlayerDeath"), Params);
-				}
-			}
-		}
-	}
-}
-*/
 
 void AamethystforestPlayerController::OnToggleInGameMenu()
 {
@@ -285,204 +233,6 @@ void AamethystforestPlayerController::SetHealthRegen(bool bEnable)
 void AamethystforestPlayerController::SetGodMode(bool bEnable)
 {
 	bGodMode = bEnable;
-}
-
-/** Starts the online game using the session name in the PlayerState */
-void AamethystforestPlayerController::ClientStartOnlineGame_Implementation()
-{
-	if (!IsPrimaryPlayer())
-		return;
-
-	/* TO DO: PlayerState and persistentuser class and fix logic
-	AAmethystPlayerState* AmethystPlayerState = Cast<AAmethystPlayerState>(PlayerState);
-	if (AmethystPlayerState)
-	{
-		IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
-		if (OnlineSub)
-		{
-			IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
-			if (Sessions.IsValid())
-			{
-				UE_LOG(LogOnline, Log, TEXT("Starting session %s on client"), *AmethystPlayerState->SessionName.ToString());
-				Sessions->StartSession(AmethystPlayerState->SessionName);
-			}
-		}
-	}
-	*/
-	else
-	{
-		// Keep retrying until player state is replicated
-		GetWorld()->GetTimerManager().SetTimer(FTimerDelegate::CreateUObject(this, &AamethystforestPlayerController::ClientStartOnlineGame_Implementation), 0.2f, false);
-	}
-}
-
-/** Ends the online game using the session name in the PlayerState */
-void AamethystforestPlayerController::ClientEndOnlineGame_Implementation()
-{
-	if (!IsPrimaryPlayer())
-		return;
-	/* TO DO: PlayerState and persistentuser class and fix logic
-	AAmethystPlayerState* AmethystPlayerState = Cast<AAmethystPlayerState>(PlayerState);
-	if (AmethystPlayerState)
-	{
-		IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
-		if (OnlineSub)
-		{
-			IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
-			if (Sessions.IsValid())
-			{
-				UE_LOG(LogOnline, Log, TEXT("Ending session %s on client"), *AmethystPlayerState->SessionName.ToString());
-				Sessions->EndSession(AmethystPlayerState->SessionName);
-			}
-		}
-	}
-	*/
-}
-
-void AamethystforestPlayerController::ClientReturnToMainMenu_Implementation(const FString& ReturnReason)
-{
-	CleanupSessionOnReturnToMenu();
-}
-
-/** Ends and/or destroys game session */
-void AamethystforestPlayerController::CleanupSessionOnReturnToMenu()
-{
-	bool bPendingOnlineOp = false;
-
-	// end online game and then destroy it
-	/* TO DO: PlayerState and persistentuser class and fix logic
-	AAmethystPlayerState* AmethystPlayerState = Cast<AAmethystPlayerState>(PlayerState);
-	if (AmethystPlayerState)
-	{
-		IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
-		if (OnlineSub)
-		{
-			IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
-			if (Sessions.IsValid())
-			{
-				EOnlineSessionState::Type SessionState = Sessions->GetSessionState(AmethystPlayerState->SessionName);
-				UE_LOG(LogOnline, Log, TEXT("Session %s is '%s'"), *AmethystPlayerState->SessionName.ToString(), EOnlineSessionState::ToString(SessionState));
-
-				if (EOnlineSessionState::InProgress == SessionState)
-				{
-					UE_LOG(LogOnline, Log, TEXT("Ending session %s on return to main menu"), *AmethystPlayerState->SessionName.ToString());
-					Sessions->AddOnEndSessionCompleteDelegate(OnEndSessionCompleteDelegate);
-					bPendingOnlineOp = Sessions->EndSession(AmethystPlayerState->SessionName);
-					if (!bPendingOnlineOp)
-					{
-						Sessions->ClearOnEndSessionCompleteDelegate(OnEndSessionCompleteDelegate);
-					}
-				}
-				else if (EOnlineSessionState::Ending == SessionState)
-				{
-					UE_LOG(LogOnline, Log, TEXT("Waiting for session %s to end on return to main menu"), *AmethystPlayerState->SessionName.ToString());
-					Sessions->AddOnEndSessionCompleteDelegate(OnEndSessionCompleteDelegate);
-					bPendingOnlineOp = true;
-				}
-				else if (EOnlineSessionState::Ended == SessionState ||
-					EOnlineSessionState::Pending == SessionState)
-				{
-					UE_LOG(LogOnline, Log, TEXT("Destroying session %s on return to main menu"), *AmethystPlayerState->SessionName.ToString());
-					Sessions->AddOnDestroySessionCompleteDelegate(OnDestroySessionCompleteDelegate);
-					bPendingOnlineOp = Sessions->DestroySession(AmethystPlayerState->SessionName);
-					if (!bPendingOnlineOp)
-					{
-						Sessions->ClearOnDestroySessionCompleteDelegate(OnDestroySessionCompleteDelegate);
-					}
-				}
-				else if (EOnlineSessionState::Starting == SessionState)
-				{
-					UE_LOG(LogOnline, Log, TEXT("Waiting for session %s to start, and then we will end it to return to main menu"), *AmethystPlayerState->SessionName.ToString());
-					Sessions->AddOnStartSessionCompleteDelegate(OnStartSessionCompleteEndItDelegate);
-					bPendingOnlineOp = true;
-				}
-			}
-		}
-	}
-	*/
-
-	if (!bPendingOnlineOp)
-	{
-		GEngine->HandleDisconnect(GetWorld(), GetWorld()->GetNetDriver());
-
-		// Temp fix until next week's meeting on how to design King / Networking interaction properly.
-		/* TO DO: Figure this out 
-		UAmethystGameKing& AmethystKing = UAmethystGameKing::Get();
-		AmethystKing.SetCurrentState(AmethystKing.GetInitialFrontendState());
-		*/
-	}
-}
-
-void AamethystforestPlayerController::OnStartSessionCompleteEndIt(FName SessionName, bool bWasSuccessful)
-{
-	/* TO DO: Fix this logic
-	UE_LOG(LogOnline, Log, TEXT("OnStartSessionCompleteEndIt: Session=%s bWasSuccessful=%s"), *SessionName.ToString(), bWasSuccessful ? TEXT("true") : TEXT("false"));
-
-	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
-	if (OnlineSub)
-	{
-		IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
-		if (Sessions.IsValid())
-		{
-			Sessions->ClearOnStartSessionCompleteDelegate(OnStartSessionCompleteEndItDelegate);
-		}
-	}
-	*/
-
-	// continue
-	CleanupSessionOnReturnToMenu();
-}
-
-/**
-* Delegate fired when ending an online session has completed
-*
-* @param SessionName the name of the session this callback is for
-* @param bWasSuccessful true if the async action completed without error, false if there was an error
-*/
-void AamethystforestPlayerController::OnEndSessionComplete(FName SessionName, bool bWasSuccessful)
-{
-	/* TO DO: Fix this logic
-	UE_LOG(LogOnline, Log, TEXT("OnEndSessionComplete: Session=%s bWasSuccessful=%s"), *SessionName.ToString(), bWasSuccessful ? TEXT("true") : TEXT("false"));
-
-	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
-	if (OnlineSub)
-	{
-		IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
-		if (Sessions.IsValid())
-		{
-			Sessions->ClearOnEndSessionCompleteDelegate(OnEndSessionCompleteDelegate);
-		}
-	}
-	*/
-
-	// continue
-	CleanupSessionOnReturnToMenu();
-}
-
-/**
-* Delegate fired when destroying an online session has completed
-*
-* @param SessionName the name of the session this callback is for
-* @param bWasSuccessful true if the async action completed without error, false if there was an error
-*/
-void AamethystforestPlayerController::OnDestroySessionComplete(FName SessionName, bool bWasSuccessful)
-{
-	/* TO DO: Fix this logic
-	UE_LOG(LogOnline, Log, TEXT("OnDestroySessionComplete: Session=%s bWasSuccessful=%s"), *SessionName.ToString(), bWasSuccessful ? TEXT("true") : TEXT("false"));
-
-	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
-	if (OnlineSub)
-	{
-		IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
-		if (Sessions.IsValid())
-		{
-			Sessions->ClearOnDestroySessionCompleteDelegate(OnDestroySessionCompleteDelegate);
-		}
-	}
-	*/
-
-	// continue
-	CleanupSessionOnReturnToMenu();
 }
 
 void AamethystforestPlayerController::SetCinematicMode(bool bInCinematicMode, bool bHidePlayer, bool bAffectsHUD, bool bAffectsMovement, bool bAffectsTurning)

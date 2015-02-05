@@ -3,10 +3,9 @@
 #include "amethystforest.h"
 #include "AmethystMainMenu.h"
 #include "Classes/Player/AmethystPersistentUser.h"
-#include "../Style/AmethystStyle.h"
-#include "../Style/AmethystMenuSoundsWidgetStyle.h"
+#include "Private/UI/Style/AmethystStyle.h"
+#include "Private/UI/Style/AmethystMenuSoundsWidgetStyle.h"
 //#include "AmethystLoadingScreen.h"
-//#include "AmethystGameInstance.h"
 #include "Slate.h"
 #include "GenericPlatformChunkInstall.h"
 

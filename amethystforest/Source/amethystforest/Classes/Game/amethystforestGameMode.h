@@ -3,8 +3,8 @@
 #pragma once
 
 #include "GameFramework/GameMode.h"
-#include "../Bots/AmethystAIController.h"
-#include "../Bots/AmethystBot.h"
+#include "Bots/AmethystAIController.h"
+#include "Bots/AmethystBot.h"
 #include "Pickups/AmethystPickup.h"
 #include "amethystforestGameMode.generated.h"
 
@@ -36,12 +36,6 @@ class AMETHYSTFOREST_API AamethystforestGameMode : public AGameMode
     
     /** returns default pawn class for given controller */
     virtual UClass* GetDefaultPawnClassForController(AController* InController) override;
-
-    /** prevents friendly fire */
-    virtual float ModifyDamage(float Damage, AActor* DamagedActor, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) const;
-    
-    /** notify about kills */
-    virtual void Killed(AController* Killer, AController* KilledPlayer, APawn* KilledPawn, const UDamageType* DamageType);
     
     /** always create cheat manager */
     virtual bool AllowCheats(APlayerController* P) override;
@@ -76,6 +70,9 @@ protected:
     virtual bool IsSpawnpointPreferred(APlayerStart* SpawnPoint, AController* Player) const;
     
 public:
+    
+    /** Send Player to Main Menu */
+    void RequestFinishAndExitToMainMenu();
     
     /** get the name of the bots count option, can be used in server travel URL if we use online*/
     static FString GetBotsCountOptionName();

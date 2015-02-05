@@ -1,11 +1,9 @@
 
 #include "amethystforest.h"
-#include "../../../Classes/Player/amethystforestPlayerController.h"
+#include "Classes/Player/amethystforestPlayerController.h"
 #include "AmethystIngameMenu.h"
-#include "../Style/AmethystStyle.h"
-#include "../Style/AmethystMenuSoundsWidgetStyle.h"
-//#include "Online.h"
-//#include "OnlineExternalUIInterface.h"
+#include "Private/UI/Style/AmethystStyle.h"
+#include "Private/UI/Style/AmethystMenuSoundsWidgetStyle.h"
 
 #define LOCTEXT_NAMESPACE "AmethystGame.HUD.Menu"
 
@@ -165,12 +163,11 @@ void FAmethystIngameMenu::OnCancelExitToMain()
 void FAmethystIngameMenu::OnConfirmExitToMain()
 {
     // tell game instance to go back to main menu state
-//    TO DO: GameInstance
-//    UAmethystGameInstance* const GI = Cast<UAmethystGameInstance>(PlayerOwner->GetGameInstance());
-//    if (GI)
-//    {
-//        GI->GotoState(AmethystGameInstanceState::MainMenu);
-//    }
+    UAmethystGameInstance* const GI = Cast<UAmethystGameInstance>(PlayerOwner->GetGameInstance());
+    if (GI)
+    {
+        GI->GotoState(AmethystGameInstanceState::MainMenu);
+    }
 }
 
 void FAmethystIngameMenu::OnUIQuit()

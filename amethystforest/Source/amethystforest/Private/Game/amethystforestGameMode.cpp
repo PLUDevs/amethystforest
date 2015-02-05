@@ -1,9 +1,9 @@
 
 
 #include "amethystforest.h"
-#include "../../Classes/Game/amethystforestGameMode.h"
-#include "../../Classes/Player/amethystforestPlayerController.h"
-#include "../../Classes/UI/AmethystHUD.h"
+#include "Classes/Game/amethystforestGameMode.h"
+#include "Classes/Player/amethystforestPlayerController.h"
+#include "Classes/UI/AmethystHUD.h"
 
 AamethystforestGameMode::AamethystforestGameMode(const class FPostConstructInitializeProperties& PCIP)
 	: Super(PCIP)
@@ -56,52 +56,27 @@ void AamethystforestGameMode::InitGame(const FString& MapName, const FString& Op
     Super::InitGame(MapName, Options, ErrorMessage);
 }
 
-float AamethystforestGameMode::ModifyDamage(float Damage, AActor* DamagedActor, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) const
+void AamethystforestGameMode::RequestFinishAndExitToMainMenu()
 {
-    float ActualDamage = Damage;
     
-    AAmethystCharacter* DamagedPawn = Cast<AAmethystCharacter>(DamagedActor);
-    if (DamagedPawn && EventInstigator)
+    APlayerController* LocalPrimaryController = nullptr;
+    for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
     {
-        /* TO DO: PlayerState
-        AAmethystPlayerState* DamagedPlayerState = Cast<AAmethystPlayerState>(DamagedPawn->PlayerState);
-        AAmethystPlayerState* InstigatorPlayerState = Cast<AAmethystPlayerState>(EventInstigator->PlayerState);
-        
-        // disable friendly fire
-        if (!CanDealDamage(InstigatorPlayerState, DamagedPlayerState))
+        APlayerController* Controller = *Iterator;
+        if (Controller && !Controller->IsLocalController())
         {
-            ActualDamage = 0.0f;
+            Controller->ClientReturnToMainMenu("Return To Main Menu");
         }
-        
-        // scale self instigated damage
-        if (InstigatorPlayerState == DamagedPlayerState)
+        else
         {
-            ActualDamage *= DamageSelfScale;
-        } */
-        return 0; //Remove later
+            LocalPrimaryController = Controller;
+        }
     }
     
-    return ActualDamage;
-}
-
-void AamethystforestGameMode::Killed(AController* Killer, AController* KilledPlayer, APawn* KilledPawn, const UDamageType* DamageType)
-{
-    /* TO DO: PlayerState
-    AAmethystPlayerState* KillerPlayerState = Killer ? Cast<AAmethystPlayerState>(Killer->PlayerState) : NULL;
-    AAmethystPlayerState* VictimPlayerState = KilledPlayer ? Cast<AAmethystPlayerState>(KilledPlayer->PlayerState) : NULL;
-    
-    if (KillerPlayerState && KillerPlayerState != VictimPlayerState)
+    if (LocalPrimaryController != NULL)
     {
-        KillerPlayerState->ScoreKill(VictimPlayerState, KillScore);
-        KillerPlayerState->InformAboutKill(KillerPlayerState, DamageType, VictimPlayerState);
+        LocalPrimaryController->ClientReturnToMainMenu("Return To Main Menu");
     }
-    
-    if (VictimPlayerState)
-    {
-        VictimPlayerState->ScoreDeath(KillerPlayerState, DeathScore);
-        VictimPlayerState->BroadcastDeath(KillerPlayerState, DamageType, VictimPlayerState);
-    }
-     */
 }
 
 bool AamethystforestGameMode::AllowCheats(APlayerController* P)

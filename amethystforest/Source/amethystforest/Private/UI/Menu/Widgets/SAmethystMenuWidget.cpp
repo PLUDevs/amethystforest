@@ -1,11 +1,11 @@
 
-#include "../../../../Public/amethystforest.h"
+#include "amethystforest.h"
 #include "Engine/Console.h"
 #include "SAmethystMenuWidget.h"
 #include "AmethystMenuItem.h"
 #include "SAmethystMenuItem.h"
-#include "../../Style/AmethystStyle.h"
-#include "../../Style/AmethystMenuWidgetStyle.h"
+#include "Private/UI/Style/AmethystStyle.h"
+#include "Private/UI/Style/AmethystMenuWidgetStyle.h"
 
 #define LOCTEXT_NAMESPACE "SAmethystMenuWidget"
 

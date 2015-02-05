@@ -1,8 +1,8 @@
 
 #include "amethystforest.h"
-#include "../Style/AmethystStyle.h"
+#include "Private/UI/Style/AmethystStyle.h"
 #include "SAmethystConfirmationDialog.h"
-#include "../Style/AmethystMenuItemWidgetStyle.h"
+#include "Private/UI/Style/AmethystMenuItemWidgetStyle.h"
 
 void SAmethystConfirmationDialog::Construct( const FArguments& InArgs )
 {

@@ -1,7 +1,7 @@
 
-#include "../../Public/amethystforest.h"
-#include "../../Classes/Weapon/AmethystWeapon_Projectile.h"
-#include "../../Classes/Weapon/AmethystProjectile.h"
+#include "amethystforest.h"
+#include "Classes/Weapon/AmethystWeapon_Projectile.h"
+#include "Classes/Weapon/AmethystProjectile.h"
 
 AAmethystWeapon_Projectile::AAmethystWeapon_Projectile(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
 {

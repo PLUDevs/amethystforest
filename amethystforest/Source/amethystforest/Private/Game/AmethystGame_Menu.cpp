@@ -1,11 +1,11 @@
 
 
 #include "amethystforest.h"
-#include "../../Classes/Game/AmethystGame_Menu.h"
-#include "../../Classes/Player/amethystforestPlayerController.h"
-#include "../UI/Menu/AmethystMainMenu.h"
-#include "../UI/Menu/AmethystMainMenu.h"
-#include "../UI/Menu/AmethystWelcomeMenu.h"
+#include "Classes/Game/AmethystGame_Menu.h"
+#include "Classes/Player/amethystforestPlayerController.h"
+#include "Private/UI/Menu/AmethystMainMenu.h"
+#include "Private/UI/Menu/AmethystMainMenu.h"
+#include "Private/UI/Menu/AmethystWelcomeMenu.h"
 
 AAmethystGame_Menu::AAmethystGame_Menu(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
 {

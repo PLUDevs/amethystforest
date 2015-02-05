@@ -1,7 +1,7 @@
 
 #include "amethystforest.h"
-#include "../Style/AmethystStyle.h"
-#include "../Widgets/SAmethystConfirmationDialog.h"
+#include "Private/UI/Style/AmethystStyle.h"
+#include "Private/UI/Widgets/SAmethystConfirmationDialog.h"
 #include "AmethystMessageMenu.h"
 
 #define LOCTEXT_NAMESPACE "AmethystGame.HUD.Menu"

@@ -1,6 +1,6 @@
 
 #include "amethystforest.h"
-#include "../../Classes/Player/AmethystCheatManager.h"
+#include "Classes/Player/AmethystCheatManager.h"
 #include "Classes/Game/amethystforestGameMode.h"
 
 UAmethystCheatManager::UAmethystCheatManager(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)

@@ -1,8 +1,8 @@
 
-#include "../../../../Public/amethystforest.h"
+#include "amethystforest.h"
 #include "SAmethystMenuItem.h"
-#include "../../Style/AmethystStyle.h"
-#include "../../Style/AmethystMenuItemWidgetStyle.h"
+#include "Private/UI/Style/AmethystStyle.h"
+#include "Private/UI/Style/AmethystMenuItemWidgetStyle.h"
 
 void SAmethystMenuItem::Construct(const FArguments& InArgs)
 {

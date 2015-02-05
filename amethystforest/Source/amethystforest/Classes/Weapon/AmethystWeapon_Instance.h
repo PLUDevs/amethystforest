@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Weapon/AmethystWeapon.h"
-#include "../../Public/amethystforest.h"
+#include "amethystforest.h"
 #include "AmethystWeapon_Instance.generated.h"
 
 USTRUCT()

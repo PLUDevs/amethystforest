@@ -1,6 +1,6 @@
 
 #include "amethystforest.h"
-#include "../../Classes/Player/AmethystLocalPlayer.h"
+#include "Classes/Player/AmethystLocalPlayer.h"
 
 UAmethystLocalPlayer::UAmethystLocalPlayer(const class FPostConstructInitializeProperties& PCIP)
 : Super(PCIP)

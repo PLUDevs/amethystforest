@@ -17,14 +17,6 @@ public:
 	UFUNCTION(reliable, client)
 		void ClientSetSpectatorCamera(FVector CameraLocation, FRotator CameraRotation);
 
-	/** Starts the online game using the session name in the PlayerState */
-	UFUNCTION(reliable, client)
-		void ClientStartOnlineGame();
-
-	/** Ends the online game using the session name in the PlayerState */
-	UFUNCTION(reliable, client)
-		void ClientEndOnlineGame();
-
 	/** used for input simulation from blueprint (for automatic perf tests) */
 	UFUNCTION(BlueprintCallable, Category = "Input")
 		void SimulateInputKey(FKey Key, bool bPressed = true);
@@ -40,14 +32,6 @@ public:
 	/** RPC for clients to talk to server */
 	UFUNCTION(unreliable, server, WithValidation)
 		void ServerSay(const FString& Msg);
-
-	/** Local function run an emote */
-	// 	UFUNCTION(exec)
-	// 	virtual void Emote(const FString& Msg);
-
-	/** notify local client about deaths */
-	/** TO DO: Get a PlayerState Class */
-	// void OnDeathMessage(class AAmethystPlayerState* KillerPlayerState, class AAmethystPlayerState* KilledPlayerState, const UDamageType* KillerDamageType);
 
 	/** toggle InGameMenu handler */
 	void OnToggleInGameMenu();
@@ -85,33 +69,6 @@ public:
 
 	/** is game menu currently active? */
 	bool IsGameMenuVisible() const;
-
-	/** Ends and/or destroys game session */
-	void CleanupSessionOnReturnToMenu();
-
-	/**
-	* Delegate fired when starting an online session has completed (intends to end it, but has to wait for the start to complete first)
-	*
-	* @param SessionName the name of the session this callback is for
-	* @param bWasSuccessful true if the async action completed without error, false if there was an error
-	*/
-	virtual void OnStartSessionCompleteEndIt(FName SessionName, bool bWasSuccessful);
-
-	/**
-	* Delegate fired when ending an online session has completed
-	*
-	* @param SessionName the name of the session this callback is for
-	* @param bWasSuccessful true if the async action completed without error, false if there was an error
-	*/
-	virtual void OnEndSessionComplete(FName SessionName, bool bWasSuccessful);
-
-	/**
-	* Delegate fired when destroying an online session has completed
-	*
-	* @param SessionName the name of the session this callback is for
-	* @param bWasSuccessful true if the async action completed without error, false if there was an error
-	*/
-	virtual void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
 
 	// Begin APlayerController interface
 
@@ -192,9 +149,6 @@ protected:
 
 	/** sets up input */
 	virtual void SetupInputComponent() OVERRIDE;
-
-	/** Return the client to the main menu gracefully */
-	void ClientReturnToMainMenu_Implementation(const FString& ReturnReason) OVERRIDE;
 
 	/** Causes the player to commit suicide */
 	UFUNCTION(exec)

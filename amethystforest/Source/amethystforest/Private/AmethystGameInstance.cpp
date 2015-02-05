@@ -1,7 +1,7 @@
 
-#include "../Public/amethystforest.h"
+#include "amethystforest.h"
 
-#include "../Classes/AmethystGameInstance.h"
+#include "Classes/AmethystGameInstance.h"
 #include "UI/Menu/AmethystMainMenu.h"
 #include "UI/Menu/AmethystWelcomeMenu.h"
 #include "UI/Menu/AmethystMessageMenu.h"
@@ -299,13 +299,11 @@ void UAmethystGameInstance::EndPlayingState()
     UWorld* const World = GetWorld();
     if (World)
     {
-        /* TO DO: GameState
         AAmethystGameState* const GameState = World->GetGameState<AAmethystGameState>();
         if (GameState)
         {
             GameState->RequestFinishAndExitToMainMenu();
         }
-         */
     }
 }
 

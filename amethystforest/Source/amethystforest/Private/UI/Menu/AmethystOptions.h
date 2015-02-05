@@ -60,9 +60,6 @@ protected:
     /** infinite clip option changed handler */
     void InfiniteClipOptionChanged(TSharedPtr<FAmethystMenuItem> MenuItem, int32 MultiOptionIndex);
     
-    /** freeze timer option changed handler */
-    void FreezeTimerOptionChanged(TSharedPtr<FAmethystMenuItem> MenuItem, int32 MultiOptionIndex);
-    
     /** health regen option changed handler */
     void HealthRegenOptionChanged(TSharedPtr<FAmethystMenuItem> MenuItem, int32 MultiOptionIndex);
     

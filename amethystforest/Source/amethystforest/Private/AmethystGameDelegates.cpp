@@ -1,5 +1,6 @@
 
 #include "amethystforest.h"
+#include "Classes/Game/AmethystGameState.h"
 #include "GameDelegates.h"
 
 
@@ -24,55 +25,6 @@ FAutoConsoleCommand CmdPlayGoNext(
 #endif
 
 #endif
-
-
-// respond to requests from a companion app
-static void WebServerDelegate(int32 UserIndex, const FString& Action, const FString& URL, const TMap<FString, FString>& Params, TMap<FString, FString>& Response)
-{
-    if (URL == TEXT("/index.html?scoreboard"))
-    {
-        FString ScoreboardStr = TEXT("{ \"scoreboard\" : [ ");
-        
-        // you shouldn't normally use this method to get a UWorld as it won't always be correct in a PIE context.
-        // However, the PS4 companion app server will never run in the Editor.
-        UGameEngine* GameEngine = CastChecked<UGameEngine>(GEngine);
-        if (GameEngine)
-        {
-            UWorld* World = GameEngine->GetGameWorld();
-            if (World)
-            {
-                ULocalPlayer *Player = GEngine->GetFirstGamePlayer(World);
-                if (Player)
-                {
-                    // get the shoter game
-                    /* TO DO: GameState
-                    AAmethystGameState* const GameState = Cast<AAmethystGameState>(Player->PlayerController->GetWorld()->GameState);
-                    
-                    
-                    RankedPlayerMap Players;
-                    GameState->GetRankedMap(0, Players);
-                    
-                    bool bNeedsComma = false;
-                    for (auto It = Players.CreateIterator(); It; ++It)
-                    {
-                        if (bNeedsComma)
-                        {
-                            ScoreboardStr += TEXT(" ,");
-                        }
-                        ScoreboardStr += FString::Printf(TEXT(" { \"n\" : \"%s\" , \"k\" : \"%d\" , \"d\" : \"%d\" }"), *It.Value()->GetShortPlayerName(), It.Value()->GetKills(), It.Value()->GetDeaths());
-                        bNeedsComma = true;
-                    }
-                     */
-                }
-                
-                ScoreboardStr += TEXT(" ] }");
-                
-                Response.Add(TEXT("Content-Type"), TEXT("text/html; charset=utf-8"));
-                Response.Add(TEXT("Body"), ScoreboardStr);
-            }
-        }
-    }
-}
 
 static void AssignStreamingChunk(const FString& PackageToAdd, const FString& LastLoadedMapName, const TArray<int32>& AssetRegistryChunkIDs, const TArray<int32>& ExistingChunkIds, int32& OutChunkIndex)
 {
@@ -146,7 +98,6 @@ static void ExtendedSaveGameInfoDelegate(const TCHAR* SaveName, const EGameDeleg
 
 void InitializeAmethystGameDelegates()
 {
-    FGameDelegates::Get().GetWebServerActionDelegate() = FWebServerActionDelegate::CreateStatic(WebServerDelegate);
     /* TO DO: Figure this out
     FGameDelegates::Get().GetAssignStreamingChunkDelegate() = FAssignStreamingChunkDelegate::CreateStatic(AssignStreamingChunk);
     FGameDelegates::Get().GetAssignLayerChunkDelegate() = FAssignLayerChunkDelegate::CreateStatic(AssignLayerChunkDelegate);

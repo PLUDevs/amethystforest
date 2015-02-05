@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "../Public/amethystforest.h"
+#include "amethystforest.h"
 #include "Engine/GameInstance.h"
 #include "AmethystGameInstance.generated.h"
 

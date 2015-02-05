@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "../../Public/amethystforest.h"
+#include "amethystforest.h"
 #include "GameFramework/Character.h"
 #include "AmethystCharacter.generated.h"
 
@@ -254,8 +254,6 @@ class AAmethystCharacter : public ACharacter
 	*/
 	USkeletalMeshComponent* GetSpecifcPawnMesh(bool WantFirstPerson) const;
 
-	/** Update the team color of all player meshes. */
-	void UpdateTeamColorsAllMIDs();
 protected:
 
 	/** pawn mesh: 1st person view */
@@ -367,9 +365,6 @@ protected:
 
 	/** handle mesh visibility and updates */
 	void UpdatePawnMeshes();
-
-	/** handle mesh colors on specified material instance */
-	void UpdateTeamColors(UMaterialInstanceDynamic* UseMID);
 
 	/** Responsible for cleaning up bodies on clients. */
 	virtual void TornOff();

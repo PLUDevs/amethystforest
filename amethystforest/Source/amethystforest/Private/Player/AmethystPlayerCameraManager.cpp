@@ -1,6 +1,6 @@
 
 #include "amethystforest.h"
-#include "../../Classes/Player/AmethystPlayerCameraManager.h"
+#include "Classes/Player/AmethystPlayerCameraManager.h"
 
 AAmethystPlayerCameraManager::AAmethystPlayerCameraManager(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
 {
