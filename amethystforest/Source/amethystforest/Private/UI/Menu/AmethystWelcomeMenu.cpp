@@ -105,7 +105,8 @@ class SAmethystWelcomeMenuWidget : public SCompoundWidget
     
     virtual FReply OnKeyboardFocusReceived(const FGeometry& MyGeometry, const FKeyboardFocusEvent& InKeyboardFocusEvent) override
     {
-        return FReply::Handled().ReleaseMouseCapture().SetUserFocus(SharedThis( this ), true);
+        // WARNING: Removed bool rvalue on SetUserFocus
+        return FReply::Handled().ReleaseMouseCapture().SetUserFocus(SharedThis( this ));
     }
 };
 

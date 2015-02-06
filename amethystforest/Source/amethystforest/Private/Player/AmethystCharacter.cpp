@@ -1085,12 +1085,16 @@ AAmethystWeapon* AAmethystCharacter::GetInventoryWeapon(int32 index) const
 
 USkeletalMeshComponent* AAmethystCharacter::GetPawnMesh() const
 {
-	return IsFirstPerson() ? Mesh1P : GetMesh();
+    if (IsFirstPerson()) return Mesh1P;
+    
+    return GetMesh();
 }
 
 USkeletalMeshComponent* AAmethystCharacter::GetSpecifcPawnMesh(bool WantFirstPerson) const
 {
-	return WantFirstPerson == true ? Mesh1P : GetMesh();
+    if (WantFirstPerson == true) return Mesh1P;
+    
+    return GetMesh();
 }
 
 FName AAmethystCharacter::GetWeaponAttachPoint() const

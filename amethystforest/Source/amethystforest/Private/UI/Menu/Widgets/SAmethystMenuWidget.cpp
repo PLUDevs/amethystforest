@@ -450,7 +450,8 @@ void SAmethystMenuWidget::Tick(const FGeometry& AllottedGeometry, const double I
         if (!bConsoleVisible)
         {
             bConsoleVisible = true;
-            FSlateApplication::Get().SetUserFocusToGameViewport();
+            // WARNING: OwnerUserIndex might not satisy SetUserFocusToGameViewport entirely
+            FSlateApplication::Get().SetUserFocusToGameViewport(OwnerUserIndex);
         }
     }
     else
@@ -620,6 +621,7 @@ FReply SAmethystMenuWidget::ButtonClicked(int32 ButtonIndex)
         ConfirmMenuItem();
     }
     
+    // WARNING: Removed bool rvalue on SetUserFocus
     return FReply::Handled().SetUserFocus(SharedThis(this), EKeyboardFocusCause::SetDirectly);
 }
 
@@ -787,7 +789,8 @@ FReply SAmethystMenuWidget::OnKeyboardFocusReceived(const FGeometry& MyGeometry,
         return FReply::Handled().ClearUserFocus().SetUserFocus(CurrentMenu.Top()->CustomWidget.ToSharedRef(),EKeyboardFocusCause::SetDirectly);
     }
     
-    return FReply::Handled().ReleaseMouseCapture().SetUserFocus(SharedThis( this ), true);
+    // WARNING: Removed bool rvalue
+    return FReply::Handled().ReleaseMouseCapture().SetUserFocus(SharedThis( this ));
 }
 
 #undef LOCTEXT_NAMESPACE
