@@ -450,7 +450,7 @@ void SAmethystMenuWidget::Tick(const FGeometry& AllottedGeometry, const double I
         if (!bConsoleVisible)
         {
             bConsoleVisible = true;
-            FSlateApplication::Get().SetFocusToGameViewport();
+            FSlateApplication::Get().SetUserFocusToGameViewport(OwnerUserIndex);
         }
     }
     else
@@ -620,7 +620,7 @@ FReply SAmethystMenuWidget::ButtonClicked(int32 ButtonIndex)
         ConfirmMenuItem();
     }
     
-    return FReply::Handled().SetKeyboardFocus(SharedThis(this), EKeyboardFocusCause::SetDirectly);
+    return FReply::Handled().SetUserFocus(SharedThis(this), EKeyboardFocusCause::SetDirectly);
 }
 
 void SAmethystMenuWidget::FadeIn()
@@ -642,7 +642,7 @@ FReply SAmethystMenuWidget::OnMouseButtonDown(const FGeometry& MyGeometry, const
     
     //Set the keyboard focus
     return FReply::Handled()
-    .SetKeyboardFocus(SharedThis(this), EKeyboardFocusCause::SetDirectly);
+    .SetUserFocus(SharedThis(this), EKeyboardFocusCause::SetDirectly);
 }
 
 void SAmethystMenuWidget::ChangeOption(int32 MoveBy)
@@ -784,10 +784,10 @@ FReply SAmethystMenuWidget::OnKeyboardFocusReceived(const FGeometry& MyGeometry,
     //Focus the custom widget
     if (CurrentMenu.Num() == 1 && CurrentMenu.Top()->MenuItemType == EAmethystMenuItemType::CustomWidget)
     {
-        return FReply::Handled().ReleaseJoystickCapture().SetKeyboardFocus(CurrentMenu.Top()->CustomWidget.ToSharedRef(),EKeyboardFocusCause::SetDirectly);
+        return FReply::Handled().ClearUserFocus().SetUserFocus(CurrentMenu.Top()->CustomWidget.ToSharedRef(),EKeyboardFocusCause::SetDirectly);
     }
     
-    return FReply::Handled().ReleaseMouseCapture().CaptureJoystick(SharedThis( this ), true);
+    return FReply::Handled().ReleaseMouseCapture().SetUserFocus(SharedThis( this ));
 }
 
 #undef LOCTEXT_NAMESPACE
