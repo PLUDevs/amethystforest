@@ -41,7 +41,7 @@ void AAmethystAIController::Possess(APawn* InPawn)
 		EnemyLastKnownLocation = BlackboardComp->GetKeyID("EnemyLocation");
 
 
-		BehaviorComp->StartTree(Bot->BotBehavior);
+		BehaviorComp->StartTree(*(Bot->BotBehavior));
 	}
 }
 

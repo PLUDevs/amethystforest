@@ -150,7 +150,7 @@ void FAmethystIngameMenu::ToggleGameMenu()
         //Start hiding animation
         GameMenuWidget->HideMenu();
         //enable player controls during hide animation
-        FSlateApplication::Get().SetFocusToGameViewport();
+        FSlateApplication::Get().SetUserFocusToGameViewport(GetOwnerUserIndex());
         PCOwner->SetCinematicMode(false,false,false,true,true);
     }
 }
