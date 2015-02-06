@@ -44,6 +44,8 @@ class AMETHYSTFOREST_API AAmethystAIController : public AAIController
 
 	UFUNCTION(BlueprintCallable, Category = Behaviour)
 		void SearchEnemyInView();
+	UFUNCTION(BlueprintCallable, Category = Behaviour)
+		void SetEnemyLastKnownLocation(class APawn* InPawn);
 
 	void UpdateControlRotation(float DeltaTime, bool bUpdatePawn);
 
@@ -52,6 +54,10 @@ class AMETHYSTFOREST_API AAmethystAIController : public AAIController
 protected:
 	int32 EnemyKeyID;
 	int32 NeedAmmoKeyID;
+	
+	int32 EnemyLastKnownLocation;
+	
+	
 };
 	
 	
