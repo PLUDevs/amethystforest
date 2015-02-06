@@ -83,7 +83,7 @@ bool SAmethystConfirmationDialog::SupportsKeyboardFocus() const
 
 FReply SAmethystConfirmationDialog::OnKeyboardFocusReceived(const FGeometry& MyGeometry, const FKeyboardFocusEvent& InKeyboardFocusEvent)
 {
-    return FReply::Handled().ReleaseMouseCapture().SetUserFocus(SharedThis( this ), true);
+    return FReply::Handled().ReleaseMouseCapture().CaptureJoystick(SharedThis( this ), true);
 }
 
 FReply SAmethystConfirmationDialog::OnControllerButtonPressed( const FGeometry& MyGeometry, const FControllerEvent& ControllerEvent )

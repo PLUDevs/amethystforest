@@ -13,7 +13,7 @@ AAmethystCharacter::AAmethystCharacter(const class FPostConstructInitializePrope
 	: Super(PCIP.SetDefaultSubobjectClass<UAmethystCharMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	Mesh1P = PCIP.CreateDefaultSubobject<USkeletalMeshComponent>(this, TEXT("PawnMesh1P"));
-	Mesh1P->AttachParent = GetCapsuleComponent();
+	Mesh1P->AttachParent = CapsuleComponent;
 	Mesh1P->bOnlyOwnerSee = true;
 	Mesh1P->bOwnerNoSee = false;
 	Mesh1P->bCastDynamicShadow = false;
@@ -25,18 +25,18 @@ AAmethystCharacter::AAmethystCharacter(const class FPostConstructInitializePrope
 	Mesh1P->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Mesh1P->SetCollisionResponseToAllChannels(ECR_Ignore);
 
-	GetMesh()->bOnlyOwnerSee = false;
-	GetMesh()->bOwnerNoSee = true;
-	GetMesh()->bReceivesDecals = false;
-	GetMesh()->SetCollisionObjectType(ECC_Pawn);
-	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	GetMesh()->SetCollisionResponseToChannel(COLLISION_WEAPON, ECR_Block);
-	GetMesh()->SetCollisionResponseToChannel(COLLISION_PROJECTILE, ECR_Block);
-	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+	Mesh->bOnlyOwnerSee = false;
+	Mesh->bOwnerNoSee = true;
+	Mesh->bReceivesDecals = false;
+	Mesh->SetCollisionObjectType(ECC_Pawn);
+	Mesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	Mesh->SetCollisionResponseToChannel(COLLISION_WEAPON, ECR_Block);
+	Mesh->SetCollisionResponseToChannel(COLLISION_PROJECTILE, ECR_Block);
+	Mesh->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 
-	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
-	GetCapsuleComponent()->SetCollisionResponseToChannel(COLLISION_PROJECTILE, ECR_Block);
-	GetCapsuleComponent()->SetCollisionResponseToChannel(COLLISION_WEAPON, ECR_Ignore);
+	CapsuleComponent->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	CapsuleComponent->SetCollisionResponseToChannel(COLLISION_PROJECTILE, ECR_Block);
+	CapsuleComponent->SetCollisionResponseToChannel(COLLISION_WEAPON, ECR_Ignore);
 
 	TargetingSpeedModifier = 0.5f;
 	bIsTargeting = false;
@@ -74,9 +74,9 @@ void AAmethystCharacter::PostInitializeComponents()
 	UpdatePawnMeshes();
 
 	// create material instance for setting team colors (3rd person view)
-	for (int32 iMat = 0; iMat < GetMesh()->GetNumMaterials(); iMat++)
+	for (int32 iMat = 0; iMat < Mesh->GetNumMaterials(); iMat++)
 	{
-		MeshMIDs.Add(GetMesh()->CreateAndSetMaterialInstanceDynamic(iMat));
+		MeshMIDs.Add(Mesh->CreateAndSetMaterialInstanceDynamic(iMat));
 	}
 
 	// play respawn effects
@@ -142,8 +142,8 @@ void AAmethystCharacter::UpdatePawnMeshes()
 	Mesh1P->MeshComponentUpdateFlag = !bFirstPerson ? EMeshComponentUpdateFlag::OnlyTickPoseWhenRendered : EMeshComponentUpdateFlag::AlwaysTickPoseAndRefreshBones;
 	Mesh1P->SetOwnerNoSee(!bFirstPerson);
 
-	GetMesh()->MeshComponentUpdateFlag = bFirstPerson ? EMeshComponentUpdateFlag::OnlyTickPoseWhenRendered : EMeshComponentUpdateFlag::AlwaysTickPoseAndRefreshBones;
-	GetMesh()->SetOwnerNoSee(bFirstPerson);
+	Mesh->MeshComponentUpdateFlag = bFirstPerson ? EMeshComponentUpdateFlag::OnlyTickPoseWhenRendered : EMeshComponentUpdateFlag::AlwaysTickPoseAndRefreshBones;
+	Mesh->SetOwnerNoSee(bFirstPerson);
 }
 
 void AAmethystCharacter::OnCameraUpdate(const FVector& CameraLocation, const FRotator& CameraRotation)
@@ -262,7 +262,7 @@ bool AAmethystCharacter::Die(float KillingDamage, FDamageEvent const& DamageEven
 	Killer = GetDamageInstigator(Killer, *DamageType);
 
 	NetUpdateFrequency = GetDefault<AAmethystCharacter>()->NetUpdateFrequency;
-	GetCharacterMovement()->ForceReplicationUpdate();
+	CharacterMovement->ForceReplicationUpdate();
 
 	OnDeath(KillingDamage, DamageEvent, Killer ? Killer->GetPawn() : NULL, DamageCauser);
 	return true;
@@ -322,13 +322,13 @@ void AAmethystCharacter::OnDeath(float KillingDamage, struct FDamageEvent const&
 	}
 
 	// disable collisions on capsule
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
+	CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	CapsuleComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
 
-	if (GetMesh())
+	if (Mesh)
 	{
 		static FName CollisionProfileName(TEXT("Ragdoll"));
-		GetMesh()->SetCollisionProfileName(CollisionProfileName);
+		Mesh->SetCollisionProfileName(CollisionProfileName);
 	}
 	SetActorEnableCollision(true);
 
@@ -396,24 +396,24 @@ void AAmethystCharacter::SetRagdollPhysics()
 	{
 		bInRagdoll = false;
 	}
-	else if (!GetMesh() || !GetMesh()->GetPhysicsAsset())
+	else if (!Mesh || !Mesh->GetPhysicsAsset())
 	{
 		bInRagdoll = false;
 	}
 	else
 	{
 		// initialize physics/etc
-		GetMesh()->SetAllBodiesSimulatePhysics(true);
-		GetMesh()->SetSimulatePhysics(true);
-		GetMesh()->WakeAllRigidBodies();
-		GetMesh()->bBlendPhysics = true;
+		Mesh->SetAllBodiesSimulatePhysics(true);
+		Mesh->SetSimulatePhysics(true);
+		Mesh->WakeAllRigidBodies();
+		Mesh->bBlendPhysics = true;
 
 		bInRagdoll = true;
 	}
 
-	GetCharacterMovement()->StopMovementImmediately();
-	GetCharacterMovement()->DisableMovement();
-	GetCharacterMovement()->SetComponentTickEnabled(false);
+	CharacterMovement->StopMovementImmediately();
+	CharacterMovement->DisableMovement();
+	CharacterMovement->SetComponentTickEnabled(false);
 
 	if (!bInRagdoll)
 	{
@@ -812,7 +812,7 @@ void AAmethystCharacter::MoveForward(float Val)
 	if (Controller && Val != 0.f)
 	{
 		// Limit pitch when walking or falling
-		const bool bLimitRotation = (GetCharacterMovement()->IsMovingOnGround() || GetCharacterMovement()->IsFalling());
+		const bool bLimitRotation = (CharacterMovement->IsMovingOnGround() || CharacterMovement->IsFalling());
 		const FRotator Rotation = bLimitRotation ? GetActorRotation() : Controller->GetControlRotation();
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::X);
 		AddMovementInput(Direction, Val);
@@ -834,7 +834,7 @@ void AAmethystCharacter::MoveUp(float Val)
 	if (Val != 0.f)
 	{
 		// Not when walking or falling.
-		if (GetCharacterMovement()->IsMovingOnGround() || GetCharacterMovement()->IsFalling())
+		if (CharacterMovement->IsMovingOnGround() || CharacterMovement->IsFalling())
 		{
 			return;
 		}
@@ -970,7 +970,7 @@ void AAmethystCharacter::OnStopRunning()
 
 bool AAmethystCharacter::IsRunning() const
 {
-	if (!GetCharacterMovement())
+	if (!CharacterMovement)
 	{
 		return false;
 	}
@@ -1085,12 +1085,12 @@ AAmethystWeapon* AAmethystCharacter::GetInventoryWeapon(int32 index) const
 
 USkeletalMeshComponent* AAmethystCharacter::GetPawnMesh() const
 {
-	return IsFirstPerson() ? Mesh1P : GetMesh();
+	return IsFirstPerson() ? Mesh1P : Mesh;
 }
 
 USkeletalMeshComponent* AAmethystCharacter::GetSpecifcPawnMesh(bool WantFirstPerson) const
 {
-	return WantFirstPerson == true ? Mesh1P : GetMesh();
+	return WantFirstPerson == true ? Mesh1P : Mesh;
 }
 
 FName AAmethystCharacter::GetWeaponAttachPoint() const
