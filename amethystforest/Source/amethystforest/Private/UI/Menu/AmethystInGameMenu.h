@@ -17,6 +17,10 @@ public:
     /** is game menu currently active? */
     bool GetIsGameMenuUp() const;
     
+    // WARNING
+    /** Updates the OwnerIndex from the player controller */
+    void UpdateMenuOwner();
+    
 protected:
     
     /** Owning player controller */

@@ -8,6 +8,7 @@
 #include "Classes/Weapon/AmethystWeapon.h"
 #include "Private/UI/Style/AmethystStyle.h"
 #include "Private/UI/Menu/AmethystInGameMenu.h"
+#include "Private/UI/Menu/AmethystMainMenu.h"
 
 #define  ACH_FRAG_SOMEONE	TEXT("ACH_FRAG_SOMEONE")
 #define  ACH_SOME_KILLS		TEXT("ACH_SOME_KILLS")
@@ -191,9 +192,7 @@ void AamethystforestPlayerController::OnKill()
 void AamethystforestPlayerController::SetPlayer(UPlayer* Player)
 {
 	APlayerController::SetPlayer(Player);
-    /* TO DO: UpdateMenuOwner Function in IngameMenu needed
 	AmethystIngameMenu->UpdateMenuOwner();
-     */
 }
 
 void AamethystforestPlayerController::OnToggleInGameMenu()

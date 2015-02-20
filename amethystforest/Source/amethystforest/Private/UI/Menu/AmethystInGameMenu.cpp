@@ -183,6 +183,12 @@ void FAmethystIngameMenu::OnUIQuit()
     }
 }
 
+void FAmethystIngameMenu::UpdateMenuOwner()
+{
+    int32 OwnerUserIndex = GetOwnerUserIndex();
+    OwnerUserIndex = PlayerOwner ? PlayerOwner->ControllerId : 0;
+}
+
 void FAmethystIngameMenu::Quit()
 {
     APlayerController* const PCOwner = PlayerOwner ? PlayerOwner->PlayerController : nullptr;
