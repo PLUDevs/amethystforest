@@ -93,11 +93,8 @@ void AamethystforestPlayerController::PawnPendingDestroy(APawn* P)
 
 void AamethystforestPlayerController::ClientSetSpectatorCamera_Implementation(FVector CameraLocation, FRotator CameraRotation)
 {
-	/* TO DO: SpectatorCamera_Implementation
-
 	SetInitialLocationAndRotation(CameraLocation, CameraRotation);
 	SetViewTarget(this);
-	*/
 }
 
 bool AamethystforestPlayerController::FindDeathCameraSpot(FVector& CameraLocation, FRotator& CameraRotation)
