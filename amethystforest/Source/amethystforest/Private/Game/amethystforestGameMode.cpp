@@ -153,7 +153,8 @@ bool AamethystforestGameMode::IsSpawnpointAllowed(APlayerStart* SpawnPoint, ACon
         }
     }
     */
-    return true;
+    //return true;
+    return false; // Remove
     
 }
 
