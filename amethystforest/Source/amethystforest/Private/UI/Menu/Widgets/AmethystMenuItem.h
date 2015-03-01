@@ -1,6 +1,7 @@
 
 #pragma once
-#include "Slate.h"
+#include "SlateBasics.h"
+#include "SlateExtras.h"
 #include "SAmethystMenuItem.h"
 
 namespace EAmethystMenuItemType
@@ -43,6 +44,18 @@ class FAmethystMenuItem : public TSharedFromThis<FAmethystMenuItem>
 public:
     /** confirm menu item delegate */
     DECLARE_DELEGATE(FOnConfirmMenuItem);
+
+	/** view profile delegate */
+	DECLARE_DELEGATE(FOnControllerFacebuttonLeftPressed);
+
+	/** Increment friend index counter delegate */
+	DECLARE_DELEGATE(FOnControllerDownInputPressed);
+
+	/** Decrement friend index counter delegate */
+	DECLARE_DELEGATE(FOnControllerUpInputPressed);
+
+	/** Send friend invite delegate */
+	DECLARE_DELEGATE(FOnOnControllerFacebuttonDownPressed);
     
     /** multi-choice option changed, parameters are menu item itself and new multi-choice index  */
     DECLARE_DELEGATE_TwoParams(FOnOptionChanged, TSharedPtr<FAmethystMenuItem>, int32);
@@ -52,6 +65,18 @@ public:
     
     /** multi-choice option changed, parameters are menu item itself and new multi-choice index */
     FOnOptionChanged OnOptionChanged;
+
+	/** delegate, which is executed by SShooterMenuWidget if user presses FacebuttonLeft */
+	FOnControllerFacebuttonLeftPressed OnControllerFacebuttonLeftPressed;
+
+	/** delegate, which is executed by SShooterMenuWidget if user presses ControllerDownInput */
+	FOnControllerDownInputPressed OnControllerDownInputPressed;
+
+	/** delegate, which is executed by SShooterMenuWidget if user presses ControllerUpInput */
+	FOnControllerUpInputPressed OnControllerUpInputPressed;
+
+	/** delegate, which is executed by SShooterMenuWidget if user presses FacebuttonDown */
+	FOnOnControllerFacebuttonDownPressed OnControllerFacebuttonDownPressed;
     
     /** menu item type */
     EAmethystMenuItemType::Type MenuItemType;

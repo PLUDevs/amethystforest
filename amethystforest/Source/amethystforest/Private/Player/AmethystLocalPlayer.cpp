@@ -2,7 +2,7 @@
 #include "amethystforest.h"
 #include "Classes/Player/AmethystLocalPlayer.h"
 
-UAmethystLocalPlayer::UAmethystLocalPlayer(const class FPostConstructInitializeProperties& PCIP)
+UAmethystLocalPlayer::UAmethystLocalPlayer(const class FObjectInitializer& PCIP)
 : Super(PCIP)
 {
 }
@@ -23,13 +23,14 @@ void UAmethystLocalPlayer::LoadPersistentUser()
 {
     if (PersistentUser == NULL)
     {
-        PersistentUser = UAmethystPersistentUser::LoadPersistentUser( GetNickname(), ControllerId );
+        PersistentUser = UAmethystPersistentUser::LoadPersistentUser( GetNickname(), GetControllerId() );
     }
 }
 
 void UAmethystLocalPlayer::SetControllerId(int32 NewControllerId)
 {
     ULocalPlayer::SetControllerId(NewControllerId);
+	int32 ControllerId = GetControllerId();
     
     // if we changed controllerid / user, then we need to load the appropriate persistent user.
     if (PersistentUser != nullptr && ( ControllerId != PersistentUser->GetUserIndex() || GetNickname() != PersistentUser->GetName() ) )

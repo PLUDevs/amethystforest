@@ -2,7 +2,7 @@
 #include "amethystforest.h"
 #include "Classes/Effects/AmethystImpactEffect.h"
 
-AAmethystImpactEffect::AAmethystImpactEffect(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+AAmethystImpactEffect::AAmethystImpactEffect(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
     bAutoDestroyWhenFinished = true;
 }

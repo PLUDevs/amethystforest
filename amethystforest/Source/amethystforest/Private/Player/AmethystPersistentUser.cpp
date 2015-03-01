@@ -2,7 +2,7 @@
 #include "amethystforest.h"
 #include "Classes/Player/AmethystPersistentUser.h"
 
-UAmethystPersistentUser::UAmethystPersistentUser(const class FPostConstructInitializeProperties& PCIP)
+UAmethystPersistentUser::UAmethystPersistentUser(const class FObjectInitializer& PCIP)
 : Super(PCIP)
 {
     SetToDefaults();
@@ -39,7 +39,7 @@ bool UAmethystPersistentUser::IsAimSensitivityDirty() const
             
             // Update key bindings for the current user only
             ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(PC->Player);
-            if(!LocalPlayer || LocalPlayer->ControllerId != UserIndex)
+            if(!LocalPlayer || LocalPlayer->GetControllerId() != UserIndex)
             {
                 continue;
             }
@@ -81,7 +81,7 @@ bool UAmethystPersistentUser::IsInvertedYAxisDirty() const
             
             // Update key bindings for the current user only
             ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(PC->Player);
-            if(!LocalPlayer || LocalPlayer->ControllerId != UserIndex)
+            if(!LocalPlayer || LocalPlayer->GetControllerId() != UserIndex)
             {
                 continue;
             }
@@ -165,7 +165,7 @@ void UAmethystPersistentUser::TellInputAboutKeybindings()
         
         // Update key bindings for the current user only
         ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(PC->Player);
-        if(!LocalPlayer || LocalPlayer->ControllerId != UserIndex)
+        if(!LocalPlayer || LocalPlayer->GetControllerId() != UserIndex)
         {
             continue;
         }

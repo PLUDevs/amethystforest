@@ -23,7 +23,7 @@ void FAmethystOptionsStyle::GetResources(TArray<const FSlateBrush*>& OutBrushes)
 }
 
 
-UAmethystOptionsWidgetStyle::UAmethystOptionsWidgetStyle( const class FPostConstructInitializeProperties& PCIP )
+UAmethystOptionsWidgetStyle::UAmethystOptionsWidgetStyle(const class FObjectInitializer& PCIP)
 : Super(PCIP)
 {
     

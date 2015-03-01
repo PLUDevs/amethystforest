@@ -1,3 +1,4 @@
+#pragma once
 
 #include "AmethystTypes.h"
 #include "AmethystPlayerController_Menu.generated.h"

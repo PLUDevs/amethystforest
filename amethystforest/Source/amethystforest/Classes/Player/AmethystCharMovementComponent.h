@@ -13,6 +13,6 @@ class AMETHYSTFOREST_API UAmethystCharMovementComponent : public UCharacterMovem
 {
 	GENERATED_UCLASS_BODY()
 
-	virtual float GetMaxSpeedModifier() const OVERRIDE;
+	virtual float GetMaxSpeed() const override;
 	
 };

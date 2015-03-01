@@ -5,6 +5,8 @@
 #include "Classes/Player/AmethystCharacter.h"
 #include "Classes/Player/AmethystPersistentUser.h"
 #include "Classes/Player/AmethystLocalPlayer.h"
+#include "Classes/Player/AmethystPlayerCameraManager.h"
+#include "Classes/Player/AmethystCheatManager.h"
 #include "Classes/Weapon/AmethystWeapon.h"
 #include "Private/UI/Style/AmethystStyle.h"
 #include "Private/UI/Menu/AmethystInGameMenu.h"
@@ -36,7 +38,7 @@ static const int32 GoodScoreCount = 10;
 static const int32 GreatScoreCount = 15;
 
 
-AamethystforestPlayerController::AamethystforestPlayerController(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+AamethystforestPlayerController::AamethystforestPlayerController(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
 	bAllowGameActions = true;
 

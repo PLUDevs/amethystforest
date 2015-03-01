@@ -9,7 +9,7 @@
 #include "Classes/UI/AmethystHUD.h"
 #include "Classes/Game/amethystforestGameMode.h"
 
-AAmethystCharacter::AAmethystCharacter(const class FPostConstructInitializeProperties& PCIP)
+AAmethystCharacter::AAmethystCharacter(const class FObjectInitializer& PCIP)
 	: Super(PCIP.SetDefaultSubobjectClass<UAmethystCharMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	Mesh1P = PCIP.CreateDefaultSubobject<USkeletalMeshComponent>(this, TEXT("PawnMesh1P"));
@@ -338,7 +338,7 @@ void AAmethystCharacter::OnDeath(float KillingDamage, struct FDamageEvent const&
 	// Ragdoll
 	if (DeathAnimDuration > 0.f)
 	{
-		GetWorldTimerManager().SetTimer(this, &AAmethystCharacter::SetRagdollPhysics, FMath::Min(0.1f, DeathAnimDuration), false);
+		GetWorldTimerManager().SetTimer(TimerHandle_Respawn, this, &AAmethystCharacter::SetRagdollPhysics, FMath::Min(0.1f, DeathAnimDuration), false);
 	}
 	else
 	{
@@ -975,7 +975,7 @@ bool AAmethystCharacter::IsRunning() const
 		return false;
 	}
 
-	return (bWantsToRun || bWantsToRunToggled) && !GetVelocity().IsZero() && (GetVelocity().SafeNormal2D() | GetActorRotation().Vector()) > -0.1;
+	return (bWantsToRun || bWantsToRunToggled) && !GetVelocity().IsZero() && (GetVelocity().GetSafeNormal2D() | GetActorRotation().Vector()) > -0.1;
 }
 
 

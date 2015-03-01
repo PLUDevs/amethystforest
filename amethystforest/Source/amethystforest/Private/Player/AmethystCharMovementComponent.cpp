@@ -5,13 +5,13 @@
 #include "Classes/Player/AmethystCharacter.h"
 
 
-UAmethystCharMovementComponent::UAmethystCharMovementComponent(const class FPostConstructInitializeProperties& PCIP)
+UAmethystCharMovementComponent::UAmethystCharMovementComponent(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 
 }
 
-float UAmethystCharMovementComponent::GetMaxSpeedModifier() const
+float UAmethystCharMovementComponent::GetMaxSpeed() const
 {
 	float SpeedMod = Super::GetMaxSpeed();
 

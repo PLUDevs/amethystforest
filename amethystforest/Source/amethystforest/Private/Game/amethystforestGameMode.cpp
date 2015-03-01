@@ -5,7 +5,7 @@
 #include "Classes/Player/amethystforestPlayerController.h"
 #include "Classes/UI/AmethystHUD.h"
 
-AamethystforestGameMode::AamethystforestGameMode(const class FPostConstructInitializeProperties& PCIP)
+AamethystforestGameMode::AamethystforestGameMode(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
     

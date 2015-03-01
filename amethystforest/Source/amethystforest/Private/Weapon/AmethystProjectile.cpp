@@ -4,7 +4,7 @@
 #include "Classes/Effects/AmethystExplosionEffect.h"
 #include "Particles/ParticleSystemComponent.h"
 
-AAmethystProjectile::AAmethystProjectile(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+AAmethystProjectile::AAmethystProjectile(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
     CollisionComp = PCIP.CreateDefaultSubobject<USphereComponent>(this, TEXT("SphereComp"));
     CollisionComp->InitSphereRadius(5.0f);
@@ -35,7 +35,6 @@ AAmethystProjectile::AAmethystProjectile(const class FPostConstructInitializePro
     PrimaryActorTick.TickGroup = TG_PrePhysics;
     SetRemoteRoleForBackwardsCompat(ROLE_SimulatedProxy);
     bReplicates = true;
-    bReplicateInstigator = true;
     bReplicateMovement = true;
 }
 

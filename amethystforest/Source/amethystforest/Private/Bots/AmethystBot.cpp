@@ -5,7 +5,7 @@
 #include "Classes/Bots/AmethystBot.h"
 
 
-AAmethystBot::AAmethystBot(const class FPostConstructInitializeProperties& PCIP)
+AAmethystBot::AAmethystBot(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 	AIControllerClass = AAmethystAIController::StaticClass();

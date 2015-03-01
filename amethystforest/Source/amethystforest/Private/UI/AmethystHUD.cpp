@@ -10,7 +10,7 @@
 
 const float AAmethystHUD::MinHudScale = 0.5f;
 
-AAmethystHUD::AAmethystHUD(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+AAmethystHUD::AAmethystHUD(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
     NoAmmoFadeOutTime =  1.0f;
     HitNotifyDisplayTime = 0.75f;

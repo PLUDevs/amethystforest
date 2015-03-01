@@ -208,7 +208,7 @@ int32 FAmethystOptions::GetCurrentGammaIndex()
 
 int32 FAmethystOptions::GetOwnerUserIndex() const
 {
-    return PlayerOwner ? PlayerOwner->ControllerId : 0;
+    return PlayerOwner ? PlayerOwner->GetControllerId() : 0;
 }
 
 UAmethystPersistentUser* FAmethystOptions::GetPersistentUser() const

@@ -15,22 +15,22 @@ class AAmethystCharacter : public ACharacter
     virtual void BeginPlay() override;
 	
 	/** spawn inventory, setup initial variables */
-	virtual void PostInitializeComponents() OVERRIDE;
+	virtual void PostInitializeComponents() override;
 
 	/** Update the character. (Running, health etc). */
-	virtual void Tick(float DeltaSeconds) OVERRIDE;
+	virtual void Tick(float DeltaSeconds) override;
 
 	/** cleanup inventory */
-	virtual void Destroyed() OVERRIDE;
+	virtual void Destroyed() override;
 
 	/** update mesh for first person view */
-	virtual void PawnClientRestart() OVERRIDE;
+	virtual void PawnClientRestart() override;
 
 	/** [server] perform PlayerState related setup */
-	virtual void PossessedBy(class AController* C) OVERRIDE;
+	virtual void PossessedBy(class AController* C) override;
 
 	/** [client] perform PlayerState related setup */
-	virtual void OnRep_PlayerState() OVERRIDE;
+	virtual void OnRep_PlayerState() override;
 
 	/**
 	* Add camera pitch to first person mesh.
@@ -114,10 +114,10 @@ class AAmethystCharacter : public ACharacter
 	// Animations
 
 	/** play anim montage */
-	virtual float PlayAnimMontage(class UAnimMontage* AnimMontage, float InPlayRate = 1.f, FName StartSectionName = NAME_None) OVERRIDE;
+	virtual float PlayAnimMontage(class UAnimMontage* AnimMontage, float InPlayRate = 1.f, FName StartSectionName = NAME_None) override;
 
 	/** stop playing montage */
-	virtual void StopAnimMontage(class UAnimMontage* AnimMontage) OVERRIDE;
+	virtual void StopAnimMontage(class UAnimMontage* AnimMontage) override;
 
 	/** stop playing all montages */
 	void StopAllAnimMontages();
@@ -126,7 +126,7 @@ class AAmethystCharacter : public ACharacter
 	// Input handlers
 
 	/** setup pawn specific input handlers */
-	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) OVERRIDE;
+	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
 	/**
 	* Move forward/back
@@ -258,7 +258,7 @@ protected:
 
 	/** pawn mesh: 1st person view */
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-		TSubobjectPtr<USkeletalMeshComponent> Mesh1P;
+	USkeletalMeshComponent* Mesh1P;
 
 	/** socket or bone name for attaching weapon mesh */
 	UPROPERTY(EditDefaultsOnly, Category = Inventory)
@@ -369,6 +369,9 @@ protected:
 	/** Responsible for cleaning up bodies on clients. */
 	virtual void TornOff();
 
+	/** Handle for efficient management of Respawn timer */
+	FTimerHandle TimerHandle_Respawn;
+
 	//////////////////////////////////////////////////////////////////////////
 	// Damage & death
 
@@ -386,7 +389,7 @@ public:
 		uint8 TeamID;
 
 	/** Take damage, handle death */
-	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) OVERRIDE;
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) override;
 
 	/** Pawn suicide */
 	virtual void Suicide();
@@ -408,10 +411,10 @@ public:
 	virtual bool Die(float KillingDamage, struct FDamageEvent const& DamageEvent, class AController* Killer, class AActor* DamageCauser);
 
 	// Die when we fall out of the world.
-	virtual void FellOutOfWorld(const class UDamageType& dmgType) OVERRIDE;
+	virtual void FellOutOfWorld(const class UDamageType& dmgType) override;
 
 	/** Called on the actor right before replication occurs */
-	virtual void PreReplication(IRepChangedPropertyTracker & ChangedPropertyTracker) OVERRIDE;
+	virtual void PreReplication(IRepChangedPropertyTracker & ChangedPropertyTracker) override;
 protected:
 	/** notification when killed, for both the server and client. */
 	virtual void OnDeath(float KillingDamage, struct FDamageEvent const& DamageEvent, class APawn* InstigatingPawn, class AActor* DamageCauser);

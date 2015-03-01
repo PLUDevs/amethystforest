@@ -4,7 +4,7 @@
 #include "Private/UI/Style/AmethystStyle.h"
 
 
-AAmethystPlayerController_Menu::AAmethystPlayerController_Menu(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+AAmethystPlayerController_Menu::AAmethystPlayerController_Menu(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
 }
 

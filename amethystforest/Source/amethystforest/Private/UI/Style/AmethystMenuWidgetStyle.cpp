@@ -26,7 +26,7 @@ void FAmethystMenuStyle::GetResources(TArray<const FSlateBrush*>& OutBrushes) co
 }
 
 
-UAmethystMenuWidgetStyle::UAmethystMenuWidgetStyle( const class FPostConstructInitializeProperties& PCIP )
+UAmethystMenuWidgetStyle::UAmethystMenuWidgetStyle(const class FObjectInitializer& PCIP)
 : Super(PCIP)
 {
     

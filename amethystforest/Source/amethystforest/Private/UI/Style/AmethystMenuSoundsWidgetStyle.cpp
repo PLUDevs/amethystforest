@@ -23,7 +23,7 @@ void FAmethystMenuSoundsStyle::GetResources(TArray<const FSlateBrush*>& OutBrush
 }
 
 
-UAmethystMenuSoundsWidgetStyle::UAmethystMenuSoundsWidgetStyle( const class FPostConstructInitializeProperties& PCIP )
+UAmethystMenuSoundsWidgetStyle::UAmethystMenuSoundsWidgetStyle(const class FObjectInitializer& PCIP)
 : Super(PCIP)
 {
     

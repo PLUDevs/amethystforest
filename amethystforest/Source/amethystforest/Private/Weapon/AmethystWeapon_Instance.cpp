@@ -4,7 +4,7 @@
 #include "Classes/Effects/AmethystImpactEffect.h"
 #include "Particles/ParticleSystemComponent.h"
 
-AAmethystWeapon_Instance::AAmethystWeapon_Instance(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+AAmethystWeapon_Instance::AAmethystWeapon_Instance(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
     CurrentFiringSpread = 0.0f;
 }
@@ -43,7 +43,7 @@ void AAmethystWeapon_Instance::ServerNotifyHit_Implementation(const FHitResult I
     if (Instigator && (Impact.GetActor() || Impact.bBlockingHit))
     {
         const FVector Origin = GetMuzzleLocation();
-        const FVector ViewDir = (Impact.Location - Origin).SafeNormal();
+        const FVector ViewDir = (Impact.Location - Origin).GetSafeNormal();
         
         // is the angle between the hit and the view within allowed limits (limit + weapon max angle)
         const float ViewDotHitDir = FVector::DotProduct(Instigator->GetViewRotation().Vector(), ViewDir);

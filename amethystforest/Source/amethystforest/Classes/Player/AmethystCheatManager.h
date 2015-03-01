@@ -1,4 +1,5 @@
-
+// Shouldn't need a pragma once, but won't compile otherwise
+#pragma once
 #include "amethystforestPlayerController.h"
 #include "AmethystCheatManager.generated.h"
 

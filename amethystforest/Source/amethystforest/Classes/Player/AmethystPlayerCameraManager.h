@@ -1,4 +1,5 @@
-
+// Shouldn't need a pragma once, but won't compile otherwise
+#pragma once
 #include "AmethystPlayerCameraManager.generated.h"
 
 UCLASS()

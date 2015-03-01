@@ -73,12 +73,12 @@ public:
 	// Begin APlayerController interface
 
 	/** handle weapon visibility */
-	virtual void SetCinematicMode(bool bInCinematicMode, bool bHidePlayer, bool bAffectsHUD, bool bAffectsMovement, bool bAffectsTurning) OVERRIDE;
+	virtual void SetCinematicMode(bool bInCinematicMode, bool bHidePlayer, bool bAffectsHUD, bool bAffectsMovement, bool bAffectsTurning) override;
 
 	/** initialize the input system from the player settings */
-	virtual void InitInputSystem() OVERRIDE;
+	virtual void InitInputSystem() override;
 
-	virtual bool SetPause(bool bPause, FCanUnpause CanUnpauseDelegate = FCanUnpause()) OVERRIDE;
+	virtual bool SetPause(bool bPause, FCanUnpause CanUnpauseDelegate = FCanUnpause()) override;
 
 	// End APlayerController interface
 
@@ -94,7 +94,7 @@ public:
 	void OnKill();
 
 	/** Calls base and sets up proper ownership of in-game menu */
-	virtual void SetPlayer(UPlayer* Player) OVERRIDE;
+	virtual void SetPlayer(UPlayer* Player) override;
 
 	// end AamethystforestPlayerController-specific
 
@@ -128,27 +128,27 @@ protected:
 	//Begin AActor interface
 
 	/** after all game elements are created */
-	virtual void PostInitializeComponents() OVERRIDE;
+	virtual void PostInitializeComponents() override;
 
 	//End AActor interface
 
 	//Begin AController interface
 
 	/** transition to dead state, retries spawning later */
-	virtual void FailedToSpawnPawn() OVERRIDE;
+	virtual void FailedToSpawnPawn() override;
 
 	/** update camera when pawn dies */
-	virtual void PawnPendingDestroy(APawn* P) OVERRIDE;
+	virtual void PawnPendingDestroy(APawn* P) override;
 
 	//End AController interface
 
 	// Begin APlayerController interface
 
 	/** respawn after dying */
-	virtual void UnFreeze() OVERRIDE;
+	virtual void UnFreeze() override;
 
 	/** sets up input */
-	virtual void SetupInputComponent() OVERRIDE;
+	virtual void SetupInputComponent() override;
 
 	/** Causes the player to commit suicide */
 	UFUNCTION(exec)
