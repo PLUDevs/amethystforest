@@ -178,15 +178,17 @@ void FAmethystIngameMenu::OnUIQuit()
     UWorld* const World = PlayerOwner ? PlayerOwner->GetWorld() : nullptr;
     if (World)
     {
+		/* TO DO: add these functions in MenuSounds style 
         const FAmethystMenuSoundsStyle& MenuSounds = FAmethystStyle::Get().GetWidgetStyle<FAmethystMenuSoundsStyle>("DefaultAmethystMenuSoundsStyle");
         MenuHelper::PlaySoundAndCall(World, MenuSounds.ExitGameSound, GetOwnerUserIndex(), this, &FAmethystIngameMenu::Quit);
+		*/
     }
 }
 
 void FAmethystIngameMenu::UpdateMenuOwner()
 {
     int32 OwnerUserIndex = GetOwnerUserIndex();
-    OwnerUserIndex = PlayerOwner ? PlayerOwner->ControllerId : 0;
+    OwnerUserIndex = PlayerOwner ? PlayerOwner->GetControllerId() : 0;
 }
 
 void FAmethystIngameMenu::Quit()
@@ -200,7 +202,7 @@ void FAmethystIngameMenu::Quit()
 
 int32 FAmethystIngameMenu::GetOwnerUserIndex() const
 {
-    return PlayerOwner ? PlayerOwner->ControllerId : 0;
+    return PlayerOwner ? PlayerOwner->GetControllerId() : 0;
 }
 
 

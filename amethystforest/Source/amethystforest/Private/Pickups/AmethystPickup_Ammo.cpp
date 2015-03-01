@@ -2,7 +2,7 @@
 #include "amethystforest.h"
 #include "Classes/Pickups/AmethystPickup_Ammo.h"
 
-AAmethystPickup_Ammo::AAmethystPickup_Ammo(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+AAmethystPickup_Ammo::AAmethystPickup_Ammo(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
     AmmoClips = 2;
 }

@@ -17,14 +17,14 @@ class AMETHYSTFOREST_API AAmethystAIController : public AAIController
 	GENERATED_UCLASS_BODY()
 
 	UPROPERTY(transient)
-		TSubobjectPtr<class UBlackboardComponent> BlackboardComp;
+		class UBlackboardComponent* BlackboardComp;
 
 	UPROPERTY(transient)
-		TSubobjectPtr<class UBehaviorTreeComponent> BehaviorComp;
+		class UBehaviorTreeComponent* BehaviorComp;
 
-	virtual void Possess(class APawn* InPawn) OVERRIDE;
+	virtual void Possess(class APawn* InPawn) override;
 
-	virtual void BeginInactiveState() OVERRIDE;
+	virtual void BeginInactiveState() override;
 
 	void Respawn();
 
@@ -54,6 +54,9 @@ class AMETHYSTFOREST_API AAmethystAIController : public AAIController
 protected:
 	int32 EnemyKeyID;
 	int32 NeedAmmoKeyID;
+
+	/** Handle for efficient management of Respawn timer */
+	FTimerHandle TimerHandle_Respawn;
 	
 	int32 EnemyLastKnownLocation;
 	

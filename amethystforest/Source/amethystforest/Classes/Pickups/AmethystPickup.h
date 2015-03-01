@@ -21,7 +21,7 @@ protected:
     
     /** FX component */
     UPROPERTY(VisibleDefaultsOnly, Category=Effects)
-    TSubobjectPtr<UParticleSystemComponent> PickupPSC;
+    UParticleSystemComponent* PickupPSC;
     
     /** FX of active pickup */
     UPROPERTY(EditDefaultsOnly, Category=Effects)
@@ -76,4 +76,7 @@ protected:
     /** blueprint event: pickup appears */
     UFUNCTION(BlueprintImplementableEvent)
     virtual void OnRespawnEvent();
+
+	/** Handle for efficient management of Respawn timer */
+	FTimerHandle TimerHandle_Respawn;
 };

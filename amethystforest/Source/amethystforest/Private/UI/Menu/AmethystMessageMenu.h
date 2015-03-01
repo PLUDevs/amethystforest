@@ -1,5 +1,7 @@
 #pragma once
-#include "Slate.h"
+#include "SlateBasics.h"
+#include "SlateExtras.h"
+
 
 DECLARE_DELEGATE(FMessageMenuButtonClicked);
 

@@ -1,7 +1,7 @@
 
 #include "amethystforest.h"
 
-UAmethystGameUserSettings::UAmethystGameUserSettings(const class FPostConstructInitializeProperties& PCIP)
+UAmethystGameUserSettings::UAmethystGameUserSettings(const class FObjectInitializer& PCIP)
 : Super(PCIP)
 {
     SetToDefaults();

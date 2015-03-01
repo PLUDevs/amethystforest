@@ -1,7 +1,9 @@
 
 #pragma once
 
-#include "Slate.h"
+#include "SlateBasics.h"
+#include "SlateExtras.h"
+
 
 //class declare
 class SAmethystMenuItem : public SCompoundWidget

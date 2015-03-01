@@ -14,7 +14,7 @@ class AMETHYSTFOREST_API AAmethystBot : public AAmethystCharacter
 	GENERATED_UCLASS_BODY()
 
 
-		UPROPERTY(EditDefaultsOnly, Category = Behaviour)
+	UPROPERTY(EditDefaultsOnly, Category = Behaviour)
 		float AttackRange;
 	UPROPERTY(EditDefaultsOnly, Category = Behaviour)
 		float AttackDamage;
@@ -27,7 +27,7 @@ class AMETHYSTFOREST_API AAmethystBot : public AAmethystCharacter
 
 	float AccumulatedFiretime;
 	/*virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) OVERRIDE;*/
-	virtual bool IsFirstPerson() const OVERRIDE;
+	virtual bool IsFirstPerson() const override;
 
 
 	virtual void ReceiveHit
@@ -40,8 +40,8 @@ class AMETHYSTFOREST_API AAmethystBot : public AAmethystCharacter
 		FVector HitNormal,
 		FVector NormalImpulse,
 		const FHitResult & Hit
-		) OVERRIDE;
+		) override;
 
-	virtual void FaceRotation(FRotator NewRotation, float DeltaTime = 0.f) OVERRIDE;
+	virtual void FaceRotation(FRotator NewRotation, float DeltaTime = 0.f) override;
 	bool Attacking;
 };

@@ -2,7 +2,7 @@
 #include "amethystforest.h"
 #include "Classes/Player/AmethystPlayerCameraManager.h"
 
-AAmethystPlayerCameraManager::AAmethystPlayerCameraManager(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+AAmethystPlayerCameraManager::AAmethystPlayerCameraManager(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
     NormalFOV = 90.0f;
     TargetingFOV = 60.0f;

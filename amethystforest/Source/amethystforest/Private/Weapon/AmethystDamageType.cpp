@@ -3,7 +3,7 @@
 #include "Classes/Weapon/AmethystDamageType.h"
 
 
-UAmethystDamageType::UAmethystDamageType(const class FPostConstructInitializeProperties& PCIP)
+UAmethystDamageType::UAmethystDamageType(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 }

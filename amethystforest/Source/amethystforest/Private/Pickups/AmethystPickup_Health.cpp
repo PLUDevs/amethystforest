@@ -2,7 +2,7 @@
 #include "amethystforest.h"
 #include "Classes/Pickups/AmethystPickup_Health.h"
 
-AAmethystPickup_Health::AAmethystPickup_Health(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+AAmethystPickup_Health::AAmethystPickup_Health(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
     Health = 50;
 }

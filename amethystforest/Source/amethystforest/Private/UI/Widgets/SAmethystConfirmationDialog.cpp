@@ -81,51 +81,99 @@ bool SAmethystConfirmationDialog::SupportsKeyboardFocus() const
     return true;
 }
 
-FReply SAmethystConfirmationDialog::OnKeyboardFocusReceived(const FGeometry& MyGeometry, const FKeyboardFocusEvent& InKeyboardFocusEvent)
+FReply SAmethystConfirmationDialog::OnFocusReceived(const FGeometry& MyGeometry, const FFocusEvent& InFocusEvent)
 {
-    return FReply::Handled().ReleaseMouseCapture().SetUserFocus(SharedThis( this ));
+	return FReply::Handled().ReleaseMouseCapture().SetUserFocus(SharedThis(this), EFocusCause::SetDirectly, true);
 }
 
-FReply SAmethystConfirmationDialog::OnControllerButtonPressed( const FGeometry& MyGeometry, const FControllerEvent& ControllerEvent )
-{
-    const FKey Key = ControllerEvent.GetEffectingButton();
-    const int32 UserIndex = ControllerEvent.GetUserIndex();
-    
-    if (Key == EKeys::Gamepad_FaceButton_Bottom)
-    {
-        if(OnConfirm.IsBound())
-        {
-            return OnConfirm.Execute();
-        }
-    }
-    else if (Key == EKeys::Gamepad_FaceButton_Right)
-    {
-        if(OnCancel.IsBound())
-        {
-            return OnCancel.Execute();
-        }
-    }
-    
-    return FReply::Unhandled();
-}
 
-FReply SAmethystConfirmationDialog::OnKeyDown(const FGeometry& MyGeometry, const FKeyboardEvent& KeyboardEvent)
+FReply SAmethystConfirmationDialog::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& KeyEvent)
 {
-    // For testing on PC
-    if (KeyboardEvent.GetKey() == EKeys::Enter)
-    {
-        if(OnConfirm.IsBound())
-        {
-            return OnConfirm.Execute();
-        }
-    }
-    else if (KeyboardEvent.GetKey() == EKeys::Escape)
-    {
-        if(OnCancel.IsBound())
-        {
-            return OnCancel.Execute();
-        }
-    }
-    
-    return FReply::Unhandled();
+	const FKey Key = KeyEvent.GetKey();
+	const int32 UserIndex = KeyEvent.GetUserIndex();
+
+	// Filter input based on the type of this dialog
+	switch (DialogType)
+	{
+	case EAmethystDialogType::Generic:
+	{
+		// Ignore input from users that don't own this dialog
+		if (PlayerOwner != nullptr && PlayerOwner->GetControllerId() != UserIndex)
+		{
+			return FReply::Unhandled();
+		}
+		break;
+	}
+
+	case EAmethystDialogType::ControllerDisconnected:
+	{
+		// Only ignore input from controllers that are bound to local users
+		if (PlayerOwner != nullptr && PlayerOwner->GetGameInstance() != nullptr)
+		{
+			if (PlayerOwner->GetGameInstance()->FindLocalPlayerFromControllerId(UserIndex))
+			{
+				return FReply::Unhandled();
+			}
+		}
+		break;
+	}
+	}
+
+	// For testing on PC
+	if ((Key == EKeys::Enter || Key == EKeys::Gamepad_FaceButton_Bottom) && !KeyEvent.IsRepeat())
+	{
+		if (OnConfirm.IsBound())
+		{
+			//these two cases should be combined when we move to using PlatformUserIDs rather than ControllerIDs.
+#if PLATFORM_PS4
+			bool bExecute = false;
+			// For controller reconnection, bind the confirming controller to the owner of this dialog
+			if (DialogType == EAmethystDialogType::ControllerDisconnected && PlayerOwner != nullptr)
+			{
+				const auto OnlineSub = IOnlineSubsystem::Get();
+				if (OnlineSub)
+				{
+					const auto IdentityInterface = OnlineSub->GetIdentityInterface();
+					if (IdentityInterface.IsValid())
+					{
+						TSharedPtr<FUniqueNetId> IncomingUserId = IdentityInterface->GetUniquePlayerId(UserIndex);
+						TSharedPtr<FUniqueNetId> DisconnectedId = PlayerOwner->GetCachedUniqueNetId();
+
+						if (*IncomingUserId == *DisconnectedId)
+						{
+							PlayerOwner->SetControllerId(UserIndex);
+							bExecute = true;
+						}
+					}
+				}
+			}
+			else
+			{
+				bExecute = true;
+			}
+
+			if (bExecute)
+			{
+				return OnConfirm.Execute();
+			}
+#else
+			// For controller reconnection, bind the confirming controller to the owner of this dialog
+			if (DialogType == EAmethystDialogType::ControllerDisconnected && PlayerOwner != nullptr)
+			{
+				PlayerOwner->SetControllerId(UserIndex);
+			}
+
+			return OnConfirm.Execute();
+#endif
+		}
+	}
+	else if (Key == EKeys::Escape || Key == EKeys::Gamepad_FaceButton_Right)
+	{
+		if (OnCancel.IsBound())
+		{
+			return OnCancel.Execute();
+		}
+	}
+
+	return FReply::Unhandled();
 }

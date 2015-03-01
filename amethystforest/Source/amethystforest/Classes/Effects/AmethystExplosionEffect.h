@@ -20,7 +20,7 @@ class AAmethystExplosionEffect : public AActor
     
     /** explosion light */
     UPROPERTY(VisibleDefaultsOnly, Category=Effect)
-    TSubobjectPtr<UPointLightComponent> ExplosionLight;
+    UPointLightComponent* ExplosionLight;
     
     /** how long keep explosion light on? */
     UPROPERTY(EditDefaultsOnly, Category=Effect)

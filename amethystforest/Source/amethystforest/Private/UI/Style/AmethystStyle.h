@@ -1,7 +1,8 @@
 
 #pragma once
 
-#include "Slate.h"
+#include "SlateBasics.h"
+#include "SlateExtras.h"
 #include "SlateBrush.h"
 #include "SlateSound.h"
 #include "SlateColor.h"

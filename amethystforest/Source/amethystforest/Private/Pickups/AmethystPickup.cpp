@@ -4,9 +4,9 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Classes/Game/amethystforestGameMode.h"
 
-AAmethystPickup::AAmethystPickup(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+AAmethystPickup::AAmethystPickup(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
-    TSubobjectPtr<UCapsuleComponent> CollisionComp = PCIP.CreateDefaultSubobject<UCapsuleComponent>(this, TEXT("CollisionComp"));
+    UCapsuleComponent* CollisionComp = PCIP.CreateDefaultSubobject<UCapsuleComponent>(this, TEXT("CollisionComp"));
     CollisionComp->InitCapsuleSize(40.0f, 50.0f);
     CollisionComp->SetCollisionObjectType(COLLISION_PICKUP);
     CollisionComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
@@ -72,7 +72,7 @@ void AAmethystPickup::PickupOnTouch(class AAmethystCharacter* Pawn)
                 
                 if (RespawnTime > 0.0f)
                 {
-                    GetWorldTimerManager().SetTimer(this, &AAmethystPickup::RespawnPickup, RespawnTime, false);
+					GetWorldTimerManager().SetTimer(TimerHandle_Respawn, this, &AAmethystPickup::RespawnPickup, RespawnTime, false);
                 }
             }
         }

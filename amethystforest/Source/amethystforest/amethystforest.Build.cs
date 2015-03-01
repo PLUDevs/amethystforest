@@ -12,9 +12,7 @@ public class amethystforest : ModuleRules
                 "CoreUObject",
                 "Engine",
                 "AssetRegistry",
-                "AIModule",
-                "Slate",
-                "SlateCore"
+                "AIModule",  
             }
         );
 

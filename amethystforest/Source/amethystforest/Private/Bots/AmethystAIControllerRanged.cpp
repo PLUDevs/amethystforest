@@ -5,7 +5,7 @@
 #include "Bots/AmethystBot.h"
 
 
-AAmethystAIControllerRanged::AAmethystAIControllerRanged(const class FPostConstructInitializeProperties& PCIP)
+AAmethystAIControllerRanged::AAmethystAIControllerRanged(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 

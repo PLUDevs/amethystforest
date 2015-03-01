@@ -1,7 +1,9 @@
 
 #pragma once
 
-#include "Slate.h"
+#include "SlateBasics.h"
+#include "SlateExtras.h"
+#include "SViewport.h"
 #include "AmethystMenuItem.h"
 
 //class declare
@@ -41,17 +43,14 @@ public:
     /** to have the mouse cursor show up at all times, we need the widget to handle all mouse events */
     virtual FReply OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
     
-    /** key down handler */
-    virtual FReply OnKeyDown(const FGeometry& MyGeometry, const FKeyboardEvent& InKeyboardEvent) override;
-    
-    /** Called when a controller button is pressed */
-    virtual FReply OnControllerButtonPressed( const FGeometry& MyGeometry, const FControllerEvent& ControllerEvent ) override;
+	/** key down handler */
+	virtual FReply OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent) override;
     
     /** says that we can support keyboard focus */
     virtual bool SupportsKeyboardFocus() const override { return true; }
     
     /** The menu sets up the appropriate mouse settings upon focus */
-    virtual FReply OnKeyboardFocusReceived(const FGeometry& MyGeometry, const FKeyboardFocusEvent& InKeyboardFocusEvent) override;
+	virtual FReply OnFocusReceived(const FGeometry& MyGeometry, const FFocusEvent& InFocusEvent) override;
     
     /** setups animation lengths, start points and launches initial animations */
     void SetupAnimations();
@@ -70,6 +69,18 @@ public:
     
     /** confirms current menu item and performs an action */
     void ConfirmMenuItem();
+
+	/** views a friend's profile in the current user's in-game menu friend list */
+	void ControllerFacebuttonLeftPressed();
+
+	/** decrement the index of the friend that the user is currently selecting while in the in-game menu friend list */
+	void ControllerUpInputPressed();
+
+	/** increment the index of the friend that the user is currently selecting while in the in-game menu friend list */
+	void ControllerDownInputPressed();
+
+	/** Sends a friend invite to a friend in the current user's in-game menu friend list */
+	void ControllerFacebuttonDownPressed();
     
     /** call to rebuild menu and start animating it */
     void BuildAndShowMenu();
@@ -88,6 +99,9 @@ public:
     
     /** disable/enable moving around menu */
     void LockControls(bool bEnable);
+
+	/** Cache the UserIndex from the owning PlayerController */
+	int32 GetOwnerUserIndex();
     
     /** Cache the UserIndex from the owning PlayerController */
     void UpdateMenuOwner();
@@ -147,6 +161,21 @@ private:
     
     /** gets current menu title string */
     FString GetMenuTitle() const;
+
+	/** gets the offset of the swap profile UI from the edge of the screen */
+	FMargin GetProfileSwapOffset() const;
+
+	/** should the profile swap be active */
+	bool IsProfileSwapActive() const;
+
+	/** gets the visibility of the swap profile UI */
+	EVisibility GetProfileSwapVisibility() const;
+
+	/** called when we want to swap the logged in user */
+	bool ProfileUISwap(const int ControllerIndex) const;
+
+	/** delegate for if the profile is swapped */
+	void HandleProfileUISwapClosed(TSharedPtr<FUniqueNetId> UniqueId, const int ControllerIndex);
     
     /** this function starts the entire fade in process */
     void FadeIn();
@@ -329,7 +358,8 @@ namespace MenuHelper
         if (World)
         {
             const float SoundDuration = FMath::Max(FSlateApplication::Get().GetSoundDuration(Sound), 0.1f);
-            World->GetTimerManager().SetTimer(FTimerDelegate::CreateSP(inObj, inMethod), SoundDuration, false);
+			FTimerHandle DummyHandle;
+			World->GetTimerManager().SetTimer(DummyHandle, FTimerDelegate::CreateSP(inObj, inMethod), SoundDuration, false);
         }
         else
         {

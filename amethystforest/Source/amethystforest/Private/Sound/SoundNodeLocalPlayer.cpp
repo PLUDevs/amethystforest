@@ -3,7 +3,7 @@
 #include "Classes/Sound/SoundNodeLocalPlayer.h"
 #include "SoundDefinitions.h"
 
-USoundNodeLocalPlayer::USoundNodeLocalPlayer(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+USoundNodeLocalPlayer::USoundNodeLocalPlayer(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
 }
 

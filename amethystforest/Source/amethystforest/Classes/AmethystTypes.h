@@ -59,6 +59,16 @@ namespace EAmethystPhysMaterialType
     };
 }
 
+namespace EAmethystDialogType
+{
+	enum Type
+	{
+		None,
+		Generic,
+		ControllerDisconnected
+	};
+}
+
 #define Amethyst_SURFACE_Default		SurfaceType_Default
 #define Amethyst_SURFACE_Concrete       SurfaceType1
 #define Amethyst_SURFACE_Dirt           SurfaceType2
