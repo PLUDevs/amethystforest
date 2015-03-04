@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "amethystforest.h"
-#include "OceanManager.h"
+#include "Classes/Physics/OceanManager.h"
 
 
 // Sets default values

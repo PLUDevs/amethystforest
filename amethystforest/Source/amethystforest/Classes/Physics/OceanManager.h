@@ -22,6 +22,7 @@ public:
 	*
 	* @returns The next Y position to draw any further strings
 	*/
+	UFUNCTION(BlueprintCallable, Category = "OceanManager")
 	FVector GetWaveHeightValue(FVector location, float time);
 
 	/*
