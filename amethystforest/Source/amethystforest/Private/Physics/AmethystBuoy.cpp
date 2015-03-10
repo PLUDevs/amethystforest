@@ -1,14 +1,26 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "amethystforest.h"
-#include "AmethystBuoy.h"
+#include "Classes/Physics/AmethystBuoy.h"
 
 
 // Sets default values
-AAmethystBuoy::AAmethystBuoy()
+AAmethystBuoy::AAmethystBuoy(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	BuoySkeletalMesh = PCIP.CreateDefaultSubobject<USkeletalMeshComponent>(this, TEXT("Buoy Skeletal Mesh"));
+	BuoySkeletalMesh->MeshComponentUpdateFlag = EMeshComponentUpdateFlag::OnlyTickPoseWhenRendered;
+	BuoySkeletalMesh->bChartDistanceFactor = true;
+	BuoySkeletalMesh->bReceivesDecals = false;
+	BuoySkeletalMesh->CastShadow = true;
+	BuoySkeletalMesh->SetCollisionObjectType(ECC_Pawn);
+	BuoySkeletalMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	BuoySkeletalMesh->SetCollisionResponseToAllChannels(ECR_Ignore);
+
+	bUseSkeletalMesh = false;
+
 	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.TickGroup = TG_PrePhysics;
+
 
 }
 
@@ -31,5 +43,24 @@ void AAmethystBuoy::SetupPlayerInputComponent(class UInputComponent* InputCompon
 {
 	Super::SetupPlayerInputComponent(InputComponent);
 
+}
+
+void AAmethystBuoy::AttachMeshToPawn()
+{
+	DetachMeshFromPawn();
+
+	if(bUseSkeletalMesh)
+	{
+		
+	}
+}
+
+void AAmethystBuoy::DetachMeshFromPawn()
+{
+	BuoySkeletalMesh->DetachFromParent();
+	BuoySkeletalMesh->SetHiddenInGame(true);
+
+	BuoyStaticMesh->DetachMeshFromPawn();
+	BuoyStaticMesh->SetHiddenInGame(true);
 }
 

@@ -5,7 +5,7 @@
 #include "GameFramework/Pawn.h"
 #include "AmethystBuoy.generated.h"
 
-UCLASS()
+UCLASS(Abstract, Blueprintable)
 class AMETHYSTFOREST_API AAmethystBuoy : public APawn
 {
 	GENERATED_BODY()
@@ -23,6 +23,31 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
-	
+	/** check if mesh is already attached */
+	bool IsAttachedToPawn() const;
+
+	/** true = use skeletalmesh */
+	UPROPERTY(EditDefaultsOnly, Category = Mesh)
+	bool bUseSkeletalMesh;
+
+protected:
+
+	/** Buoy Skeletal Mesh */
+	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+	USkeletalMeshComponent* BuoySkeletalMesh;
+
+	/** Buoy Static Mesh */
+	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+	UStaticMeshComponent* BuoyStaticMesh;
+
+	/** Single sound when buoy rocks passed 15 degrees */
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	USoundCue* RockingSound;
+
+	/** attaches buoy mesh to pawn */
+	void AttachMeshToPawn();
+
+	/** detach mesh from pawn */
+	void DetachMeshFromPawn();
 	
 };
