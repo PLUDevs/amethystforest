@@ -10,11 +10,9 @@
 UCLASS(Abstract, Blueprintable)
 class AMETHYSTFOREST_API AAmethystBuoy : public APawn
 {
-	GENERATED_BODY()
+	GENERATED_UCLASS_BODY()
 
 public:
-	// Sets default values for this pawn's properties
-	AAmethystBuoy();
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -40,16 +38,16 @@ public:
 	FVector GetLocation();
 
 	/** Get array of test points */
-	TArray<FVector> GetTestPoints() const;
+	TArray<FVector> GetTestPoints();
 
 	/** Get mass of object */
-	float GetMass() const;
+	float GetMass();
 
 	/** Get Thickness of points */
-	float GetThickness() const;
+	float GetThickness();
 
 	/** Get mass of object */
-	float GetDisplacementRatio() const;
+	float GetDisplacementRatio();
 
 
 protected:
@@ -94,23 +92,32 @@ private:
 	void InitializeBuoyancy(); 
 
 	/** Process a test point to determine what buoyant forces are to be applied */
-	void ProcessWaveHeightatPoint(FVector Location, AOceanManager Liquid, FTransform ActorTransform, float PointMass, float PointThickness, float DispRatio, float Time);
+	void ProcessWaveHeightatPoint(FVector Location, FTransform ActorTransform, float PointMass, float PointThickness, float DispRatio, float Time);
 
 	/** Determine if the point is under the surface */
-	bool IsUnder(FVector Location, AOceanManager Liquid, FTransform ActorTransform, float PointThickness, float Time);
+	bool IsUnder(FVector Location, FTransform ActorTransform, float PointThickness, float Time);
 
-	float ForceMagnitude(FVector Location, AOceanManager Liquid, FTransform ActorTransform, float PointThickness, float Time);
+	/** Determine the magnitude of the force exerted onto the object, this relates to the tickness of the point and wave height*/
+	float ForceMagnitude(FVector Location, FTransform ActorTransform, float PointThickness, float Time);
 
-	float ChangeInHeight(FVector Location, AOceanManager Liquid, FTransform ActorTransform, float PointThickness, float Time);
+	/** Calculate the change in height */
+	float ChangeInHeight(FVector Location, FTransform ActorTransform, float Time);
 
-	float WaveHeight(FVector Location, AOceanManager Liquid, FTransform ActorTransform, float PointThickness, float Time);
+	/** Find the point where the wave intersects */
+	FVector WaveHeightIntersection(FVector Location, FTransform ActorTransform, float Time);
 
-	FVector WaveHeightIntersection(FVector Location, AOceanManager Liquid, FTransform ActorTransform, float PointThickness, float Time);
+	/** For Debugging: Draws out test points */
+	void DisplayTestPoints();
 
-
-	void DisplayTestPoints(FVector Location);
-
+	/** Apply appropriate force onto object */
 	void ApplyForce(float PointMass, float Magnitude, float DispRatio, FVector Location);
 
+	/** Calculate Mass of each point */
 	float MassofPoint(float ObjectMass, float NumPoints);
+    
+    /** Get in game time */
+    float GetTime();
+
+	/** Calculate the wave height value from the OceanManager class*/
+	FVector WaveHeightValue(FVector Location, float Time);
 };
