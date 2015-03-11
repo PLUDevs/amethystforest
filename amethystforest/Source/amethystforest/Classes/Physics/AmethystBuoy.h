@@ -3,6 +3,8 @@
 #pragma once
 
 #include "GameFramework/Pawn.h"
+#include "OceanManager.h"
+#include "amethystforest.h"
 #include "AmethystBuoy.generated.h"
 
 UCLASS(Abstract, Blueprintable)
@@ -23,14 +25,38 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
-	/** check if mesh is already attached */
-	bool IsAttachedToPawn() const;
-
 	/** true = use skeletalmesh */
 	UPROPERTY(EditDefaultsOnly, Category = Mesh)
 	bool bUseSkeletalMesh;
 
+	/** true = display test points, for debugging purposes */
+	UPROPERTY(EditDefaultsOnly, Category = Debugging)
+	bool bDisplayPoints;
+
+	/** Get objects transform */
+	FTransform GetTransform();
+
+	/** Get objects location */
+	FVector GetLocation();
+
+	/** Get array of test points */
+	TArray<FVector> GetTestPoints() const;
+
+	/** Get mass of object */
+	float GetMass() const;
+
+	/** Get Thickness of points */
+	float GetThickness() const;
+
+	/** Get mass of object */
+	float GetDisplacementRatio() const;
+
+
 protected:
+
+	/* Liquid object will be displaced in */
+	UPROPERTY(Transient)
+	class AOceanManager* Fluid;
 
 	/** Buoy Skeletal Mesh */
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
@@ -40,6 +66,22 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	UStaticMeshComponent* BuoyStaticMesh;
 
+	/** Array of test points */
+	UPROPERTY(EditDefaultsOnly, Category = Points)
+	TArray<FVector> TestPoints;
+
+	/** Mass of object */
+	UPROPERTY(EditDefaultsOnly, Category = Physics)
+	float Mass;
+
+	/* Thickness of each point */
+	UPROPERTY(EditDefaultsOnly, Category = Physics)
+	float Thickness;
+
+	/** Object's Displacement Ratio */
+	UPROPERTY(EditDefaultsOnly, Category = Physics)
+	float DisplacementRatio;
+
 	/** Single sound when buoy rocks passed 15 degrees */
 	UPROPERTY(EditDefaultsOnly, Category = Sound)
 	USoundCue* RockingSound;
@@ -47,7 +89,28 @@ protected:
 	/** attaches buoy mesh to pawn */
 	void AttachMeshToPawn();
 
-	/** detach mesh from pawn */
-	void DetachMeshFromPawn();
-	
+private:
+	/** Starts the rending bouancy */
+	void InitializeBuoyancy(); 
+
+	/** Process a test point to determine what buoyant forces are to be applied */
+	void ProcessWaveHeightatPoint(FVector Location, AOceanManager Liquid, FTransform ActorTransform, float PointMass, float PointThickness, float DispRatio, float Time);
+
+	/** Determine if the point is under the surface */
+	bool IsUnder(FVector Location, AOceanManager Liquid, FTransform ActorTransform, float PointThickness, float Time);
+
+	float ForceMagnitude(FVector Location, AOceanManager Liquid, FTransform ActorTransform, float PointThickness, float Time);
+
+	float ChangeInHeight(FVector Location, AOceanManager Liquid, FTransform ActorTransform, float PointThickness, float Time);
+
+	float WaveHeight(FVector Location, AOceanManager Liquid, FTransform ActorTransform, float PointThickness, float Time);
+
+	FVector WaveHeightIntersection(FVector Location, AOceanManager Liquid, FTransform ActorTransform, float PointThickness, float Time);
+
+
+	void DisplayTestPoints(FVector Location);
+
+	void ApplyForce(float PointMass, float Magnitude, float DispRatio, FVector Location);
+
+	float MassofPoint(float ObjectMass, float NumPoints);
 };
