@@ -193,13 +193,17 @@ void AAmethystBuoy::ApplyForce(float PointMass, float Magnitude, float DispRatio
     
     float a = ForceMagnitude(Location, GetTransform(), GetThickness(), GetTime());
     
+    /* Note: AddForceAtLocation without a bone parameter will target the root body instead.
+     Might need to make adjustment as the root body of the SkeletalMesh is the SkeletalMesh or
+     see if its possible to get the proper FName of the rootcomponent
+     */
     if(bUseSkeletalMesh)
     {
-        BuoySkeletalMesh->AddForce(Force * ForceMagnitude(Location, GetTransform(), GetThickness(), GetTime()), BoneName);
+        BuoySkeletalMesh->AddForceAtLocation(Force * ForceMagnitude(Location, GetTransform(), GetThickness(), GetTime()), Location);
     }
     else
     {
-        BuoyStaticMesh->AddForce(Force * ForceMagnitude(Location, GetTransform(), GetThickness(), GetTime()), BoneName);
+        BuoyStaticMesh->AddForceAtLocation(Force * ForceMagnitude(Location, GetTransform(), GetThickness(), GetTime()), Location);
     }
 
 }
