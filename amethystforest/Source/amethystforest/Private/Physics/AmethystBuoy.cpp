@@ -5,6 +5,8 @@
 #include "Classes/Physics/OceanManager.h"
 #include "Math/UnrealMathUtility.h"
 #include "Components/PrimitiveComponent.h"
+#include "DrawDebugHelpers.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Math/Color.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -76,6 +78,11 @@ void AAmethystBuoy::ProcessWaveHeightatPoint(FVector Location, FTransform ActorT
 {
     FVector NewLocation = UKismetMathLibrary::TransformLocation(ActorTransform, Location);
 	bool Under = IsUnder(Location, ActorTransform, PointThickness, Time);
+    
+    if (Under)
+    {
+        // Do Stuff
+    }
 
 
 }
@@ -137,28 +144,31 @@ void AAmethystBuoy::DisplayTestPoints()
 	FVector LineEndUp = GetLocation() + (0,0,25);
 	FVector LineEndDown = GetLocation() + (0,0,-25);
 	float ArrowSize = 15;
-    FColor C = (255.f,0.f,0.f,0.f);
-	FLinearColor LineColor = C;
+    FColor Red;
+	FLinearColor LineColor = Red;
 	float Duration = -1;
 	float Radius = 10;
 	float Segments = 12;
 	if (bDisplayPoints)
 	{
-		DrawDebugArrow(
+        UKismetSystemLibrary::DrawDebugArrow(
+            GetWorld(),
 			LineStart,
 			LineEndUp,
 			ArrowSize,
 			LineColor,
 			Duration
         );
-		DrawDebugArrow(
+		UKismetSystemLibrary::DrawDebugArrow(
+            GetWorld(),
 			LineStart,
 			LineEndDown,
 			ArrowSize,
 			LineColor,
 			Duration
         );
-		DrawDebugSphere(
+		UKismetSystemLibrary::DrawDebugSphere(
+            GetWorld(),
 			LineStart, //Center
 			Radius,
 			Segments,
@@ -181,13 +191,15 @@ void AAmethystBuoy::ApplyForce(float PointMass, float Magnitude, float DispRatio
         Force.Set(0.0f,0.0f, 980*PointMass);
 	}
     
+    float a = ForceMagnitude(Location, GetTransform(), GetThickness(), GetTime());
+    
     if(bUseSkeletalMesh)
     {
-        BuoySkeletalMesh->AddForce(Location, Force * ForceMagnitude(Location, GetTransform(), GetThickness(), GetTime()));
+        BuoySkeletalMesh->AddForce(Force * ForceMagnitude(Location, GetTransform(), GetThickness(), GetTime()), BoneName);
     }
     else
     {
-        BuoyStaticMesh->AddForce(Location, Force * ForceMagnitude(Location, GetTransform(), GetThickness(), GetTime()));
+        BuoyStaticMesh->AddForce(Force * ForceMagnitude(Location, GetTransform(), GetThickness(), GetTime()), BoneName);
     }
 
 }

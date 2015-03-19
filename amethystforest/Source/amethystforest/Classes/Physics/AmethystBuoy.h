@@ -30,6 +30,10 @@ public:
 	/** true = display test points, for debugging purposes */
 	UPROPERTY(EditDefaultsOnly, Category = Debugging)
 	bool bDisplayPoints;
+    
+    /** Name of the bone to apply force to */
+    UPROPERTY(EditDefaultsOnly, Category = Mesh)
+    FName BoneName;
 
 	/** Get objects transform */
 	FTransform GetTransform();
