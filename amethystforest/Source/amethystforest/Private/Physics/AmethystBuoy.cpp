@@ -170,19 +170,25 @@ void AAmethystBuoy::DisplayTestPoints()
 
 void AAmethystBuoy::ApplyForce(float PointMass, float Magnitude, float DispRatio, FVector Location)
 {
+    FVector Force;
 	if (IsUnder(Location, GetTransform(), GetThickness(), GetTime()))
 	{
-        FVector Force;
         Force.Set(0.f,0.f, 980*PointMass);
 		
 	}
 	else 
 	{
-        FVector Force;
         Force.Set(0.0f,0.0f, 980*PointMass);
 	}
-
-    this->UPrimitiveComponent::AddForce(Location, Force * ForceMagnitude(Location, GetActorTransform(), GetThickness(), GetWorldTime()));
+    
+    if(bUseSkeletalMesh)
+    {
+        BuoySkeletalMesh->AddForce(Location, Force * ForceMagnitude(Location, GetTransform(), GetThickness(), GetTime()));
+    }
+    else
+    {
+        BuoyStaticMesh->AddForce(Location, Force * ForceMagnitude(Location, GetTransform(), GetThickness(), GetTime()));
+    }
 
 }
 
@@ -208,7 +214,7 @@ float AAmethystBuoy::MassofPoint(float ObjectMass, float NumPoints)
 
 FTransform AAmethystBuoy::GetTransform()
 {
-    return this->Actor::GetActorTransform();
+    return this->GetTransform();
 }
 
 FVector AAmethystBuoy::GetLocation()
@@ -238,6 +244,7 @@ float AAmethystBuoy::GetDisplacementRatio()
 
 float AAmethystBuoy::GetTime()
 {
-    return GetWorldTime();
+    UWorld * World = GetWorld();
+    return World->GetTimeSeconds();
 }
 
