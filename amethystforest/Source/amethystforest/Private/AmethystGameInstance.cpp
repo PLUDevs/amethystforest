@@ -10,6 +10,7 @@
 #include "Classes/Game/AmethystGameState.h"
 #include "Classes/Player/amethystforestPlayerController.h"
 #include "Classes/Player/AmethystPlayerController_Menu.h"
+#include "AmethystGameViewportClient.h"
 //#include "AmethystGameLoadingScreen.h"
 
 void SAmethystWaitDialog::Construct(const FArguments& InArgs)
@@ -448,7 +449,8 @@ void UAmethystGameInstance::BeginMainMenuState()
 	MainMenuUI = MakeShareable(new FAmethystMainMenu());
 	MainMenuUI->Construct(this, Player);
 	MainMenuUI->AddMenuToGameViewport();
-
+	*/
+	ULocalPlayer* const Player = GetFirstGamePlayer();
 #if !Amethyst_CONSOLE_UI
 	// The cached unique net ID is usually set on the welcome screen, but there isn't
 	// one on PC/Mac, so do it here.
@@ -459,7 +461,7 @@ void UAmethystGameInstance::BeginMainMenuState()
 	}
 #endif
 
-	*/
+	
 }
 
 void UAmethystGameInstance::EndMainMenuState()
@@ -559,7 +561,7 @@ bool UAmethystGameInstance::Tick(float DeltaSeconds)
 
 	MaybeChangeState();
 
-	/* TO DO: GameViewportClient
+	
 	UAmethystGameViewportClient * AmethystViewport = Cast<UAmethystGameViewportClient>(GetGameViewportClient());
 
 	if (CurrentState != AmethystGameInstanceState::WelcomeScreen)
@@ -598,7 +600,7 @@ bool UAmethystGameInstance::Tick(float DeltaSeconds)
 			}
 		}
 	}
-	*/
+	
 	return true;
 }
 
@@ -716,7 +718,7 @@ void UAmethystGameInstance::HandleControllerPairingChanged(int GameUserIndex, co
 #if Amethyst_CONSOLE_UI && PLATFORM_XBOXONE
 	if (IgnorePairingChangeForControllerId != -1 && GameUserIndex == IgnorePairingChangeForControllerId)
 	{
-		// We were told to ignore
+		// We were told to ignores
 		IgnorePairingChangeForControllerId = -1;	// Reset now so there there is no chance this remains in a bad state
 		return;
 	}

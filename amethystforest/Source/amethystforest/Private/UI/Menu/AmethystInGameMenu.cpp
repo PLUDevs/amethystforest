@@ -6,7 +6,7 @@
 #include "Private/UI/Style/AmethystMenuSoundsWidgetStyle.h"
 
 #define LOCTEXT_NAMESPACE "AmethystGame.HUD.Menu"
-
+// maybe use amethyst local player
 void FAmethystIngameMenu::Construct(ULocalPlayer* _PlayerOwner)
 {
     PlayerOwner = _PlayerOwner;

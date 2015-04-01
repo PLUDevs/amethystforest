@@ -191,7 +191,8 @@ void AamethystforestPlayerController::OnKill()
 void AamethystforestPlayerController::SetPlayer(UPlayer* Player)
 {
 	APlayerController::SetPlayer(Player);
-	AmethystIngameMenu->UpdateMenuOwner();
+	AmethystIngameMenu = MakeShareable(new FAmethystIngameMenu);
+	AmethystIngameMenu->Construct(Cast<ULocalPlayer>(Player));
 }
 
 void AamethystforestPlayerController::OnToggleInGameMenu()
