@@ -9,7 +9,7 @@ class AAmethystPickup : public AActor
     GENERATED_UCLASS_BODY()
     
     /** pickup on touch */
-    virtual void ReceiveActorBeginOverlap(class AActor* Other) override;
+    virtual void ReceiveActorBeginOverlap(class AActor* Other);
     
     /** check if pawn can use this pickup */
     virtual bool CanBePickedUp(class AAmethystCharacter* TestPawn) const;

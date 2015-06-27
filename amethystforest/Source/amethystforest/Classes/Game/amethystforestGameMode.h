@@ -29,13 +29,14 @@ class AMETHYSTFOREST_API AamethystforestGameMode : public AGameMode
     virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
     
     /** select best spawn point for player */
-    virtual AActor* ChoosePlayerStart(AController* Player) override;
-    
+    /* TO DO: This can be handled in the base GameMode Class, consider removing unless customization is needed */
+    virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
+
     /** always pick new random spawn */
     virtual bool ShouldSpawnAtStartSpot(AController* Player) override;
     
     /** returns default pawn class for given controller */
-    virtual UClass* GetDefaultPawnClassForController(AController* InController) override;
+    virtual UClass* GetDefaultPawnClassForController(AController* InController);
     
     /** always create cheat manager */
     virtual bool AllowCheats(APlayerController* P) override;

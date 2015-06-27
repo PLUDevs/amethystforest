@@ -374,7 +374,7 @@ void AAmethystCharacter::PlayHit(float DamageTaken, struct FDamageEvent const& D
 	AAmethystHUD* MyHUD = MyPC ? Cast<AAmethystHUD>(MyPC->GetHUD()) : NULL;
 	if (MyHUD)
 	{
-		MyHUD->NotifyHit(DamageTaken, DamageEvent, PawnInstigator);
+		MyHUD->NotifyWeaponHit(DamageTaken, DamageEvent, PawnInstigator);
 	}
 
 	if (PawnInstigator && PawnInstigator != this && PawnInstigator->IsLocallyControlled())
