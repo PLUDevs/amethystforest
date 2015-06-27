@@ -42,6 +42,11 @@ AAmethystBuoy::AAmethystBuoy(const class FObjectInitializer& PCIP) : Super(PCIP)
 void AAmethystBuoy::BeginPlay()
 {
 	Super::BeginPlay();
+    
+    if (bDisplayPoints)
+    {
+        DisplayTestPoints();
+    }
 
 	InitializeBuoyancy();
 	
@@ -74,22 +79,15 @@ void AAmethystBuoy::InitializeBuoyancy()
 
 }
 
-void AAmethystBuoy::ProcessWaveHeightatPoint(FVector Location, FTransform ActorTransform, float PointMass, float PointThickness, float DispRatio, float Time)
+void AAmethystBuoy::ProcessWaveHeightatPoint(FVector PointLocation, FTransform ActorTransform, float PointMass, float PointThickness, float DispRatio, float Time)
 {
-    FVector NewLocation = UKismetMathLibrary::TransformLocation(ActorTransform, Location);
-	bool Under = IsUnder(Location, ActorTransform, PointThickness, Time);
-    
-    if (Under)
-    {
-        // Do Stuff
-    }
-
-
+    FVector NewLocation = UKismetMathLibrary::TransformLocation(ActorTransform, PointLocation);
+    ApplyForce(PointMass, ForceMagnitude(NewLocation, ActorTransform, PointThickness, Time), DispRatio, NewLocation);
 }
 
-bool AAmethystBuoy::IsUnder(FVector Location, FTransform ActorTransform, float PointThickness, float Time)
+bool AAmethystBuoy::IsUnder(FVector PointLocation, FTransform ActorTransform, float PointThickness, float Time)
 {	
-	float Delta = ChangeInHeight(Location, ActorTransform, Time);
+	float Delta = ChangeInHeight(PointLocation, ActorTransform, Time);
 
 	if (Delta > 0){return true;}
 
@@ -140,42 +138,54 @@ FVector AAmethystBuoy::WaveHeightValue(FVector Location, float Time)
 
 void AAmethystBuoy::DisplayTestPoints()
 {
-	FVector LineStart = GetLocation();
-	FVector LineEndUp = GetLocation() + (0,0,25);
-	FVector LineEndDown = GetLocation() + (0,0,-25);
-	float ArrowSize = 15;
-    FColor Red;
-	FLinearColor LineColor = Red;
-	float Duration = -1;
-	float Radius = 10;
-	float Segments = 12;
-	if (bDisplayPoints)
-	{
-        UKismetSystemLibrary::DrawDebugArrow(
-            GetWorld(),
-			LineStart,
-			LineEndUp,
-			ArrowSize,
-			LineColor,
-			Duration
-        );
-		UKismetSystemLibrary::DrawDebugArrow(
-            GetWorld(),
-			LineStart,
-			LineEndDown,
-			ArrowSize,
-			LineColor,
-			Duration
-        );
-		UKismetSystemLibrary::DrawDebugSphere(
-            GetWorld(),
-			LineStart, //Center
-			Radius,
-			Segments,
-			LineColor,
-			Duration
-        );
-	}
+    TArray<FVector> Points = GetTestPoints();
+    if(DebugColor == EDebugColor::Black)
+    {
+        FLinearColor LineColor = FColor Black;
+    }
+    float ArrowSize = 15;
+    FColor Red = Red;
+    //FLinearColor LineColor = Red;
+    float Duration = -1;
+    float Radius = 10;
+    float Segments = 12;
+    
+    // Loop through the number of points in array
+    for (int32 n = 0; n<Points.Num(); n++)
+    {
+        // Dray an up arrow and down arrow on the point surrounded by a sphere
+        
+        FVector LineStart = Points[n];
+        FVector LineEndUp = Points[n] + (0,0,25);
+        FVector LineEndDown = Points[n] + (0,0,-25);
+        if (bDisplayPoints)
+        {
+            UKismetSystemLibrary::DrawDebugArrow(
+                GetWorld(),
+                LineStart,
+			    LineEndUp,
+			    ArrowSize,
+			    LineColor,
+			    Duration
+            );
+		    UKismetSystemLibrary::DrawDebugArrow(
+                GetWorld(),
+			    LineStart,
+			    LineEndDown,
+			    ArrowSize,
+			    LineColor,
+			    Duration
+            );
+            UKismetSystemLibrary::DrawDebugSphere(
+                GetWorld(),
+			    LineStart, //Center
+			    Radius,
+			    Segments,
+			    LineColor,
+			    Duration
+            );
+        }
+    }
 }
 
 void AAmethystBuoy::ApplyForce(float PointMass, float Magnitude, float DispRatio, FVector Location)
@@ -183,7 +193,7 @@ void AAmethystBuoy::ApplyForce(float PointMass, float Magnitude, float DispRatio
     FVector Force;
 	if (IsUnder(Location, GetTransform(), GetThickness(), GetTime()))
 	{
-        Force.Set(0.f,0.f, 980*PointMass);
+        Force.Set(0.f,0.f, 980.f*DispRatio*PointMass);
 		
 	}
 	else 
@@ -262,5 +272,13 @@ float AAmethystBuoy::GetTime()
 {
     UWorld * World = GetWorld();
     return World->GetTimeSeconds();
+}
+
+FString GetColorEnumAsString(EDebugColor::Type EnumValue)
+{
+    const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EDebugColor"), true);
+    if(!EnumPtr) return FString("Invalid");
+    
+    return EnumPtr->GetEnumName(EnumValue);
 }
 

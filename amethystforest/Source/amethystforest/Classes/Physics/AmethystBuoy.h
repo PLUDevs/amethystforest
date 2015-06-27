@@ -7,6 +7,35 @@
 #include "amethystforest.h"
 #include "AmethystBuoy.generated.h"
 
+UENUM(BlueprintType)		//"BlueprintType" is essential to include
+enum class EDebugColor : uint8
+{
+    Black   UMETA(DisplayName = "Black"),
+    Blue    UMETA(DisplayName = "Blue"),
+    Cyan    UMETA(DisplayName = "Cyan"),
+    Green   UMETA(DisplayName = "Green"),
+    Magenta UMETA(DisplayName = "Magenta"),
+    Red     UMETA(DisplayName = "Red"),
+    White   UMETA(DisplayName = "White"),
+    Yellow  UMETA(DisplayName = "Yellow"),
+};
+/*
+UENUM()
+namespace EDebugColorState
+{
+    enum type
+    {
+        Black   UMETA(DisplayName = "Black"),
+        Blue    UMETA(DisplayName = "Blue"),
+        Cyan    UMETA(DisplayName = "Cyan"),
+        Green   UMETA(DisplayName = "Green"),
+        Magenta UMETA(DisplayName = "Magenta"),
+        Red     UMETA(DisplayName = "Red"),
+        White   UMETA(DisplayName = "White"),
+        Yellow  UMETA(DisplayName = "Yellow"),
+    };
+}*/
+
 UCLASS(Abstract, Blueprintable)
 class AMETHYSTFOREST_API AAmethystBuoy : public APawn
 {
@@ -30,6 +59,14 @@ public:
 	/** true = display test points, for debugging purposes */
 	UPROPERTY(EditDefaultsOnly, Category = Debugging)
 	bool bDisplayPoints;
+    
+    /** true = display test points, for debugging purposes */
+    UPROPERTY(EditDefaultsOnly, Category = Debugging)
+    float ArrowSize;
+    
+    /** The type of object the interactable is */
+    UPROPERTY(EditDefaultsOnly, Category = "INTERACTABLE")
+    EDebugColor DebugColor;
 
 	/** Get objects transform */
 	FTransform GetTransform();
@@ -86,8 +123,9 @@ protected:
 
 	/** attaches buoy mesh to pawn */
 	void AttachMeshToPawn();
-
+    
 private:
+
 	/** Starts the rending bouancy */
 	void InitializeBuoyancy(); 
 
@@ -120,4 +158,6 @@ private:
 
 	/** Calculate the wave height value from the OceanManager class*/
 	FVector WaveHeightValue(FVector Location, float Time);
+    
+    FString GetColorEnumAsString(EDebugColor::Type EnumValue);
 };
