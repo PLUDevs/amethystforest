@@ -32,6 +32,8 @@
 *.uproject
 amethystforest/Intermediate/
 amethystforest/Saved/
+Saved/
+Intermediate/
 
 #Intermediates
 Intermediate/*
