@@ -311,7 +311,7 @@ void SAmethystMenuWidget::SetupAnimations()
     ButtonsPosXCurve = MenuWidgetAnimation.AddCurve(StartDelay+SecondDelay, AnimDuration, ECurveEaseFunction::QuadInOut);
 }
 
-void SAmethystMenuWidget::BuildLeftPanel(bool bGoingBack)
+void SAmethystMenuWidget::BuildLeftPanel(bool bInGoingBack)
 {
     if (CurrentMenu.Num() == 0)
     {
@@ -322,7 +322,7 @@ void SAmethystMenuWidget::BuildLeftPanel(bool bGoingBack)
     int32 PreviousIndex = -1;
     if (bLeftMenuChanging)
     {
-        if (bGoingBack && MenuHistory.Num() > 0)
+        if (bInGoingBack && MenuHistory.Num() > 0)
         {
             FAmethystMenuInfo MenuInfo = MenuHistory.Pop();
             CurrentMenu = MenuInfo.Menu;
