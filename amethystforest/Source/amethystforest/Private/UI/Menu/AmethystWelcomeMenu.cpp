@@ -72,11 +72,11 @@ class SAmethystWelcomeMenuWidget : public SCompoundWidget
 		{
 			if (TextAnimation.IsAtEnd())
 			{
-				TextAnimation.PlayReverse();
+				TextAnimation.PlayReverse(this->AsShared());
 			}
 			else
 			{
-				TextAnimation.Play();
+				TextAnimation.Play(this->AsShared());
 			}
 		}
 	}

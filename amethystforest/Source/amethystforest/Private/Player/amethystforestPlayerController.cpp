@@ -116,7 +116,7 @@ bool AamethystforestPlayerController::FindDeathCameraSpot(FVector& CameraLocatio
 		CameraDir.Normalize();
 
 		const FVector TestLocation = PawnLocation - CameraDir.Vector() * CameraOffset;
-		const bool bBlocked = GetWorld()->LineTraceTest(PawnLocation, TestLocation, ECC_Camera, TraceParams);
+		const bool bBlocked = GetWorld()->LineTraceTestByChannel(PawnLocation, TestLocation, ECC_Camera, TraceParams);
 
 		if (!bBlocked)
 		{

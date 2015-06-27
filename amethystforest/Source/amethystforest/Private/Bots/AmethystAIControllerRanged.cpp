@@ -27,7 +27,7 @@ bool AAmethystAIControllerRanged::HasWeaponLOSToEnemy(AActor* InEnemyActor, cons
 
 	FHitResult Hit(ForceInit);
 	const FVector EndLocation = InEnemyActor->GetActorLocation();
-	GetWorld()->LineTraceSingle(Hit, StartLocation, EndLocation, COLLISION_WEAPON, TraceParams);
+	GetWorld()->LineTraceSingleByChannel(Hit, StartLocation, EndLocation, COLLISION_WEAPON, TraceParams);
 	if (Hit.bBlockingHit == true)
 	{
 		// Theres a blocking hit - check if its our enemy actor
