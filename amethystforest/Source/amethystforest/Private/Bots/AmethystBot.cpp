@@ -66,7 +66,7 @@ void AAmethystBot::PerformMeleeAttack()
 	TraceParams.bReturnPhysicalMaterial = true;
 
 	FHitResult Hit(ForceInit);
-	GetWorld()->SweepSingle(Hit, StartTrace, EndTrace, FQuat::Identity, ECollisionChannel::ECC_Pawn, FCollisionShape::MakeSphere(25), TraceParams);
+	GetWorld()->SweepSingleByChannel(Hit, StartTrace, EndTrace, FQuat::Identity, ECollisionChannel::ECC_Pawn, FCollisionShape::MakeSphere(25), TraceParams);
 
 
 	if (Hit.Actor != NULL)

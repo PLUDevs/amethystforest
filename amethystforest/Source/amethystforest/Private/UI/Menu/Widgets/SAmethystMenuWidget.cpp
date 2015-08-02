@@ -267,7 +267,7 @@ void SAmethystMenuWidget::HideMenu()
     {
         if(MenuWidgetAnimation.IsAtEnd())
         {
-            MenuWidgetAnimation.PlayReverse();
+            MenuWidgetAnimation.PlayReverse(this->AsShared());
         }
         else
         {
@@ -296,7 +296,7 @@ void SAmethystMenuWidget::SetupAnimations()
     MenuWidgetAnimation = FCurveSequence();
     LeftMenuWidgetAnimation = FCurveSequence();
     LeftMenuScrollOutCurve = LeftMenuWidgetAnimation.AddCurve(0,MenuChangeDuration,ECurveEaseFunction::QuadInOut);
-    LeftMenuWidgetAnimation.Play();
+    LeftMenuWidgetAnimation.Play(this->AsShared());
     
     //Define the fade in animation
     TopColorCurve = MenuWidgetAnimation.AddCurve(StartDelay, AnimDuration, ECurveEaseFunction::QuadInOut);
@@ -311,7 +311,7 @@ void SAmethystMenuWidget::SetupAnimations()
     ButtonsPosXCurve = MenuWidgetAnimation.AddCurve(StartDelay+SecondDelay, AnimDuration, ECurveEaseFunction::QuadInOut);
 }
 
-void SAmethystMenuWidget::BuildLeftPanel(bool bGoingBack)
+void SAmethystMenuWidget::BuildLeftPanel(bool bInGoingBack)
 {
     if (CurrentMenu.Num() == 0)
     {
@@ -322,7 +322,7 @@ void SAmethystMenuWidget::BuildLeftPanel(bool bGoingBack)
     int32 PreviousIndex = -1;
     if (bLeftMenuChanging)
     {
-        if (bGoingBack && MenuHistory.Num() > 0)
+        if (bInGoingBack && MenuHistory.Num() > 0)
         {
             FAmethystMenuInfo MenuInfo = MenuHistory.Pop();
             CurrentMenu = MenuInfo.Menu;
@@ -610,14 +610,14 @@ void SAmethystMenuWidget::Tick(const FGeometry& AllottedGeometry, const double I
                 }
                 bSubMenuChanging = true;
                 
-                LeftMenuWidgetAnimation.PlayReverse();
+                LeftMenuWidgetAnimation.PlayReverse(this->AsShared());
             }
             if (!LeftMenuWidgetAnimation.IsPlaying())
             {
                 if (CurrentMenu.Num() > 0)
                 {
                     BuildLeftPanel(bGoingBack);
-                    LeftMenuWidgetAnimation.Play();
+                    LeftMenuWidgetAnimation.Play(this->AsShared());
                 }
                 //Focus the custom widget
                 if (CurrentMenu.Num() == 1 && CurrentMenu.Top()->MenuItemType == EAmethystMenuItemType::CustomWidget)
@@ -632,14 +632,14 @@ void SAmethystMenuWidget::Tick(const FGeometry& AllottedGeometry, const double I
         {
             if (SubMenuWidgetAnimation.IsAtEnd())
             {
-                SubMenuWidgetAnimation.PlayReverse();
+                SubMenuWidgetAnimation.PlayReverse(this->AsShared());
             }
             if (!SubMenuWidgetAnimation.IsPlaying())
             {
                 if (NextMenu.Num() > 0)
                 {
                     BuildRightPanel();
-                    SubMenuWidgetAnimation.Play();
+                    SubMenuWidgetAnimation.Play(this->AsShared());
                 }
                 bSubMenuChanging = false;
             }
@@ -735,7 +735,7 @@ FReply SAmethystMenuWidget::ButtonClicked(int32 ButtonIndex)
 void SAmethystMenuWidget::FadeIn()
 {
     //Start the menu widget playing
-    MenuWidgetAnimation.Play();
+    MenuWidgetAnimation.Play(this->AsShared());
     
     //Go into UI mode
     FSlateApplication::Get().SetKeyboardFocus(SharedThis(this));

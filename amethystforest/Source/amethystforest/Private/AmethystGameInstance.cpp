@@ -51,13 +51,13 @@ void SAmethystWaitDialog::Construct(const FArguments& InArgs)
 
 	WidgetAnimation = FCurveSequence();
 	TextColorCurve = WidgetAnimation.AddCurve(StartDelay + SecondDelay, AnimDuration, ECurveEaseFunction::QuadInOut);
-	WidgetAnimation.Play();
+	WidgetAnimation.Play(this->AsShared(), true);
 }
 
 FSlateColor SAmethystWaitDialog::GetTextColor() const
 {
 	//instead of going from black -> white, go from white -> grey.
-	float fAlpha = 1.0f - TextColorCurve.GetLerpLooping();
+	float fAlpha = 1.0f - TextColorCurve.GetLerp();
 	fAlpha = fAlpha * 0.5f + 0.5f;
 	return FLinearColor(FColor(155, 164, 182, FMath::Clamp((int32)(fAlpha * 255.0f), 0, 255)));
 }

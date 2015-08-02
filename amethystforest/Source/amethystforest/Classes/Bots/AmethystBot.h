@@ -40,7 +40,7 @@ class AMETHYSTFOREST_API AAmethystBot : public AAmethystCharacter
 		FVector HitNormal,
 		FVector NormalImpulse,
 		const FHitResult & Hit
-		) override;
+		);
 
 	virtual void FaceRotation(FRotator NewRotation, float DeltaTime = 0.f) override;
 	bool Attacking;

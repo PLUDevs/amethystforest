@@ -20,7 +20,7 @@ void UAmethystPersistentUser::SetToDefaults()
 
 bool UAmethystPersistentUser::IsAimSensitivityDirty() const
 {
-    bool bIsDirty = false;
+    bool bIsAimSensitivityDirty = false;
     
     // Fixme: UAmethystPersistentUser is not setup to work with multiple worlds.
     // For now, user settings are global to all world instances.
@@ -52,7 +52,7 @@ bool UAmethystPersistentUser::IsAimSensitivityDirty() const
                 {
                     if (FMath::Abs(AxisMapping.Scale) != GetAimSensitivity())
                     {
-                        bIsDirty = true;
+                        bIsAimSensitivityDirty = true;
                         break;
                     }
                 }
@@ -60,12 +60,12 @@ bool UAmethystPersistentUser::IsAimSensitivityDirty() const
         }
     }
     
-    return bIsDirty;
+    return bIsAimSensitivityDirty;
 }
 
 bool UAmethystPersistentUser::IsInvertedYAxisDirty() const
 {
-    bool bIsDirty = false;
+    bool bIsInvertedYAxisDirty = false;
     if (GEngine)
     {
         TArray<APlayerController*> PlayerList;
@@ -86,12 +86,12 @@ bool UAmethystPersistentUser::IsInvertedYAxisDirty() const
                 continue;
             }
             
-            bIsDirty |= PC->PlayerInput->GetInvertAxis("Lookup") != GetInvertedYAxis();
-            bIsDirty |= PC->PlayerInput->GetInvertAxis("LookupRate") != GetInvertedYAxis();
+            bIsInvertedYAxisDirty |= PC->PlayerInput->GetInvertAxis("Lookup") != GetInvertedYAxis();
+            bIsInvertedYAxisDirty |= PC->PlayerInput->GetInvertAxis("LookupRate") != GetInvertedYAxis();
         }
     }
     
-    return bIsDirty;
+    return bIsInvertedYAxisDirty;
 }
 
 void UAmethystPersistentUser::SavePersistentUser()

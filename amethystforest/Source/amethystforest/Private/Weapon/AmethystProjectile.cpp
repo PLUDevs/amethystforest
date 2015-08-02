@@ -123,7 +123,7 @@ void AAmethystProjectile::OnRep_Exploded()
     const FVector EndTrace = GetActorLocation() + ProjDirection * 150;
     FHitResult Impact;
     
-    if (!GetWorld()->LineTraceSingle(Impact, StartTrace, EndTrace, COLLISION_PROJECTILE, FCollisionQueryParams(TEXT("ProjClient"), true, Instigator)))
+    if (!GetWorld()->LineTraceSingleByChannel(Impact, StartTrace, EndTrace, COLLISION_PROJECTILE, FCollisionQueryParams(TEXT("ProjClient"), true, Instigator)))
     {
         // failsafe
         Impact.ImpactPoint = GetActorLocation();
