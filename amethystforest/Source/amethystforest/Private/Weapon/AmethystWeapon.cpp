@@ -6,7 +6,7 @@
 #include "Classes/Player/amethystforestPlayerController.h"
 #include "Classes/Bots/AmethystAIController.h"
 
-AAmethystWeapon::AAmethystWeapon(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+AAmethystWeapon::AAmethystWeapon(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
 	Mesh1P = PCIP.CreateDefaultSubobject<USkeletalMeshComponent>(this, TEXT("WeaponMesh1P"));
 	Mesh1P->MeshComponentUpdateFlag = EMeshComponentUpdateFlag::OnlyTickPoseWhenRendered;
@@ -49,7 +49,6 @@ AAmethystWeapon::AAmethystWeapon(const class FPostConstructInitializeProperties&
 	PrimaryActorTick.TickGroup = TG_PrePhysics;
 	SetRemoteRoleForBackwardsCompat(ROLE_SimulatedProxy);
 	bReplicates = true;
-	bReplicateInstigator = true;
 	bNetUseOwnerRelevancy = true;
 }
 
@@ -92,7 +91,7 @@ void AAmethystWeapon::OnEquip()
 	EquipStartedTime = GetWorld()->GetTimeSeconds();
 	EquipDuration = Duration;
 
-	GetWorldTimerManager().SetTimer(this, &AAmethystWeapon::OnEquipFinished, Duration, false);
+	GetWorldTimerManager().SetTimer(TimerHandle_OnEquipFinished, this, &AAmethystWeapon::OnEquipFinished, Duration, false);
 
 	if (MyPawn && MyPawn->IsLocallyControlled())
 	{
@@ -132,8 +131,8 @@ void AAmethystWeapon::OnUnEquip()
 		StopWeaponAnimation(ReloadAnim);
 		bPendingReload = false;
 
-		GetWorldTimerManager().ClearTimer(this, &AAmethystWeapon::StopReload);
-		GetWorldTimerManager().ClearTimer(this, &AAmethystWeapon::ReloadWeapon);
+		GetWorldTimerManager().ClearTimer(TimerHandle_StopReload);
+		GetWorldTimerManager().ClearTimer(TimerHandle_ReloadWeapon);
 	}
 
 	if (bPendingEquip)
@@ -141,7 +140,7 @@ void AAmethystWeapon::OnUnEquip()
 		StopWeaponAnimation(EquipAnim);
 		bPendingEquip = false;
 
-		GetWorldTimerManager().ClearTimer(this, &AAmethystWeapon::OnEquipFinished);
+		GetWorldTimerManager().ClearTimer(TimerHandle_OnEquipFinished);
 	}
 
 	DetermineWeaponState();
@@ -252,10 +251,10 @@ void AAmethystWeapon::StartReload(bool bFromReplication)
 			AnimDuration = WeaponConfig.NoAnimReloadDuration;
 		}
 
-		GetWorldTimerManager().SetTimer(this, &AAmethystWeapon::StopReload, AnimDuration, false);
+		GetWorldTimerManager().SetTimer(TimerHandle_StopReload, this, &AAmethystWeapon::StopReload, AnimDuration, false);
 		if (Role == ROLE_Authority)
 		{
-			GetWorldTimerManager().SetTimer(this, &AAmethystWeapon::ReloadWeapon, FMath::Max(0.1f, AnimDuration - 0.1f), false);
+			GetWorldTimerManager().SetTimer(TimerHandle_ReloadWeapon, this, &AAmethystWeapon::ReloadWeapon, FMath::Max(0.1f, AnimDuration - 0.1f), false);
 		}
 
 		if (MyPawn && MyPawn->IsLocallyControlled())
@@ -444,7 +443,7 @@ void AAmethystWeapon::HandleFiring()
 		bRefiring = (CurrentState == EWeaponState::Firing && WeaponConfig.TimeBetweenShots > 0.0f);
 		if (bRefiring)
 		{
-			GetWorldTimerManager().SetTimer(this, &AAmethystWeapon::HandleFiring, WeaponConfig.TimeBetweenShots, false);
+			GetWorldTimerManager().SetTimer(TimerHandle_HandleFiring, this, &AAmethystWeapon::HandleFiring, WeaponConfig.TimeBetweenShots, false);
 		}
 	}
 
@@ -546,7 +545,7 @@ void AAmethystWeapon::OnBurstStarted()
 	if (LastFireTime > 0 && WeaponConfig.TimeBetweenShots > 0.0f &&
 		LastFireTime + WeaponConfig.TimeBetweenShots > GameTime)
 	{
-		GetWorldTimerManager().SetTimer(this, &AAmethystWeapon::HandleFiring, LastFireTime + WeaponConfig.TimeBetweenShots - GameTime, false);
+		GetWorldTimerManager().SetTimer(TimerHandle_HandleFiring, this, &AAmethystWeapon::HandleFiring, LastFireTime + WeaponConfig.TimeBetweenShots - GameTime, false);
 	}
 	else
 	{
@@ -565,7 +564,7 @@ void AAmethystWeapon::OnBurstFinished()
 		StopSimulatingWeaponFire();
 	}
 
-	GetWorldTimerManager().ClearTimer(this, &AAmethystWeapon::HandleFiring);
+	GetWorldTimerManager().ClearTimer(TimerHandle_HandleFiring);
 	bRefiring = false;
 }
 
@@ -705,7 +704,7 @@ FHitResult AAmethystWeapon::WeaponTrace(const FVector& StartTrace, const FVector
 	TraceParams.bReturnPhysicalMaterial = true;
 
 	FHitResult Hit(ForceInit);
-	GetWorld()->LineTraceSingle(Hit, StartTrace, EndTrace, COLLISION_WEAPON, TraceParams);
+	GetWorld()->LineTraceSingleByChannel(Hit, StartTrace, EndTrace, COLLISION_WEAPON, TraceParams);
 
 	return Hit;
 }

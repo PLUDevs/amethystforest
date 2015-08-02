@@ -314,7 +314,7 @@ void FAmethystMainMenu::DisplayLoadingScreen()
 
 void FAmethystMainMenu::UpdateMenuOwner()
 {
-    OwnerUserIndex = PlayerOwner ? PlayerOwner->ControllerId : 0;
+    OwnerUserIndex = PlayerOwner ? PlayerOwner->GetControllerId() : 0;
 }
 
 bool FAmethystMainMenu::IsMapReady() const

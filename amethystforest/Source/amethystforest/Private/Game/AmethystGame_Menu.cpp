@@ -7,7 +7,7 @@
 #include "Private/UI/Menu/AmethystMainMenu.h"
 #include "Private/UI/Menu/AmethystWelcomeMenu.h"
 
-AAmethystGame_Menu::AAmethystGame_Menu(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+AAmethystGame_Menu::AAmethystGame_Menu(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
     PlayerControllerClass = AamethystforestPlayerController::StaticClass();
 }

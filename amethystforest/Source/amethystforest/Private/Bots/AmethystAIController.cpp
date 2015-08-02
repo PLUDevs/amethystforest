@@ -8,9 +8,12 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/Blackboard/BlackboardKeyType_Bool.h"
+#include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
+#include "BehaviorTree/Blackboard/BlackboardKeyType_Object.h"
 
 
-AAmethystAIController::AAmethystAIController(const class FPostConstructInitializeProperties& PCIP)
+AAmethystAIController::AAmethystAIController(const class FObjectInitializer& PCIP)
 	: Super(PCIP) 
 {
 	// create blackboard and behaviour components in the constructor
@@ -33,14 +36,17 @@ void AAmethystAIController::Possess(APawn* InPawn)
 	if (Bot && Bot->BotBehavior)
 	{
 
+		/* To Do: cannot convert argument 1 from 'UBlackboardData *' to 'UBlackboardData &'
 		BlackboardComp->InitializeBlackboard(Bot->BotBehavior->BlackboardAsset);
+		*/
 
 		// Get the enemy blackboard ID, and store it to access that blackboard key later.
 		EnemyKeyID = BlackboardComp->GetKeyID("Enemy");
 		NeedAmmoKeyID = BlackboardComp->GetKeyID("NeedAmmo");
+		EnemyLastKnownLocation = BlackboardComp->GetKeyID("EnemyLocation");
 
 
-		BehaviorComp->StartTree(Bot->BotBehavior);
+		BehaviorComp->StartTree(*(Bot->BotBehavior));
 	}
 }
 
@@ -52,7 +58,7 @@ void AAmethystAIController::BeginInactiveState()
 
 	const float MinRespawnDelay = (GameState && GameState->GameModeClass) ? GetDefault<AGameMode>(GameState->GameModeClass)->MinRespawnDelay : 1.0f;
 
-	GetWorldTimerManager().SetTimer(this, &AAmethystAIController::Respawn, MinRespawnDelay);
+	GetWorldTimerManager().SetTimer(TimerHandle_Respawn, this, &AAmethystAIController::Respawn, MinRespawnDelay);
 }
 
 void AAmethystAIController::Respawn()
@@ -61,13 +67,20 @@ void AAmethystAIController::Respawn()
 }
 
 
-
+void AAmethystAIController::SetEnemyLastKnownLocation(class APawn* InPawn)
+{
+	if (BlackboardComp)
+	{
+		
+		BlackboardComp->SetValue<UBlackboardKeyType_Vector>(EnemyLastKnownLocation, InPawn->GetActorLocation());
+	}
+}
 
 void AAmethystAIController::SetEnemy(class APawn* InPawn)
 {
 	if (BlackboardComp)
 	{
-		BlackboardComp->SetValueAsObject(EnemyKeyID, InPawn);
+		BlackboardComp->SetValue<UBlackboardKeyType_Object>(EnemyKeyID, InPawn);
 		SetFocus(InPawn);
 	}
 }
@@ -76,7 +89,7 @@ class AAmethystCharacter* AAmethystAIController::GetEnemy() const
 {
 	if (BlackboardComp)
 	{
-		return Cast<AAmethystCharacter>(BlackboardComp->GetValueAsObject(EnemyKeyID));
+		return Cast<AAmethystCharacter>(BlackboardComp->GetValue<UBlackboardKeyType_Object>(EnemyKeyID));
 	}
 
 	return NULL;
@@ -113,7 +126,7 @@ void AAmethystAIController::CheckAmmo(const class AAmethystWeapon* CurrentWeapon
 		const int32 MaxAmmo = CurrentWeapon->GetMaxAmmo();
 		const float Ratio = (float)Ammo / (float)MaxAmmo;
 
-		BlackboardComp->SetValueAsBool(NeedAmmoKeyID, (Ratio <= 0.1f));
+		BlackboardComp->SetValue<UBlackboardKeyType_Bool>(NeedAmmoKeyID, (Ratio <= 0.1f));
 	}
 }
 
@@ -161,6 +174,7 @@ bool AAmethystAIController::PawnCanBeSeen(APawn * target)
 
 	if (LineOfSightTo(target, GetPawn()->GetActorLocation()) && angle >0)
 	{
+		SetEnemyLastKnownLocation(target);
 		return true;
 	}
 	else

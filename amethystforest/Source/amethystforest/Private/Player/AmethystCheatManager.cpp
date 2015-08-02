@@ -3,7 +3,7 @@
 #include "Classes/Player/AmethystCheatManager.h"
 #include "Classes/Game/amethystforestGameMode.h"
 
-UAmethystCheatManager::UAmethystCheatManager(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+UAmethystCheatManager::UAmethystCheatManager(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
 }
 
@@ -37,7 +37,7 @@ void UAmethystCheatManager::SpawnBot()
     {
         FRotator Rot = MyPawn->GetActorRotation();
         FVector Loc = MyPawn->GetActorLocation();
-        Loc += Rot.Vector().SafeNormal() * 500;
+		Loc += Rot.Vector().GetSafeNormal2D() * 500;
         
         MyGame->SpawnBot(Loc, Rot);
     }

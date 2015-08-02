@@ -1,4 +1,4 @@
 Amethyst Forest
 ==============
 
-Members: Patrick, Alex, Cody, Gage, Joseph.
+Members: Patrick, Alex, Cody.

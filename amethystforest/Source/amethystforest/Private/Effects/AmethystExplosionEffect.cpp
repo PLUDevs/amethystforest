@@ -2,7 +2,7 @@
 #include "amethystforest.h"
 #include "Classes/Effects/AmethystExplosionEffect.h"
 
-AAmethystExplosionEffect::AAmethystExplosionEffect(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+AAmethystExplosionEffect::AAmethystExplosionEffect(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
     ExplosionLightComponentName = TEXT("ExplosionLight");
     

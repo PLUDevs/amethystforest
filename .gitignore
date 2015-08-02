@@ -30,11 +30,14 @@
 # Unreal
 *.umap
 *.uproject
-*./Intermediate
-*./Saved
+amethystforest/Intermediate/
+amethystforest/Saved/
+Saved/
+Intermediate/
 
 #Intermediates
 Intermediate/*
+Build/
 
 *.sdf
 *.suo

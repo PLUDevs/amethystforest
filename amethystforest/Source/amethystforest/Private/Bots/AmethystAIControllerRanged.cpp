@@ -5,7 +5,7 @@
 #include "Bots/AmethystBot.h"
 
 
-AAmethystAIControllerRanged::AAmethystAIControllerRanged(const class FPostConstructInitializeProperties& PCIP)
+AAmethystAIControllerRanged::AAmethystAIControllerRanged(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 
@@ -27,7 +27,7 @@ bool AAmethystAIControllerRanged::HasWeaponLOSToEnemy(AActor* InEnemyActor, cons
 
 	FHitResult Hit(ForceInit);
 	const FVector EndLocation = InEnemyActor->GetActorLocation();
-	GetWorld()->LineTraceSingle(Hit, StartLocation, EndLocation, COLLISION_WEAPON, TraceParams);
+	GetWorld()->LineTraceSingleByChannel(Hit, StartLocation, EndLocation, COLLISION_WEAPON, TraceParams);
 	if (Hit.bBlockingHit == true)
 	{
 		// Theres a blocking hit - check if its our enemy actor
@@ -71,7 +71,10 @@ void AAmethystAIControllerRanged::ShootEnemy()
 	{
 		return;
 	}
-
+	
+		
+		
+	
 	bool bCanShoot = false;
 	AAmethystCharacter* Enemy = GetEnemy();
 	if (Enemy && (Enemy->IsAlive()) && (MyWeapon->GetCurrentAmmo() > 0) && (MyWeapon->CanFire() == true))
@@ -84,6 +87,7 @@ void AAmethystAIControllerRanged::ShootEnemy()
 
 	if (bCanShoot)
 	{
+		
 		MyBot->StartWeaponFire();
 	}
 	else
@@ -91,7 +95,7 @@ void AAmethystAIControllerRanged::ShootEnemy()
 		MyBot->StopWeaponFire();
 	}
 }
-void AAmethystAIControllerRanged::CheckAmmo(const class AShooterWeapon* CurrentWeapon)
+void AAmethystAIControllerRanged::CheckAmmo(const class AAmethystWeapon* CurrentWeapon)
 {
 	/*if (CurrentWeapon && BlackboardComp)
 	{

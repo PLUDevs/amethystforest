@@ -10,7 +10,7 @@
 
 const float AAmethystHUD::MinHudScale = 0.5f;
 
-AAmethystHUD::AAmethystHUD(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+AAmethystHUD::AAmethystHUD(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
     NoAmmoFadeOutTime =  1.0f;
     HitNotifyDisplayTime = 0.75f;
@@ -96,90 +96,93 @@ void AAmethystHUD::DrawWeaponHUD()
     AAmethystWeapon* MyWeapon = MyPawn->GetWeapon();
     if (MyWeapon)
     {
-        //PRIMARY WEAPON
-        const float PriWeapOffsetY = 65;
-        const float PriWeaponBoxWidth = 150;
-        
-        Canvas->SetDrawColor(FColor::White);
-        const float PriWeapBgPosY =  Canvas->ClipY - Canvas->OrgY - (PriWeapOffsetY + PrimaryWeapBg.VL + Offset) * ScaleUI;
-        
-        //Weapon draw position
-        const float PriWeapPosX = Canvas->ClipX - Canvas->OrgX - ((PriWeaponBoxWidth + MyWeapon->PrimaryIcon.UL) / 2.0f + 2 * Offset) * ScaleUI;
-        const float PriWeapPosY =  Canvas->ClipY - Canvas->OrgY - (PriWeapOffsetY + (PrimaryWeapBg.VL + MyWeapon->PrimaryIcon.VL) / 2 + Offset) * ScaleUI;
-        
-        //Clip draw position
-        const float ClipWidth = MyWeapon->PrimaryClipIcon.UL +  MyWeapon->PrimaryClipIconOffset * (MyWeapon->AmmoIconsCount-1);
-        const float BoxWidth = 65.0f;
-        const float PriClipPosX = PriWeapPosX - (BoxWidth + ClipWidth) * ScaleUI;
-        const float PriClipPosY =  Canvas->ClipY - Canvas->OrgY - (PriWeapOffsetY + (PrimaryWeapBg.VL + MyWeapon->PrimaryClipIcon.VL) / 2 + Offset) * ScaleUI;
-        
-        const float LeftCornerWidth = 60;
-        
-        FCanvasTileItem TileItem(FVector2D( PriClipPosX - Offset * ScaleUI, PriWeapBgPosY ), PrimaryWeapBg.Texture->Resource,
-                                 FVector2D( LeftCornerWidth * ScaleUI, PrimaryWeapBg.VL * ScaleUI ),	 FLinearColor::White);
-        MakeUV(PrimaryWeapBg, TileItem.UV0, TileItem.UV1, PrimaryWeapBg.U, PrimaryWeapBg.V, LeftCornerWidth, PrimaryWeapBg.VL);
-        TileItem.BlendMode = SE_BLEND_Translucent;
-        Canvas->DrawItem( TileItem );
-        
-        const float RestWidth =  Canvas->ClipX - PriClipPosX - LeftCornerWidth * ScaleUI;
-        TileItem.Position = FVector2D(PriClipPosX - (Offset - LeftCornerWidth) * ScaleUI, PriWeapBgPosY);
-        TileItem.Size = FVector2D(RestWidth, PrimaryWeapBg.VL * ScaleUI);
-        MakeUV(PrimaryWeapBg, TileItem.UV0, TileItem.UV1, PrimaryWeapBg.U + PrimaryWeapBg.UL - RestWidth / ScaleUI, PrimaryWeapBg.V, RestWidth / ScaleUI, PrimaryWeapBg.VL);
-        Canvas->DrawItem( TileItem );
-        
-        //Drawing primary weapon icon, ammo in the clip and total spare ammo numbers
-        Canvas->DrawIcon(MyWeapon->PrimaryIcon, PriWeapPosX, PriWeapPosY, ScaleUI);
-        
-        const float TextOffset = 12;
-        float SizeX, SizeY;
-        float TopTextHeight;
-        FString Text = FString::FromInt(MyWeapon->GetCurrentAmmoInClip());
-        
         FCanvasTextItem TextItem( FVector2D::ZeroVector, FText::GetEmpty(), BigFont, HUDDark );
         TextItem.EnableShadow( FLinearColor::Black );
-        Canvas->StrLen(BigFont, Text, SizeX, SizeY);
         
-        const float TopTextScale = 0.73f; // of 51pt font
-        const float TopTextPosX = Canvas->ClipX - Canvas->OrgX - (PriWeaponBoxWidth + Offset * 2 + (BoxWidth + SizeX * TopTextScale) / 2.0f)  * ScaleUI;
-        const float TopTextPosY = Canvas->ClipY - Canvas->OrgY - (PriWeapOffsetY + PrimaryWeapBg.VL + Offset - TextOffset / 2.0f) * ScaleUI;
-        TextItem.Text = FText::FromString( Text );
-        TextItem.Scale = FVector2D( TopTextScale * ScaleUI, TopTextScale * ScaleUI );
-        TextItem.FontRenderInfo = ShadowedFont;
-        Canvas->DrawItem( TextItem, TopTextPosX, TopTextPosY );
-        TopTextHeight = SizeY * TopTextScale;
-        Text = FString::FromInt(MyWeapon->GetCurrentAmmo() - MyWeapon->GetCurrentAmmoInClip());
-        Canvas->StrLen(BigFont, Text, SizeX, SizeY);
-        
-        const float BottomTextScale = 0.49f; // of 51pt font
-        const float BottomTextPosX = Canvas->ClipX - Canvas->OrgX - (PriWeaponBoxWidth + Offset * 2 + (BoxWidth + SizeX * BottomTextScale) / 2.0f) * ScaleUI;
-        const float BottomTextPosY = TopTextPosY + (TopTextHeight - 0.8f * TextOffset) * ScaleUI;
-        TextItem.Text = FText::FromString( Text );
-        TextItem.Scale = FVector2D( BottomTextScale*ScaleUI, BottomTextScale * ScaleUI );
-        TextItem.FontRenderInfo = ShadowedFont;
-        Canvas->DrawItem( TextItem, BottomTextPosX, BottomTextPosY );
-        
-        // Drawing clip icons
-        Canvas->SetDrawColor(FColor::White);
-        
-        const float AmmoPerIcon = MyWeapon->GetAmmoPerClip() / MyWeapon->AmmoIconsCount;
-        for (int32 i = 0; i < MyWeapon->AmmoIconsCount; i++)
+        //PRIMARY WEAPON
         {
-            if ((i+1) * AmmoPerIcon > MyWeapon->GetCurrentAmmoInClip())
-            {
-                const float UsedPerIcon = (i+1) * AmmoPerIcon - MyWeapon->GetCurrentAmmoInClip();
-                float PercentLeftInIcon = 0;
-                if (UsedPerIcon < AmmoPerIcon)
-                {
-                    PercentLeftInIcon = (AmmoPerIcon - UsedPerIcon) / AmmoPerIcon;
-                }
-                const int32 Color = 128 + 128 * PercentLeftInIcon;
-                Canvas->SetDrawColor(Color, Color, Color, Color);
-            }
+            const float PriWeapOffsetY = 65;
+            const float PriWeaponBoxWidth = 150;
             
-            const float ClipOffset = MyWeapon->PrimaryClipIconOffset * ScaleUI * i;
-            Canvas->DrawIcon(MyWeapon->PrimaryClipIcon, PriClipPosX + ClipOffset, PriClipPosY, ScaleUI);
+            Canvas->SetDrawColor(FColor::White);
+            const float PriWeapBgPosY =  Canvas->ClipY - Canvas->OrgY - (PriWeapOffsetY + PrimaryWeapBg.VL + Offset) * ScaleUI;
+            
+            //Weapon draw position
+            const float PriWeapPosX = Canvas->ClipX - Canvas->OrgX - ((PriWeaponBoxWidth + MyWeapon->PrimaryIcon.UL) / 2.0f + 2 * Offset) * ScaleUI;
+            const float PriWeapPosY =  Canvas->ClipY - Canvas->OrgY - (PriWeapOffsetY + (PrimaryWeapBg.VL + MyWeapon->PrimaryIcon.VL) / 2 + Offset) * ScaleUI;
+            
+            //Clip draw position
+            const float ClipWidth = MyWeapon->PrimaryClipIcon.UL +  MyWeapon->PrimaryClipIconOffset * (MyWeapon->AmmoIconsCount-1);
+            const float BoxWidth = 65.0f;
+            const float PriClipPosX = PriWeapPosX - (BoxWidth + ClipWidth) * ScaleUI;
+            const float PriClipPosY =  Canvas->ClipY - Canvas->OrgY - (PriWeapOffsetY + (PrimaryWeapBg.VL + MyWeapon->PrimaryClipIcon.VL) / 2 + Offset) * ScaleUI;
+            
+            const float LeftCornerWidth = 60;
+            
+            FCanvasTileItem TileItem(FVector2D( PriClipPosX - Offset * ScaleUI, PriWeapBgPosY ), PrimaryWeapBg.Texture->Resource,
+                                     FVector2D( LeftCornerWidth * ScaleUI, PrimaryWeapBg.VL * ScaleUI ),	 FLinearColor::White);
+            MakeUV(PrimaryWeapBg, TileItem.UV0, TileItem.UV1, PrimaryWeapBg.U, PrimaryWeapBg.V, LeftCornerWidth, PrimaryWeapBg.VL);
+            TileItem.BlendMode = SE_BLEND_Translucent;
+            Canvas->DrawItem( TileItem );
+            
+            const float RestWidth =  Canvas->ClipX - PriClipPosX - LeftCornerWidth * ScaleUI;
+            TileItem.Position = FVector2D(PriClipPosX - (Offset - LeftCornerWidth) * ScaleUI, PriWeapBgPosY);
+            TileItem.Size = FVector2D(RestWidth, PrimaryWeapBg.VL * ScaleUI);
+            MakeUV(PrimaryWeapBg, TileItem.UV0, TileItem.UV1, PrimaryWeapBg.U + PrimaryWeapBg.UL - RestWidth / ScaleUI, PrimaryWeapBg.V, RestWidth / ScaleUI, PrimaryWeapBg.VL);
+            Canvas->DrawItem( TileItem );
+            
+            //Drawing primary weapon icon, ammo in the clip and total spare ammo numbers
+            Canvas->DrawIcon(MyWeapon->PrimaryIcon, PriWeapPosX, PriWeapPosY, ScaleUI);
+            
+            const float TextOffset = 12;
+            float SizeX, SizeY;
+            float TopTextHeight;
+            FString Text = FString::FromInt(MyWeapon->GetCurrentAmmoInClip());
+            
+            Canvas->StrLen(BigFont, Text, SizeX, SizeY);
+            
+            const float TopTextScale = 0.73f; // of 51pt font
+            const float TopTextPosX = Canvas->ClipX - Canvas->OrgX - (PriWeaponBoxWidth + Offset * 2 + (BoxWidth + SizeX * TopTextScale) / 2.0f)  * ScaleUI;
+            const float TopTextPosY = Canvas->ClipY - Canvas->OrgY - (PriWeapOffsetY + PrimaryWeapBg.VL + Offset - TextOffset / 2.0f) * ScaleUI;
+            TextItem.Text = FText::FromString( Text );
+            TextItem.Scale = FVector2D( TopTextScale * ScaleUI, TopTextScale * ScaleUI );
+            TextItem.FontRenderInfo = ShadowedFont;
+            Canvas->DrawItem( TextItem, TopTextPosX, TopTextPosY );
+            TopTextHeight = SizeY * TopTextScale;
+            Text = FString::FromInt(MyWeapon->GetCurrentAmmo() - MyWeapon->GetCurrentAmmoInClip());
+            Canvas->StrLen(BigFont, Text, SizeX, SizeY);
+            
+            const float BottomTextScale = 0.49f; // of 51pt font
+            const float BottomTextPosX = Canvas->ClipX - Canvas->OrgX - (PriWeaponBoxWidth + Offset * 2 + (BoxWidth + SizeX * BottomTextScale) / 2.0f) * ScaleUI;
+            const float BottomTextPosY = TopTextPosY + (TopTextHeight - 0.8f * TextOffset) * ScaleUI;
+            TextItem.Text = FText::FromString( Text );
+            TextItem.Scale = FVector2D( BottomTextScale*ScaleUI, BottomTextScale * ScaleUI );
+            TextItem.FontRenderInfo = ShadowedFont;
+            Canvas->DrawItem( TextItem, BottomTextPosX, BottomTextPosY );
+            
+            // Drawing clip icons
+            Canvas->SetDrawColor(FColor::White);
+            
+            const float AmmoPerIcon = MyWeapon->GetAmmoPerClip() / MyWeapon->AmmoIconsCount;
+            for (int32 i = 0; i < MyWeapon->AmmoIconsCount; i++)
+            {
+                if ((i+1) * AmmoPerIcon > MyWeapon->GetCurrentAmmoInClip())
+                {
+                    const float UsedPerIcon = (i+1) * AmmoPerIcon - MyWeapon->GetCurrentAmmoInClip();
+                    float PercentLeftInIcon = 0;
+                    if (UsedPerIcon < AmmoPerIcon)
+                    {
+                        PercentLeftInIcon = (AmmoPerIcon - UsedPerIcon) / AmmoPerIcon;
+                    }
+                    const int32 Color = 128 + 128 * PercentLeftInIcon;
+                    Canvas->SetDrawColor(Color, Color, Color, Color);
+                }
+                
+                const float ClipOffset = MyWeapon->PrimaryClipIconOffset * ScaleUI * i;
+                Canvas->DrawIcon(MyWeapon->PrimaryClipIcon, PriClipPosX + ClipOffset, PriClipPosY, ScaleUI);
+            }
+            Canvas->SetDrawColor(HUDDark);
         }
-        Canvas->SetDrawColor(HUDDark);
         //
         
         //SECONDARY WEAPON
@@ -209,8 +212,8 @@ void AAmethystHUD::DrawWeaponHUD()
             
             //secondary clip draw position
             const float SecClipWidth = SecondaryWeapon->SecondaryClipIcon.UL +  SecondaryWeapon->SecondaryClipIconOffset * (SecondaryWeapon->AmmoIconsCount-1);
-            const float BoxWidth = 45.0f;
-            const float SecClipPosX = Canvas->ClipX - Canvas->OrgX - (SecWeaponBoxWidth + BoxWidth + SecClipWidth + 2 * Offset) * ScaleUI;
+            const float SecClipBoxWidth = 45.0f;
+            const float SecClipPosX = Canvas->ClipX - Canvas->OrgX - (SecWeaponBoxWidth + SecClipBoxWidth + SecClipWidth + 2 * Offset) * ScaleUI;
             const float SecClipPosY =  Canvas->ClipY - Canvas->OrgY - (SecWeapOffsetY + (SecondaryWeapBg.VL + SecondaryWeapon->SecondaryClipIcon.VL) / 2.0f + Offset) * ScaleUI;
             
             //draw background in two parts to match number of clip icons
@@ -260,8 +263,8 @@ void AAmethystHUD::DrawWeaponHUD()
             const float TopTextScale = 0.53f; // of 51pt font
             TopTextHeight = SizeY * TopTextScale;
             
-            const float TopTextPosX = Canvas->ClipX - Canvas->OrgX - (SecWeaponBoxWidth + Offset * 2 + (BoxWidth + SizeX * TopTextScale) / 2.0f)  * ScaleUI;
-            const float TopTextPosY = SecWeapBgPosY + (SecondaryWeapBg.VL - TopTextHeight) / 2.0f * ScaleUI;
+            const float TopTextPosX = Canvas->ClipX - Canvas->OrgX - (SecWeaponBoxWidth + Offset * 2 + (SecClipBoxWidth + SizeX * TopTextScale) / 2.0f)  * ScaleUI;
+            const float TopTextPosY = SecWeapBgPosY + (SecondaryWeapBg.VL - TopTextHeight) / 2.0f * ScaleUI; 
             
             TextItem.Text = FText::FromString( Text );
             TextItem.Scale = FVector2D( TopTextScale * ScaleUI, TopTextScale * ScaleUI );
@@ -358,7 +361,7 @@ void AAmethystHUD::DrawHUD()
     float MessageOffset = (Canvas->ClipY / 4.0)* ScaleUI;
 
     // Render the info messages such as wating to respawn - these will be drawn below any 'killed player' message.
-    ShowInfoItems(MessageOffset , ScaleUI, 1.0f);
+    ShowInfoItems(MessageOffset, 1.0f);
     
 }
 
@@ -560,7 +563,7 @@ void AAmethystHUD::DrawDeathMessages()
     }
 }
 
-void AAmethystHUD::NotifyHit(float DamageTaken, struct FDamageEvent const& DamageEvent, class APawn* PawnInstigator)
+void AAmethystHUD::NotifyWeaponHit(float DamageTaken, struct FDamageEvent const& DamageEvent, class APawn* PawnInstigator)
 {
     const float CurrentTime = GetWorld()->GetTimeSeconds();
     AAmethystCharacter* MyPawn = (PlayerOwner) ? Cast<AAmethystCharacter>(PlayerOwner->GetPawn()) : NULL;
@@ -618,7 +621,6 @@ void AAmethystHUD::NotifyHit(float DamageTaken, struct FDamageEvent const& Damag
     LastHitTime = CurrentTime;
 }
 
-
 void AAmethystHUD::DrawHitIndicator()
 {
     const float CurrentTime = GetWorld()->GetTimeSeconds();
@@ -656,7 +658,7 @@ void AAmethystHUD::AddMatchInfoString(const FCanvasTextItem InInfoItem )
     InfoItems.Add(InInfoItem);
 }
 
-float AAmethystHUD::ShowInfoItems(float YOffset, float ScaleUI, float TextScale)
+float AAmethystHUD::ShowInfoItems(float YOffset, float TextScale)
 {
     float Y = YOffset;
     float CanvasCentre = Canvas->ClipX / 2.0f;

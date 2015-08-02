@@ -1,6 +1,7 @@
 
 #pragma once
-#include "Slate.h"
+#include "SlateBasics.h"
+#include "SlateExtras.h"
 #include "Widgets/AmethystMenuItem.h"
 #include "Widgets/SAmethystMenuWidget.h"
 #include "AmethystOptions.h"
@@ -16,6 +17,10 @@ public:
     
     /** is game menu currently active? */
     bool GetIsGameMenuUp() const;
+    
+    // WARNING
+    /** Updates the OwnerIndex from the player controller */
+    void UpdateMenuOwner();
     
 protected:
     

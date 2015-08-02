@@ -3,7 +3,7 @@
 #include "Classes/Weapon/AmethystWeapon_Projectile.h"
 #include "Classes/Weapon/AmethystProjectile.h"
 
-AAmethystWeapon_Projectile::AAmethystWeapon_Projectile(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+AAmethystWeapon_Projectile::AAmethystWeapon_Projectile(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
 }
 
@@ -24,7 +24,7 @@ void AAmethystWeapon_Projectile::FireWeapon()
     // and adjust directions to hit that actor
     if (Impact.bBlockingHit)
     {
-        const FVector AdjustedDir = (Impact.ImpactPoint - Origin).SafeNormal();
+        const FVector AdjustedDir = (Impact.ImpactPoint - Origin).GetSafeNormal();
         bool bWeaponPenetration = false;
         
         const float DirectionDot = FVector::DotProduct(AdjustedDir, ShootDir);

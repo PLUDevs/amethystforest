@@ -20,7 +20,7 @@ class AMETHYSTFOREST_API AAmethystAIControllerRanged : public AAmethystAIControl
 	/* If there is line of sight to current enemy, start firing at them */
 	UFUNCTION(BlueprintCallable, Category = Behavior)
 		void ShootEnemy();
-		void CheckAmmo(const class AShooterWeapon* CurrentWeapon);
+		void CheckAmmo(const class AAmethystWeapon* CurrentWeapon);
 protected:
 	// Check of we have LOS to a character
 	bool LOSTrace(AAmethystCharacter* InEnemyChar) const;

@@ -5,7 +5,7 @@
 #include "Classes/Player/amethystforestPlayerController.h"
 #include "Classes/UI/AmethystHUD.h"
 
-AamethystforestGameMode::AamethystforestGameMode(const class FPostConstructInitializeProperties& PCIP)
+AamethystforestGameMode::AamethystforestGameMode(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
     
@@ -89,40 +89,51 @@ bool AamethystforestGameMode::ShouldSpawnAtStartSpot(AController* Player)
     return false;
 }
 
-AActor* AamethystforestGameMode::ChoosePlayerStart(AController* Player)
+AActor* AamethystforestGameMode::ChoosePlayerStart_Implementation(AController* Player)
 {
     TArray<APlayerStart*> PreferredSpawns;
     TArray<APlayerStart*> FallbackSpawns;
     
-    for (int32 i = 0; i < PlayerStarts.Num(); i++)
+    APlayerStart* BestStart = NULL;
+    for (TActorIterator<APlayerStart> It(GetWorld()); It; ++It)
     {
-        APlayerStart* TestSpawn = PlayerStarts[i];
-        /* TO DO: Fix IsSpawnpointAllowed function
-        if (IsSpawnpointAllowed(TestSpawn, Player))
+        APlayerStart* TestSpawn = *It;
+        if (TestSpawn->IsA<APlayerStartPIE>())
         {
-            if (IsSpawnpointPreferred(TestSpawn, Player))
+            // Always prefer the first "Play from Here" PlayerStart, if we find one while in PIE mode
+            BestStart = TestSpawn;
+            break;
+        }
+        else
+        {
+            if (IsSpawnpointAllowed(TestSpawn, Player))
             {
-                PreferredSpawns.Add(TestSpawn);
-            }
-            else
-            {
-                FallbackSpawns.Add(TestSpawn);
+                if (IsSpawnpointPreferred(TestSpawn, Player))
+                {
+                    PreferredSpawns.Add(TestSpawn);
+                }
+                else
+                {
+                    FallbackSpawns.Add(TestSpawn);
+                }
             }
         }
-         */
     }
     
-    APlayerStart* BestStart = NULL;
-    if (PreferredSpawns.Num() > 0)
+    
+    if (BestStart == NULL)
     {
-        BestStart = PreferredSpawns[FMath::RandHelper(PreferredSpawns.Num())];
-    }
-    else if (FallbackSpawns.Num() > 0)
-    {
-        BestStart = FallbackSpawns[FMath::RandHelper(FallbackSpawns.Num())];
+        if (PreferredSpawns.Num() > 0)
+        {
+            BestStart = PreferredSpawns[FMath::RandHelper(PreferredSpawns.Num())];
+        }
+        else if (FallbackSpawns.Num() > 0)
+        {
+            BestStart = FallbackSpawns[FMath::RandHelper(FallbackSpawns.Num())];
+        }
     }
     
-    return BestStart ? BestStart : Super::ChoosePlayerStart(Player);
+    return BestStart ? BestStart : Super::ChoosePlayerStart_Implementation(Player);
 }
 
 UClass* AamethystforestGameMode::GetDefaultPawnClassForController(AController* InController)
@@ -153,7 +164,8 @@ bool AamethystforestGameMode::IsSpawnpointAllowed(APlayerStart* SpawnPoint, ACon
         }
     }
     */
-    return true;
+    //return true;
+    return false; // Remove
     
 }
 
@@ -168,8 +180,8 @@ bool AamethystforestGameMode::IsSpawnpointPreferred(APlayerStart* SpawnPoint, AC
             ACharacter* OtherPawn = Cast<ACharacter>(*It);
             if (OtherPawn && OtherPawn != MyPawn)
             {
-                const float CombinedHeight = (MyPawn->CapsuleComponent->GetScaledCapsuleHalfHeight() + OtherPawn->CapsuleComponent->GetScaledCapsuleHalfHeight()) * 2.0f;
-                const float CombinedRadius = MyPawn->CapsuleComponent->GetScaledCapsuleRadius() + OtherPawn->CapsuleComponent->GetScaledCapsuleRadius();
+                const float CombinedHeight = (MyPawn->GetCapsuleComponent()->GetScaledCapsuleHalfHeight() + OtherPawn->GetCapsuleComponent()->GetScaledCapsuleHalfHeight()) * 2.0f;
+                const float CombinedRadius = MyPawn->GetCapsuleComponent()->GetScaledCapsuleRadius() + OtherPawn->GetCapsuleComponent()->GetScaledCapsuleRadius();
                 const FVector OtherLocation = OtherPawn->GetActorLocation();
                 
                 // check if player start overlaps this pawn

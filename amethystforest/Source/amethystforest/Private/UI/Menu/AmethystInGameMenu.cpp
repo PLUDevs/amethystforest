@@ -6,7 +6,7 @@
 #include "Private/UI/Style/AmethystMenuSoundsWidgetStyle.h"
 
 #define LOCTEXT_NAMESPACE "AmethystGame.HUD.Menu"
-
+// maybe use amethyst local player
 void FAmethystIngameMenu::Construct(ULocalPlayer* _PlayerOwner)
 {
     PlayerOwner = _PlayerOwner;
@@ -150,7 +150,7 @@ void FAmethystIngameMenu::ToggleGameMenu()
         //Start hiding animation
         GameMenuWidget->HideMenu();
         //enable player controls during hide animation
-        FSlateApplication::Get().SetFocusToGameViewport();
+        FSlateApplication::Get().SetUserFocusToGameViewport(GetOwnerUserIndex());
         PCOwner->SetCinematicMode(false,false,false,true,true);
     }
 }
@@ -178,9 +178,17 @@ void FAmethystIngameMenu::OnUIQuit()
     UWorld* const World = PlayerOwner ? PlayerOwner->GetWorld() : nullptr;
     if (World)
     {
+		/* TO DO: add these functions in MenuSounds style 
         const FAmethystMenuSoundsStyle& MenuSounds = FAmethystStyle::Get().GetWidgetStyle<FAmethystMenuSoundsStyle>("DefaultAmethystMenuSoundsStyle");
         MenuHelper::PlaySoundAndCall(World, MenuSounds.ExitGameSound, GetOwnerUserIndex(), this, &FAmethystIngameMenu::Quit);
+		*/
     }
+}
+
+void FAmethystIngameMenu::UpdateMenuOwner()
+{
+    int32 OwnerUserIndex = GetOwnerUserIndex();
+    OwnerUserIndex = PlayerOwner ? PlayerOwner->GetControllerId() : 0;
 }
 
 void FAmethystIngameMenu::Quit()
@@ -194,7 +202,7 @@ void FAmethystIngameMenu::Quit()
 
 int32 FAmethystIngameMenu::GetOwnerUserIndex() const
 {
-    return PlayerOwner ? PlayerOwner->ControllerId : 0;
+    return PlayerOwner ? PlayerOwner->GetControllerId() : 0;
 }
 
 

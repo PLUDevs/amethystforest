@@ -3,7 +3,7 @@
 #include "Classes/Game/AmethystGameState.h"
 #include "Classes/Game/amethystforestGameMode.h"
 
-AAmethystGameState::AAmethystGameState(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+AAmethystGameState::AAmethystGameState(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
 }
 

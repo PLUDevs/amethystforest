@@ -4,6 +4,7 @@
 #include "SAmethystMenuWidget.h"
 #include "AmethystMenuItem.h"
 #include "SAmethystMenuItem.h"
+#include "Classes/Player/AmethystLocalPlayer.h"
 #include "Private/UI/Style/AmethystStyle.h"
 #include "Private/UI/Style/AmethystMenuWidgetStyle.h"
 
@@ -145,6 +146,77 @@ FString SAmethystMenuWidget::GetMenuTitle() const
     return CurrentMenuTitle.ToString();
 }
 
+FMargin SAmethystMenuWidget::GetProfileSwapOffset() const
+{
+	return FMargin(0.0f, 50.0f, 50.0f, 0.0f);
+}
+
+bool SAmethystMenuWidget::IsProfileSwapActive() const
+{
+#if PROFILE_SWAPPING
+	// Dont' show if ingame or not on the main menu screen
+	return !bGameMenu && MenuHistory.Num() == 0 ? true : false;
+#else
+	return false;
+#endif
+}
+
+EVisibility SAmethystMenuWidget::GetProfileSwapVisibility() const
+{
+	return IsProfileSwapActive() ? EVisibility::Visible : EVisibility::Collapsed;
+}
+
+bool SAmethystMenuWidget::ProfileUISwap(const int ControllerIndex) const
+{
+	/* To DO: Game Instance function need
+	if (IsProfileSwapActive())
+	{
+		const IOnlineExternalUI::FOnLoginUIClosedDelegate Delegate = IOnlineExternalUI::FOnLoginUIClosedDelegate::CreateSP(this, &SAmethystMenuWidget::HandleProfileUISwapClosed);
+		if (AmethystUIHelpers::Get().ProfileSwapUI(ControllerIndex, false, &Delegate))
+		{
+			UAmethystGameInstance * GameInstance = PlayerOwner.IsValid() ? Cast< UAmethystGameInstance >(PlayerOwner->GetGameInstance()) : nullptr;
+
+			if (GameInstance != nullptr)
+			{
+				GameInstance->SetIgnorePairingChangeForControllerId(ControllerIndex);
+			}
+			return true;
+		}
+	}
+	*/
+	return false;
+}
+
+void SAmethystMenuWidget::HandleProfileUISwapClosed(TSharedPtr<FUniqueNetId> UniqueId, const int ControllerIndex)
+{
+	UAmethystGameInstance * GameInstance = PlayerOwner.IsValid() ? Cast< UAmethystGameInstance >(PlayerOwner->GetGameInstance()) : nullptr;
+
+	if (GameInstance != nullptr)
+	{
+		/* To DO: Game Instance function need 
+		GameInstance->SetIgnorePairingChangeForControllerId(-1);
+		*/
+	}
+
+	// If the id is null, the user backed out
+	if (UniqueId.IsValid() && PlayerOwner.IsValid())
+	{
+		// If the id is the same, the user picked the existing profile
+		// (use the cached unique net id, since we want to compare to the user that was selected at "press start"
+		const TSharedPtr<FUniqueNetId> OwnerId = PlayerOwner->GetCachedUniqueNetId();
+		if (OwnerId.IsValid() && UniqueId.IsValid() && *OwnerId == *UniqueId)
+		{
+			return;
+		}
+
+		// Go back to the welcome screen.
+		HideMenu();
+	}
+
+	UAmethystLocalPlayer* LocalPlayer = Cast<UAmethystLocalPlayer>(PlayerOwner.Get());
+	LocalPlayer->LoadPersistentUser();
+}
+
 void SAmethystMenuWidget::LockControls(bool bEnable)
 {
     bControlsLocked = bEnable;
@@ -152,7 +224,12 @@ void SAmethystMenuWidget::LockControls(bool bEnable)
 
 void SAmethystMenuWidget::UpdateMenuOwner()
 {
-    OwnerUserIndex = PlayerOwner.IsValid() ? PlayerOwner->ControllerId : 0;
+    OwnerUserIndex = PlayerOwner.IsValid() ? PlayerOwner->GetControllerId() : 0;
+}
+
+int32 SAmethystMenuWidget::GetOwnerUserIndex()
+{
+	return PlayerOwner.IsValid() ? PlayerOwner->GetControllerId() : 0;
 }
 
 void SAmethystMenuWidget::BuildAndShowMenu()
@@ -190,7 +267,7 @@ void SAmethystMenuWidget::HideMenu()
     {
         if(MenuWidgetAnimation.IsAtEnd())
         {
-            MenuWidgetAnimation.PlayReverse();
+            MenuWidgetAnimation.PlayReverse(this->AsShared());
         }
         else
         {
@@ -219,7 +296,7 @@ void SAmethystMenuWidget::SetupAnimations()
     MenuWidgetAnimation = FCurveSequence();
     LeftMenuWidgetAnimation = FCurveSequence();
     LeftMenuScrollOutCurve = LeftMenuWidgetAnimation.AddCurve(0,MenuChangeDuration,ECurveEaseFunction::QuadInOut);
-    LeftMenuWidgetAnimation.Play();
+    LeftMenuWidgetAnimation.Play(this->AsShared());
     
     //Define the fade in animation
     TopColorCurve = MenuWidgetAnimation.AddCurve(StartDelay, AnimDuration, ECurveEaseFunction::QuadInOut);
@@ -234,7 +311,7 @@ void SAmethystMenuWidget::SetupAnimations()
     ButtonsPosXCurve = MenuWidgetAnimation.AddCurve(StartDelay+SecondDelay, AnimDuration, ECurveEaseFunction::QuadInOut);
 }
 
-void SAmethystMenuWidget::BuildLeftPanel(bool bGoingBack)
+void SAmethystMenuWidget::BuildLeftPanel(bool bInGoingBack)
 {
     if (CurrentMenu.Num() == 0)
     {
@@ -245,7 +322,7 @@ void SAmethystMenuWidget::BuildLeftPanel(bool bGoingBack)
     int32 PreviousIndex = -1;
     if (bLeftMenuChanging)
     {
-        if (bGoingBack && MenuHistory.Num() > 0)
+        if (bInGoingBack && MenuHistory.Num() > 0)
         {
             FAmethystMenuInfo MenuInfo = MenuHistory.Pop();
             CurrentMenu = MenuInfo.Menu;
@@ -438,6 +515,38 @@ void SAmethystMenuWidget::ConfirmMenuItem()
     }
 }
 
+void SAmethystMenuWidget::ControllerFacebuttonLeftPressed()
+{
+	if (CurrentMenu[SelectedIndex]->OnControllerFacebuttonLeftPressed.IsBound())
+	{
+		CurrentMenu[SelectedIndex]->OnControllerFacebuttonLeftPressed.Execute();
+	}
+}
+
+void SAmethystMenuWidget::ControllerUpInputPressed()
+{
+	if (CurrentMenu[SelectedIndex]->OnControllerUpInputPressed.IsBound())
+	{
+		CurrentMenu[SelectedIndex]->OnControllerUpInputPressed.Execute();
+	}
+}
+
+void SAmethystMenuWidget::ControllerDownInputPressed()
+{
+	if (CurrentMenu[SelectedIndex]->OnControllerDownInputPressed.IsBound())
+	{
+		CurrentMenu[SelectedIndex]->OnControllerDownInputPressed.Execute();
+	}
+}
+
+void SAmethystMenuWidget::ControllerFacebuttonDownPressed()
+{
+	if (CurrentMenu[SelectedIndex]->OnControllerFacebuttonDownPressed.IsBound())
+	{
+		CurrentMenu[SelectedIndex]->OnControllerFacebuttonDownPressed.Execute();
+	}
+}
+
 void SAmethystMenuWidget::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
 {
     //Always tick the super
@@ -450,7 +559,7 @@ void SAmethystMenuWidget::Tick(const FGeometry& AllottedGeometry, const double I
         if (!bConsoleVisible)
         {
             bConsoleVisible = true;
-            FSlateApplication::Get().SetFocusToGameViewport();
+            FSlateApplication::Get().SetUserFocusToGameViewport(OwnerUserIndex);
         }
     }
     else
@@ -501,14 +610,14 @@ void SAmethystMenuWidget::Tick(const FGeometry& AllottedGeometry, const double I
                 }
                 bSubMenuChanging = true;
                 
-                LeftMenuWidgetAnimation.PlayReverse();
+                LeftMenuWidgetAnimation.PlayReverse(this->AsShared());
             }
             if (!LeftMenuWidgetAnimation.IsPlaying())
             {
                 if (CurrentMenu.Num() > 0)
                 {
                     BuildLeftPanel(bGoingBack);
-                    LeftMenuWidgetAnimation.Play();
+                    LeftMenuWidgetAnimation.Play(this->AsShared());
                 }
                 //Focus the custom widget
                 if (CurrentMenu.Num() == 1 && CurrentMenu.Top()->MenuItemType == EAmethystMenuItemType::CustomWidget)
@@ -523,14 +632,14 @@ void SAmethystMenuWidget::Tick(const FGeometry& AllottedGeometry, const double I
         {
             if (SubMenuWidgetAnimation.IsAtEnd())
             {
-                SubMenuWidgetAnimation.PlayReverse();
+                SubMenuWidgetAnimation.PlayReverse(this->AsShared());
             }
             if (!SubMenuWidgetAnimation.IsPlaying())
             {
                 if (NextMenu.Num() > 0)
                 {
                     BuildRightPanel();
-                    SubMenuWidgetAnimation.Play();
+                    SubMenuWidgetAnimation.Play(this->AsShared());
                 }
                 bSubMenuChanging = false;
             }
@@ -620,13 +729,13 @@ FReply SAmethystMenuWidget::ButtonClicked(int32 ButtonIndex)
         ConfirmMenuItem();
     }
     
-    return FReply::Handled().SetKeyboardFocus(SharedThis(this), EKeyboardFocusCause::SetDirectly);
+    return FReply::Handled().SetUserFocus(SharedThis(this), EKeyboardFocusCause::SetDirectly);
 }
 
 void SAmethystMenuWidget::FadeIn()
 {
     //Start the menu widget playing
-    MenuWidgetAnimation.Play();
+    MenuWidgetAnimation.Play(this->AsShared());
     
     //Go into UI mode
     FSlateApplication::Get().SetKeyboardFocus(SharedThis(this));
@@ -642,7 +751,7 @@ FReply SAmethystMenuWidget::OnMouseButtonDown(const FGeometry& MyGeometry, const
     
     //Set the keyboard focus
     return FReply::Handled()
-    .SetKeyboardFocus(SharedThis(this), EKeyboardFocusCause::SetDirectly);
+    .SetUserFocus(SharedThis(this), EKeyboardFocusCause::SetDirectly);
 }
 
 void SAmethystMenuWidget::ChangeOption(int32 MoveBy)
@@ -686,108 +795,89 @@ int32 SAmethystMenuWidget::GetNextValidIndex(int32 MoveBy)
     return Result;
 }
 
-FReply SAmethystMenuWidget::OnKeyDown(const FGeometry& MyGeometry, const FKeyboardEvent& InKeyboardEvent)
-{
-    FReply Result = FReply::Unhandled();
-    if (!bControlsLocked)
-    {
-        const FKey Key = InKeyboardEvent.GetKey();
-        
-        if (Key == EKeys::Up || Key == EKeys::Down)
-        {
-            int32 MoveBy = Key == EKeys::Up ? -1 : 1;
-            int32 NextValidIndex = GetNextValidIndex(MoveBy);
-            if (NextValidIndex != SelectedIndex)
-            {
-                ButtonClicked(NextValidIndex);
-            }
-            Result = FReply::Handled();
-        }
-        else if (Key == EKeys::Left || Key == EKeys::Right)
-        {
-            int32 MoveBy = Key == EKeys::Left ? -1 : 1;
-            ChangeOption(MoveBy);
-            Result = FReply::Handled();
-        }
-        else if (Key == EKeys::Enter)
-        {
-            ConfirmMenuItem();
-            Result = FReply::Handled();
-        } 
-        else if (Key == EKeys::Escape )
-        {
-            MenuGoBack();
-            Result = FReply::Handled();
-        }
-    }
-    return Result;
+FReply SAmethystMenuWidget::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent){
+	FReply Result = FReply::Unhandled();
+	
+	const int32 UserIndex = InKeyEvent.GetUserIndex();
+	bool bEventUserCanInteract = GetOwnerUserIndex() == -1 || UserIndex == GetOwnerUserIndex();
+
+	if (!bControlsLocked && bEventUserCanInteract)
+	{
+		const FKey Key = InKeyEvent.GetKey();
+		if (Key == EKeys::Up || Key == EKeys::Gamepad_DPad_Up || Key == EKeys::Gamepad_LeftStick_Up)
+		{
+			ControllerUpInputPressed();
+			int32 NextValidIndex = GetNextValidIndex(-1);
+			if (NextValidIndex != SelectedIndex)
+			{
+				ButtonClicked(NextValidIndex);
+			}
+			Result = FReply::Handled();
+		}
+		else if (Key == EKeys::Down || Key == EKeys::Gamepad_DPad_Down || Key == EKeys::Gamepad_LeftStick_Down)
+		{
+			ControllerDownInputPressed();
+			int32 NextValidIndex = GetNextValidIndex(1);
+			if (NextValidIndex != SelectedIndex)
+			{
+				ButtonClicked(NextValidIndex);
+			}
+			Result = FReply::Handled();
+		}
+		else if (Key == EKeys::Left || Key == EKeys::Gamepad_DPad_Left || Key == EKeys::Gamepad_LeftStick_Left)
+		{
+			ChangeOption(-1);
+			Result = FReply::Handled();
+		}
+		else if (Key == EKeys::Right || Key == EKeys::Gamepad_DPad_Right || Key == EKeys::Gamepad_LeftStick_Right)
+		{
+			ChangeOption(1);
+			Result = FReply::Handled();
+		}
+		else if (Key == EKeys::Gamepad_FaceButton_Top)
+		{
+			ProfileUISwap(UserIndex);
+			Result = FReply::Handled();
+		}
+		else if (Key == EKeys::Enter)
+		{
+			ConfirmMenuItem();
+			Result = FReply::Handled();
+		}
+		else if (Key == EKeys::Gamepad_FaceButton_Bottom && !InKeyEvent.IsRepeat())
+		{
+			ControllerFacebuttonDownPressed();
+			ConfirmMenuItem();
+			Result = FReply::Handled();
+		}
+		else if ((Key == EKeys::Escape || Key == EKeys::Gamepad_FaceButton_Right || Key == EKeys::Gamepad_Special_Left || Key == EKeys::Global_Back || Key == EKeys::Global_View) && !InKeyEvent.IsRepeat())
+		{
+			MenuGoBack();
+			Result = FReply::Handled();
+		}
+		else if (Key == EKeys::Gamepad_FaceButton_Left)
+		{
+			ControllerFacebuttonLeftPressed();
+			Result = FReply::Handled();
+		}
+		else if ((Key == ControllerHideMenuKey || Key == EKeys::Global_Play || Key == EKeys::Global_Menu) && !InKeyEvent.IsRepeat())
+		{
+			OnToggleMenu.ExecuteIfBound();
+			Result = FReply::Handled();
+		}
+	}
+	return Result;
 }
 
-FReply SAmethystMenuWidget::OnControllerButtonPressed( const FGeometry& MyGeometry, const FControllerEvent& ControllerEvent )
+FReply SAmethystMenuWidget::OnFocusReceived(const FGeometry& MyGeometry, const FFocusEvent& InFocusEvent)
 {
-    FReply Result = FReply::Unhandled();
-    const int32 UserIndex = ControllerEvent.GetUserIndex();
-    bool bEventUserCanInteract = OwnerUserIndex == -1 || UserIndex == OwnerUserIndex;
-    
-    if (!bControlsLocked && bEventUserCanInteract)
-    {
-        const FKey Key = ControllerEvent.GetEffectingButton();
-        if (Key == EKeys::Gamepad_DPad_Up || Key == EKeys::Gamepad_LeftStick_Up)
-        {
-            int32 NextValidIndex = GetNextValidIndex(-1);
-            if (NextValidIndex != SelectedIndex)
-            {
-                ButtonClicked(NextValidIndex);
-            }
-            Result = FReply::Handled();
-        }
-        else if (Key == EKeys::Gamepad_DPad_Down || Key == EKeys::Gamepad_LeftStick_Down)
-        {
-            int32 NextValidIndex = GetNextValidIndex(1);
-            if (NextValidIndex != SelectedIndex)
-            {
-                ButtonClicked(NextValidIndex);
-            }
-            Result = FReply::Handled();
-        }
-        else if (Key == EKeys::Gamepad_DPad_Left || Key == EKeys::Gamepad_LeftStick_Left)
-        {
-            ChangeOption(-1);
-            Result = FReply::Handled();
-        }
-        else if (Key == EKeys::Gamepad_DPad_Right || Key == EKeys::Gamepad_LeftStick_Right)
-        {
-            ChangeOption(1);
-            Result = FReply::Handled();
-        }
-        else if (Key == EKeys::Gamepad_FaceButton_Bottom && !ControllerEvent.IsRepeat())
-        {
-            ConfirmMenuItem();
-            Result = FReply::Handled();
-        } 
-        else if ((Key == EKeys::Gamepad_FaceButton_Right || Key == EKeys::Gamepad_Special_Left || Key == EKeys::Global_Back || Key == EKeys::Global_View) && !ControllerEvent.IsRepeat())
-        {
-            MenuGoBack();
-            Result = FReply::Handled();
-        } 
-        else if ((Key == ControllerHideMenuKey || Key == EKeys::Global_Play || Key == EKeys::Global_Menu) && !ControllerEvent.IsRepeat())
-        {
-            OnToggleMenu.ExecuteIfBound();
-            Result = FReply::Handled();
-        }
-    }
-    return Result;
-}
+	//Focus the custom widget
+	if (CurrentMenu.Num() == 1 && CurrentMenu.Top()->MenuItemType == EAmethystMenuItemType::CustomWidget)
+	{
+		return FReply::Handled().SetUserFocus(CurrentMenu.Top()->CustomWidget.ToSharedRef(), EFocusCause::SetDirectly);
+	}
 
-FReply SAmethystMenuWidget::OnKeyboardFocusReceived(const FGeometry& MyGeometry, const FKeyboardFocusEvent& InKeyboardFocusEvent)
-{
-    //Focus the custom widget
-    if (CurrentMenu.Num() == 1 && CurrentMenu.Top()->MenuItemType == EAmethystMenuItemType::CustomWidget)
-    {
-        return FReply::Handled().ReleaseJoystickCapture().SetKeyboardFocus(CurrentMenu.Top()->CustomWidget.ToSharedRef(),EKeyboardFocusCause::SetDirectly);
-    }
-    
-    return FReply::Handled().ReleaseMouseCapture().CaptureJoystick(SharedThis( this ), true);
+	return FReply::Handled().ReleaseMouseCapture().SetUserFocus(SharedThis(this), EFocusCause::SetDirectly, true);
 }
 
 #undef LOCTEXT_NAMESPACE

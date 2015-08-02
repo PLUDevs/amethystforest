@@ -76,7 +76,7 @@ public:
      * @param	DamageEvent		The actual damage event.
      * @param	PawnInstigator	The pawn that did the damage.
      */
-    void NotifyHit(float DamageTaken, struct FDamageEvent const& DamageEvent, class APawn* PawnInstigator);
+    void NotifyWeaponHit(float DamageTaken, struct FDamageEvent const& DamageEvent, class APawn* PawnInstigator);
     
     /** Sent from AmethystWeapon, shows NO AMMO text. */
     void NotifyOutOfAmmo();
@@ -267,11 +267,10 @@ protected:
      * Render the info messages.
      *
      * @param YOffset	YOffset from top of canvas to start drawing the messages
-     * @param ScaleUI	UI Scale factor
      * @param TextScale	Text scale factor
      *
      * @returns The next Y position to draw any further strings
      */
-    float ShowInfoItems(float YOffset, float ScaleUI, float TextScale);
+    float ShowInfoItems(float YOffset, float TextScale);
     
 };

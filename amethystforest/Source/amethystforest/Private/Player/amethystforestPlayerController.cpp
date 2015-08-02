@@ -5,9 +5,12 @@
 #include "Classes/Player/AmethystCharacter.h"
 #include "Classes/Player/AmethystPersistentUser.h"
 #include "Classes/Player/AmethystLocalPlayer.h"
+#include "Classes/Player/AmethystPlayerCameraManager.h"
+#include "Classes/Player/AmethystCheatManager.h"
 #include "Classes/Weapon/AmethystWeapon.h"
 #include "Private/UI/Style/AmethystStyle.h"
 #include "Private/UI/Menu/AmethystInGameMenu.h"
+#include "Private/UI/Menu/AmethystMainMenu.h"
 
 #define  ACH_FRAG_SOMEONE	TEXT("ACH_FRAG_SOMEONE")
 #define  ACH_SOME_KILLS		TEXT("ACH_SOME_KILLS")
@@ -35,7 +38,7 @@ static const int32 GoodScoreCount = 10;
 static const int32 GreatScoreCount = 15;
 
 
-AamethystforestPlayerController::AamethystforestPlayerController(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP)
+AamethystforestPlayerController::AamethystforestPlayerController(const class FObjectInitializer& PCIP) : Super(PCIP)
 {
 	bAllowGameActions = true;
 
@@ -92,11 +95,8 @@ void AamethystforestPlayerController::PawnPendingDestroy(APawn* P)
 
 void AamethystforestPlayerController::ClientSetSpectatorCamera_Implementation(FVector CameraLocation, FRotator CameraRotation)
 {
-	/* TO DO: SpectatorCamera_Implementation
-
 	SetInitialLocationAndRotation(CameraLocation, CameraRotation);
 	SetViewTarget(this);
-	*/
 }
 
 bool AamethystforestPlayerController::FindDeathCameraSpot(FVector& CameraLocation, FRotator& CameraRotation)
@@ -116,7 +116,7 @@ bool AamethystforestPlayerController::FindDeathCameraSpot(FVector& CameraLocatio
 		CameraDir.Normalize();
 
 		const FVector TestLocation = PawnLocation - CameraDir.Vector() * CameraOffset;
-		const bool bBlocked = GetWorld()->LineTraceTest(PawnLocation, TestLocation, ECC_Camera, TraceParams);
+		const bool bBlocked = GetWorld()->LineTraceTestByChannel(PawnLocation, TestLocation, ECC_Camera, TraceParams);
 
 		if (!bBlocked)
 		{
@@ -191,9 +191,8 @@ void AamethystforestPlayerController::OnKill()
 void AamethystforestPlayerController::SetPlayer(UPlayer* Player)
 {
 	APlayerController::SetPlayer(Player);
-    /* TO DO: UpdateMenuOwner Function in IngameMenu needed
-	AmethystIngameMenu->UpdateMenuOwner();
-     */
+	AmethystIngameMenu = MakeShareable(new FAmethystIngameMenu);
+	AmethystIngameMenu->Construct(Cast<ULocalPlayer>(Player));
 }
 
 void AamethystforestPlayerController::OnToggleInGameMenu()
