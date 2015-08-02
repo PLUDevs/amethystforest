@@ -37,6 +37,7 @@ Intermediate/
 
 #Intermediates
 Intermediate/*
+Build/
 
 *.sdf
 *.suo
